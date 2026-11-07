@@ -11,3 +11,4 @@
 20:04:58 Aussen v3 fertig (180 s)
 20:08:05 Aussen v4 fertig (182 s)
 20:11:10 Aussen v5 fertig (183 s)
+20:14:31 Aussen v6 fertig (198 s)
