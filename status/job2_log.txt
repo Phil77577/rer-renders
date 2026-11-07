@@ -6,3 +6,4 @@
 19:49:56 Innen kind fertig (168 s)
 19:52:23 Innen bad fertig (146 s)
 19:55:20 Aussen v0 fertig (170 s)
+19:58:13 Aussen v1 fertig (171 s)
