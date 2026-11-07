@@ -1,2 +1,3 @@
 23:13:07 Sofa+Sessel entfernt, Waschtisch ersetzt (4 Teile raus), Groesse [0.77, 1.35, 0.5]
 23:15:39 Innen bad fertig (150 s)
+23:17:51 Innen wohnen fertig (130 s)
