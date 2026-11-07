@@ -1,3 +1,4 @@
 19:37:55 Wohnzimmer entruempelt: Esstisch Bein, Esstisch Bein.001, Esstisch Bein.002, Esstisch Bein.003, Esstisch Platte, Stuhl Bein, Stuhl Bein.001, Stuhl Bein.002, Stuhl Bein.003, Stuhl Bein.004, Stuhl Bein.005, Stuhl Bein.006
 19:40:04 Innen wohnen fertig (128 s)
 19:41:38 Innen balkon fertig (92 s)
+19:44:26 Innen schlafen fertig (166 s)
