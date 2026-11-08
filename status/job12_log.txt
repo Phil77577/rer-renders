@@ -73,3 +73,4 @@
 13:59:30 Aussen f67 (11 s) ok
 13:59:42 Aussen f68 (11 s) ok
 13:59:55 Aussen f69 (12 s) ok
+14:00:07 Aussen f70 (11 s) ok
