@@ -10,3 +10,4 @@
 11:18:25 Zwischenbild 9 (5 s)
 11:18:31 Zwischenbild 10 (5 s)
 11:18:37 Zwischenbild 11 (5 s)
+11:18:43 Zwischenbild 13 (5 s)
