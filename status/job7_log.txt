@@ -34,3 +34,4 @@
 11:20:50 Zwischenbild 38 (4 s)
 11:20:56 Zwischenbild 39 (4 s)
 11:21:02 Zwischenbild 40 (4 s)
+11:21:08 Zwischenbild 41 (5 s)
