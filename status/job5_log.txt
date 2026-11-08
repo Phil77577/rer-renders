@@ -1,2 +1,3 @@
 10:49:02 Waschtisch aufgerichtet Masse=[0.77, 0.5, 1.35] z=-0.0..1.35
 10:51:30 Innen bad neu
+10:54:14 Innen flur neu
