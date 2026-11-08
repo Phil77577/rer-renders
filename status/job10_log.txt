@@ -2,3 +2,4 @@
 12:40:25 Innen flur (306 s) upload=ok
 12:44:39 Innen wohnen (252 s) upload=ok
 12:47:44 Innen balkon (183 s) upload=ok
+12:47:48 Upload schlafen ok
