@@ -5,3 +5,4 @@
 13:44:23 Innen balkon (174 s) upload=ok
 13:46:19 Aussen f00 (107 s) ok
 13:46:32 Aussen f01 (11 s) ok
+13:46:44 Aussen f02 (11 s) ok
