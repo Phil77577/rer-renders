@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lindenhain-Höfe – Wohnungsnavigator | RER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0E1F2E; --gold: #C8963E; --gold-ink: #8A611F;
+  --paper: #EEF1F2; --surface: #FFFFFF; --surface-2: #F4F6F6; --ink: #0E1F2E; --muted: #5A6874; --line: #E2E6E7;
+  --frei: #1F8A53; --reserviert: #C26A12; --vergeben: #C33A33;
+  --c-frei: #2BB673; --c-reserviert: #F0952E; --c-vergeben: #E5483F;
+  --shadow: 0 1px 2px rgba(14,31,46,.06), 0 12px 32px -12px rgba(14,31,46,.28);
+  --font: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light; box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0B1620; --surface: #132433; --surface-2: #1A2E40; --ink: #E8EDF0; --muted: #9CAEBC; --line: #24394C; --gold-ink: #DDB06A; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0B1620; --surface: #132433; --surface-2: #1A2E40; --ink: #E8EDF0; --muted: #9CAEBC; --line: #24394C; --gold-ink: #DDB06A; color-scheme: dark; }
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.45; overflow: hidden; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2.5px solid var(--gold); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Kopf */
+.bar { position: fixed; top: 0; left: 0; right: 0; z-index: 9; padding: env(safe-area-inset-top, 0px) 20px 0; height: calc(64px + env(safe-area-inset-top, 0px)); display: flex; align-items: center; gap: 18px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.logo { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--navy); color: var(--gold); font-weight: 800; letter-spacing: .04em; font-size: 15px; flex: none; }
+.proj { min-width: 0; }
+.proj h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.proj p { margin: 0; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.seg { margin-left: auto; display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.seg button { border: 0; background: none; color: var(--muted); padding: 7px 16px; border-radius: 999px; font-size: 14px; font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+
+/* Bühne mit Rendering */
+#stage { position: fixed; z-index: 0; left: 0; right: 0; top: calc(64px + env(safe-area-inset-top, 0px)); bottom: 0; background: #DCE3E6; overflow: hidden; }
+#bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#scene { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+#scene:active { cursor: grabbing; }
+#scene image { transition: opacity .55s ease; }
+#polys path { fill-opacity: .34; stroke-opacity: 0; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; transition: fill-opacity .15s ease; }
+#polys path.st-frei { fill: var(--c-frei); stroke: var(--c-frei); }
+#polys path.st-reserviert { fill: var(--c-reserviert); stroke: var(--c-reserviert); }
+#polys path.st-vergeben { fill: var(--c-vergeben); stroke: var(--c-vergeben); }
+#polys path.hov { fill-opacity: .56; }
+#polys path.out { fill: #9AA5AC; fill-opacity: .12; }
+#polys path.dim { fill-opacity: .06; }
+#polys path.flr { fill-opacity: .55; stroke: #fff; stroke-opacity: .9; }
+#polys path.sel { fill-opacity: .68; stroke: #fff; stroke-opacity: 1; stroke-width: 3; }
+body:not(.ready) #stage { opacity: 0; }
+#stage { transition: opacity .6s ease; }
+#tip { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; background: var(--navy); color: #fff; padding: 9px 12px; border-radius: 10px; display: grid; gap: 1px; font-size: 13px; box-shadow: var(--shadow); min-width: 150px; }
+#tip .st-frei { color: #7EE6B0; } #tip .st-reserviert { color: #F7BE7B; } #tip .st-vergeben { color: #FF948C; }
+
+.viewbar { position: fixed; z-index: 4; left: calc(50% + 190px); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; align-items: center; gap: 6px; background: var(--surface); border-radius: 999px; padding: 5px; box-shadow: var(--shadow); transition: left .35s ease; }
+.viewbar button { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--surface-2); display: grid; place-items: center; }
+.viewbar .vt { min-width: 112px; text-align: center; padding: 0 6px; }
+.compass { display: grid; place-items: center; color: var(--ink); }
+.viewbar .vt strong { display: block; font-size: 14px; font-weight: 650; }
+#viewDots { display: flex; justify-content: center; gap: 5px; margin-top: 2px; }
+#viewDots i { width: 5px; height: 5px; border-radius: 50%; background: var(--line); }
+#viewDots i.on { background: var(--gold); }
+.zoom { position: fixed; z-index: 4; right: 22px; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; transition: right .35s ease; }
+.zoom button { width: 44px; height: 44px; border: 0; background: none; font-size: 22px; font-weight: 500; }
+.zoom button + button { border-top: 1px solid var(--line); }
+body.has-detail .zoom { right: 434px; }
+body.has-detail .viewbar { left: calc(50% - 30px); }
+
+/* Belegungsplan */
+#belegung { position: fixed; z-index: 4; right: 22px; top: calc(86px + env(safe-area-inset-top, 0px)); width: 300px; background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 14px 10px; transition: right .35s ease; }
+body.has-detail #belegung { right: 434px; }
+.bl-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.bl-head h2 { margin: 0; font-size: 15px; font-weight: 700; }
+.bl-head span { font-size: 12.5px; color: var(--muted); }
+#planGrid svg { width: 100%; height: auto; display: block; }
+#planGrid text { font-family: var(--font); font-size: 10px; font-weight: 700; fill: var(--muted); text-anchor: end; }
+#planGrid .pl-cap { font-size: 8.5px; font-weight: 600; text-anchor: middle; }
+.pl-hit { fill: transparent; cursor: pointer; }
+.pl-row:hover .pl-hit { fill: var(--surface-2); }
+.pl-row.on .pl-hit { fill: rgba(200,150,62,.16); }
+.pl-row.on text { fill: var(--gold-ink); }
+.pl-u { cursor: pointer; stroke: var(--surface); stroke-width: 1; }
+.pl-u.st-frei { fill: var(--c-frei); } .pl-u.st-reserviert { fill: var(--c-reserviert); } .pl-u.st-vergeben { fill: var(--c-vergeben); }
+.pl-u.out { opacity: .22; }
+.pl-u.sel { stroke: var(--navy); stroke-width: 2.4; }
+.pl-u:hover { opacity: .8; }
+#legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+.lg { display: inline-flex; align-items: center; gap: 6px; }
+.lg b { color: var(--ink); }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 3px; flex: none; }
+.dot.st-frei { background: var(--c-frei); } .dot.st-reserviert { background: var(--c-reserviert); } .dot.st-vergeben { background: var(--c-vergeben); }
+#planToggleM { display: none; }
+
+/* Wohnungsfinder */
+#side { position: fixed; z-index: 5; left: 22px; top: calc(86px + env(safe-area-inset-top, 0px)); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); width: 356px; background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; }
+.side-head { padding: 18px 18px 4px; }
+.side-head h2 { margin: 0; font-size: 20px; font-weight: 750; letter-spacing: -.015em; }
+#count { margin: 2px 0 0; color: var(--muted); font-size: 13.5px; }
+#count b { color: var(--frei); font-weight: 700; }
+.sheet-handle { display: none; }
+.filters { padding: 10px 18px 14px; display: grid; gap: 12px; border-bottom: 1px solid var(--line); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); padding: 6px 13px; border-radius: 10px; font-size: 13.5px; font-weight: 550; min-height: 34px; }
+.chip[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.range { display: grid; gap: 4px; }
+.range label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.range output { color: var(--ink); font-weight: 650; }
+input[type=range] { width: 100%; accent-color: var(--gold); height: 22px; margin: 0; }
+.f-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.f-row select { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 8px; font-size: 13.5px; }
+.link { background: none; border: 0; padding: 4px 0; color: var(--gold-ink); font-weight: 650; font-size: 13.5px; text-decoration: underline; text-underline-offset: 3px; }
+#list { overflow-y: auto; flex: 1; padding: 8px 10px 12px; overscroll-behavior: contain; display: grid; gap: 6px; align-content: start; }
+.row { display: flex; align-items: stretch; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.row.on { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(200,150,62,.25); }
+.row-main { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto auto; column-gap: 10px; text-align: left; border: 0; background: none; padding: 11px 6px 11px 14px; border-radius: 14px; }
+.row-main:hover { background: var(--surface-2); }
+.r-top { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; }
+.r-no { font-weight: 750; font-size: 15px; }
+.tag { font-size: 11.5px; font-weight: 650; padding: 2px 8px; border-radius: 6px; }
+.tag.st-frei { background: rgba(43,182,115,.14); color: var(--frei); } .tag.st-reserviert { background: rgba(240,149,46,.16); color: var(--reserviert); } .tag.st-vergeben { background: rgba(229,72,63,.12); color: var(--vergeben); }
+.r-t { font-weight: 600; font-size: 14px; margin-top: 3px; }
+.r-s { font-size: 12.5px; color: var(--muted); grid-column: 1; }
+.r-p { grid-column: 2; grid-row: 2 / 4; align-self: end; font-weight: 700; font-size: 15px; white-space: nowrap; }
+.r-p small { font-weight: 500; color: var(--muted); font-size: 11.5px; }
+.fav { border: 0; background: none; color: var(--gold-ink); width: 42px; display: grid; place-items: center; border-radius: 0 14px 14px 0; }
+.fav:hover { background: var(--surface-2); }
+.empty { padding: 28px 12px; text-align: center; color: var(--muted); }
+.disclaimer { margin: 0; padding: 10px 18px 14px; font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); }
+
+/* Detail */
+#detail { position: fixed; z-index: 6; right: 22px; top: calc(86px + env(safe-area-inset-top, 0px)); bottom: calc(22px + env(safe-area-inset-bottom, 0px)); width: 396px; background: var(--surface); border-radius: 18px; box-shadow: var(--shadow); overflow-y: auto; overscroll-behavior: contain; transform: translateX(calc(100% + 30px)); transition: transform .38s cubic-bezier(.2,.7,.2,1); visibility: hidden; }
+#detail.open { transform: none; visibility: visible; }
+#detailClose { position: sticky; top: 12px; float: right; margin: 12px 12px -50px 0; width: 38px; height: 38px; border-radius: 50%; border: 0; background: rgba(255,255,255,.92); color: #0E1F2E; display: grid; place-items: center; z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+#detailBody { padding: 0 0 26px; }
+#detailBody > *:not(.preview) { margin-left: 22px; margin-right: 22px; }
+.preview { display: block; width: 100%; height: 190px; border: 0; padding: 0; background-size: 330% auto; background-position: 50% 52%; position: relative; border-radius: 18px 18px 0 0; margin: 0 0 18px; }
+.preview span { position: absolute; left: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.94); color: #0E1F2E; padding: 8px 13px; border-radius: 999px; font-weight: 650; font-size: 13.5px; }
+.preview:disabled { cursor: default; }
+.d-floor { margin-top: 0; margin-bottom: 0; color: var(--muted); font-size: 13.5px; }
+#detailBody h2 { margin-top: 2px; margin-bottom: 10px; font-size: 26px; line-height: 1.12; font-weight: 750; letter-spacing: -.02em; }
+.pill { display: inline-block; padding: 4px 11px; border-radius: 8px; color: #fff; font-weight: 650; font-size: 13px; }
+.pill.st-frei { background: var(--frei); } .pill.st-reserviert { background: var(--reserviert); } .pill.st-vergeben { background: var(--vergeben); }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 18px; margin-bottom: 18px; }
+.facts div { background: var(--surface); padding: 10px 12px; }
+.facts dt { font-size: 12px; color: var(--muted); }
+.facts dd { margin: 0; font-weight: 650; font-size: 15px; }
+.price { background: var(--surface-2); border-radius: 14px; padding: 16px 16px 10px; }
+.price-main { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 6px; }
+.price-main span { color: var(--muted); font-size: 13.5px; }
+.price-main strong { font-size: 28px; font-weight: 800; letter-spacing: -.02em; }
+.price-rows { margin: 0; }
+.price-rows div { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13.5px; }
+.price-rows dt { color: var(--muted); }
+.price-rows dd { margin: 0; font-weight: 650; }
+.actions { margin-top: 16px; margin-bottom: 6px; display: grid; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; min-height: 46px; padding: 10px 14px; font-weight: 650; font-size: 14.5px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; font-size: 15.5px; min-height: 54px; }
+.btn.primary svg { color: var(--gold); }
+.btn.primary:hover { background: #18324A; }
+.btn-row { display: grid; grid-template-columns: 1fr 50px; gap: 8px; }
+.btn.icon-only { padding: 0; color: var(--gold-ink); }
+.gone { margin: 0; color: var(--muted); font-size: 14px; }
+.sim-h { margin: 6px 0 0; font-size: 13px; font-weight: 650; }
+.sim { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.sim-b { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 8px; display: grid; justify-items: start; gap: 2px; text-align: left; }
+.sim-b span { font-weight: 750; }
+.sim-b small { color: var(--muted); font-size: 12px; }
+.plan-fig { margin-top: 18px; margin-bottom: 0; }
+.plan-fig figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.plan { width: 100%; height: auto; display: block; }
+.plan .room rect { fill: #FBFAF7; stroke: #0E1F2E; stroke-width: .12; }
+.plan .room.k-bad rect { fill: #E7EEF1; } .plan .room.k-flur rect { fill: #F2EFE8; }
+.plan .room.k-balkon rect { stroke-width: .05; stroke-dasharray: .2 .12; }
+.plan .hatch { stroke: #C8963E; stroke-width: .05; opacity: .6; }
+.plan text { fill: #0E1F2E; text-anchor: middle; font-weight: 650; font-family: var(--font); }
+.plan text.m2 { font-weight: 450; fill: #56677A; }
+.plan .gap { stroke: #FBFAF7; stroke-width: .16; } .plan .swing { fill: none; stroke: #C8963E; stroke-width: .04; }
+.plan .glass { stroke: #7FB2CF; stroke-width: .08; } .plan .win { stroke: #7FB2CF; stroke-width: .16; }
+.plan .entry { fill: none; stroke: #C8963E; stroke-width: .08; stroke-linecap: round; stroke-linejoin: round; }
+.plan .you { fill: #C8963E; stroke: #fff; stroke-width: .06; }
+.plan .room.current rect { fill: #F6E7CC; }
+.plan [role="button"] { cursor: pointer; } .plan [role="button"]:hover rect { fill: #F4EBDD; }
+.plan [role="button"]:focus-visible { outline: none; } .plan [role="button"]:focus-visible rect { stroke: #C8963E; stroke-width: .18; }
+
+/* Rundgang */
+#tour { position: fixed; inset: 0; z-index: 20; background: #0E1F2E; color: #fff; }
+#tour[hidden] { display: none; }
+#tourCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+#tourCanvas:active { cursor: grabbing; }
+.t-top { position: absolute; left: 0; right: 0; top: 0; padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 26px; display: flex; align-items: flex-start; gap: 12px; background: linear-gradient(180deg, rgba(14,31,46,.7), rgba(14,31,46,0)); pointer-events: none; }
+.t-top > * { pointer-events: auto; }
+.t-title { flex: 1; min-width: 0; }
+.t-title p { margin: 0; font-size: 13px; color: #D3DCE2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-title h3 { margin: 0; font-size: 24px; font-weight: 750; line-height: 1.15; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; letter-spacing: -.01em; }
+.t-title h3 small { font-size: 14px; font-weight: 550; color: #F1D29A; }
+.t-btn { border: 0; background: rgba(255,255,255,.94); color: #0E1F2E; border-radius: 999px; padding: 9px 16px; font-weight: 650; font-size: 13.5px; min-height: 42px; }
+.t-btn[aria-pressed="true"] { background: var(--gold); }
+.t-plan { position: absolute; right: 18px; top: calc(88px + env(safe-area-inset-top, 0px)); width: min(300px, 40vw); background: rgba(251,250,247,.96); border-radius: 14px; padding: 8px; box-shadow: var(--shadow); }
+.t-rooms { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 18px calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; overflow-x: auto; background: linear-gradient(0deg, rgba(14,31,46,.7), rgba(14,31,46,0)); scrollbar-width: none; }
+.t-rooms::-webkit-scrollbar { display: none; }
+.t-rooms button { flex: none; border: 1px solid rgba(255,255,255,.45); background: rgba(14,31,46,.45); color: #fff; padding: 9px 15px; border-radius: 999px; font-weight: 600; font-size: 14px; min-height: 42px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.t-rooms button[aria-current="true"] { background: #fff; color: #0E1F2E; border-color: #fff; }
+.t-hint { position: absolute; left: 50%; bottom: calc(100px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: rgba(14,31,46,.78); padding: 10px 16px; border-radius: 999px; font-size: 13.5px; text-align: center; pointer-events: none; transition: opacity .5s ease; max-width: calc(100% - 32px); }
+.t-hint.gone { opacity: 0; }
+.t-note { position: absolute; left: 18px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); font-size: 11.5px; color: rgba(255,255,255,.8); text-shadow: 0 1px 3px rgba(0,0,0,.6); pointer-events: none; }
+#planToggle { display: none; }
+
+dialog { border: 0; border-radius: 18px; padding: 0; width: min(440px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+dialog::backdrop { background: rgba(14,31,46,.55); }
+.dlg { padding: 22px; display: grid; gap: 12px; }
+.dlg h2 { margin: 0; font-size: 21px; font-weight: 750; }
+.dlg p { margin: 0; color: var(--muted); font-size: 14px; }
+.dlg label { display: grid; gap: 4px; font-size: 13px; font-weight: 600; }
+.dlg input, .dlg select, .dlg textarea { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface); font-size: 15px; font-weight: 400; }
+.dlg textarea { min-height: 84px; resize: vertical; }
+.dlg .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dlg .acts { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+
+@media (max-width: 1180px) and (min-width: 900px) { #belegung { width: 250px; } .viewbar { left: calc(50% + 180px); } }
+@media (max-width: 899px) {
+  .bar { height: calc(58px + env(safe-area-inset-top, 0px)); padding-left: 14px; padding-right: 14px; gap: 10px; }
+  .logo { width: 38px; height: 38px; font-size: 13px; border-radius: 10px; }
+  .proj h1 { font-size: 15.5px; } .proj p { font-size: 12px; }
+  .seg button { padding: 6px 11px; font-size: 13px; }
+  #stage { top: calc(58px + env(safe-area-inset-top, 0px)); }
+  #belegung { right: 10px; top: calc(68px + env(safe-area-inset-top, 0px)); width: auto; padding: 0; background: none; box-shadow: none; }
+  body.has-detail #belegung { right: 10px; }
+  #planToggleM { display: inline-flex; align-items: center; gap: 6px; border: 0; background: var(--surface); box-shadow: var(--shadow); border-radius: 999px; padding: 8px 14px; font-weight: 650; font-size: 13.5px; min-height: 40px; }
+  #belegung .bl-body { display: none; background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); padding: 12px; margin-top: 8px; width: min(320px, calc(100vw - 20px)); }
+  #belegung.open .bl-body { display: block; }
+  #belegung { display: flex; flex-direction: column; align-items: flex-end; }
+  .viewbar { left: 50%; bottom: calc(142px + env(safe-area-inset-bottom, 0px)); }
+  body.has-detail .viewbar { left: 50%; }
+  .viewbar .vt { min-width: 104px; }
+  .zoom { right: 10px; bottom: calc(142px + env(safe-area-inset-bottom, 0px)); }
+  .zoom button { width: 40px; height: 40px; }
+  body.has-detail .zoom { right: 10px; }
+  #side { left: 0; right: 0; width: auto; top: auto; bottom: 0; max-height: 78vh; border-radius: 20px 20px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); transform: translateY(calc(100% - 124px - env(safe-area-inset-bottom, 0px))); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+  #side.open { transform: none; }
+  .sheet-handle { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; border: 0; background: none; padding: 18px 18px 6px; text-align: left; position: relative; }
+  .sheet-handle::before { content: ""; position: absolute; left: 50%; top: 7px; width: 42px; height: 4px; border-radius: 4px; background: var(--line); transform: translateX(-50%); }
+  .sheet-handle strong { font-size: 17px; font-weight: 750; display: block; }
+  .sheet-handle span { font-size: 13px; color: var(--muted); }
+  .sheet-handle .sh-cta { color: var(--gold-ink); font-weight: 650; font-size: 13.5px; white-space: nowrap; }
+  .side-head { display: none; }
+  #detail { left: 0; right: 0; width: auto; top: auto; bottom: 0; height: 88vh; border-radius: 20px 20px 0 0; transform: translateY(105%); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .preview { border-radius: 20px 20px 0 0; height: 170px; }
+  #detailBody h2 { font-size: 23px; }
+  .t-title h3 { font-size: 19px; }
+  .t-plan { display: none; left: 12px; right: 12px; width: auto; top: calc(80px + env(safe-area-inset-top, 0px)); max-width: 420px; margin: 0 auto; }
+  #tour.plan-open .t-plan { display: block; }
+  #planToggle { display: inline-flex; align-items: center; }
+}
+@media (max-width: 380px) { .proj p { display: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <span class="logo" aria-label="RER">RER</span>
+  <div class="proj"><h1>Lindenhain-Höfe</h1><p>Bernau bei Berlin, 50 Wohnungen, Bezug Frühjahr 2027</p></div>
+  <div class="seg" id="mode" role="group" aria-label="Angebotsart">
+    <button data-mode="rent" aria-pressed="true">Mieten</button>
+    <button data-mode="buy" aria-pressed="false">Kaufen</button>
+  </div>
+</header>
+
+<main id="stage">
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <svg id="scene" viewBox="0 0 1800 1125" preserveAspectRatio="xMidYMid meet" aria-label="Gebäudeansicht. Wohnungen antippen für Details.">
+    <g id="polys"></g>
+  </svg>
+  <div id="tip" hidden></div>
+</main>
+
+<div class="viewbar" role="group" aria-label="Blickwinkel">
+  <button id="viewPrev" aria-label="Vorherige Ansicht"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <span class="compass" aria-hidden="true"><svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><g id="needle" style="transform-origin:20px 20px;transition:transform .5s ease"><path d="M20 5 L25 20 L20 18 L15 20Z" fill="#C8963E"/><path d="M20 35 L25 20 L20 22 L15 20Z" fill="currentColor" fill-opacity=".35"/><text x="20" y="4.6" text-anchor="middle" font-size="5" font-weight="700" fill="#C8963E">N</text></g></svg></span><div class="vt"><strong id="viewName"></strong><div id="viewDots"></div></div>
+  <button id="viewNext" aria-label="Nächste Ansicht"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+<div class="zoom"><button id="zIn" aria-label="Vergrößern">+</button><button id="zOut" aria-label="Verkleinern">−</button></div>
+
+<section id="belegung" aria-label="Belegungsplan">
+  <button id="planToggleM"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 20V8l8-4 8 4v12M4 14h16M4 20h16M9 20V8M15 20V8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Etagen</button>
+  <div class="bl-body">
+    <div class="bl-head"><h2>Belegungsplan</h2><span id="planFloor"></span></div>
+    <div id="planGrid"></div>
+    <div id="legend"></div>
+  </div>
+</section>
+
+<aside id="side" aria-label="Wohnungen filtern und auswählen">
+  <button class="sheet-handle" id="sheetToggle" aria-expanded="false" aria-controls="list">
+    <span><strong>Wohnungsfinder</strong><span id="sheetCount"></span></span>
+    <span class="sh-cta">Filter und Liste</span>
+  </button>
+  <div class="side-head"><h2>Wohnungsnavigator</h2><p id="count"></p></div>
+  <div class="filters">
+    <div class="chips">
+      <button class="chip" id="fFree" aria-pressed="false">Nur verfügbare</button>
+      <button class="chip" id="fFav" aria-pressed="false">Merkliste (<span id="fFavCount">0</span>)</button>
+    </div>
+    <div class="chips" id="fZi" role="group" aria-label="Zimmer">
+      <button class="chip" data-zi="1" aria-pressed="false">1 Zi.</button>
+      <button class="chip" data-zi="2" aria-pressed="false">2 Zi.</button>
+      <button class="chip" data-zi="3" aria-pressed="false">3 Zi.</button>
+      <button class="chip" data-zi="4" aria-pressed="false">4 Zi.</button>
+    </div>
+    <div class="range"><label for="fArea"><span>Wohnfläche</span><output id="fAreaVal"></output></label><input type="range" id="fArea" min="30" max="150" step="5"></div>
+    <div class="range"><label for="fPrice"><span id="fPriceLabel">Kaltmiete bis</span><output id="fPriceVal"></output></label><input type="range" id="fPrice"></div>
+    <div class="f-row">
+      <label class="sr" for="fSort">Sortieren nach</label>
+      <select id="fSort"><option value="floor">Etage</option><option value="price" id="sortPriceOpt">Kaltmiete</option><option value="area">Wohnfläche</option><option value="zi">Zimmer</option></select>
+      <button class="link" data-act="reset">Filter zurücksetzen</button>
+    </div>
+  </div>
+  <div id="list" role="list"></div>
+  <p class="disclaimer">Fiktives Demo-Objekt. Visualisierungen, Grundrisse und Preise sind unverbindlich.</p>
+</aside>
+
+<aside id="detail" aria-labelledby="detailTitle">
+  <button id="detailClose" aria-label="Details schließen"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  <div id="detailBody"></div>
+</aside>
+
+<div id="tour" hidden role="dialog" aria-modal="true" aria-label="360-Grad-Rundgang">
+  <canvas id="tourCanvas"></canvas>
+  <div class="t-top">
+    <button class="t-btn" id="tourClose">Rundgang beenden</button>
+    <div class="t-title"><p id="tourUnit"></p><h3><span id="tourRoom"></span><small id="tourArea"></small></h3></div>
+    <button class="t-btn" id="planToggle" aria-pressed="false">Grundriss</button>
+  </div>
+  <div class="t-plan" id="tourPlan"></div>
+  <p class="t-note">Musterwohnung (3 Zimmer), gerendert in Blender. Ausstattung beispielhaft.</p>
+  <div class="t-hint" id="tourHint">Ziehen zum Umsehen. Auf ein Schild tippen, um hinüberzugehen.</div>
+  <nav class="t-rooms" id="tourRooms" aria-label="Räume"></nav>
+</div>
+
+<dialog id="ask" aria-labelledby="askTitle">
+  <form class="dlg" id="askForm" novalidate>
+    <h2 id="askTitle">Besichtigung anfragen</h2>
+    <p id="askUnit"></p>
+    <div class="two"><label>Name<input name="name" required autocomplete="name"></label><label>Telefon<input name="tel" type="tel" autocomplete="tel"></label></div>
+    <label>E-Mail<input name="mail" type="email" required autocomplete="email"></label>
+    <label>Art der Besichtigung<select name="art"><option>Video-Besichtigung mit Berater</option><option>Termin vor Ort</option><option>Erst Rückruf</option></select></label>
+    <label>Nachricht<textarea id="askMsg" name="msg"></textarea></label>
+    <div class="acts"><button type="button" class="btn" data-close-ask>Abbrechen</button><button class="btn primary" type="submit">Anfrage senden</button></div>
+  </form>
+  <div class="dlg" id="askDone" hidden>
+    <h2>Anfrage gesendet</h2>
+    <p>In dieser Demo wird nichts übertragen. Im Live-Betrieb landet die Anfrage direkt im CRM bzw. Postfach der Vermietung.</p>
+    <div class="acts"><button class="btn primary" data-close-ask>Schließen</button></div>
+  </div>
+</dialog>
+
+<script id="assets" type="application/json">{"extSize":[2200,1375],"ext":{"v0":{"img":"aussen8/v0.jpg","polys":{"we-0-01":[[[0.254,0.764],[0.377,0.764],[0.374,0.714],[0.249,0.714]]],"we-0-02":[[[0.377,0.764],[0.5,0.764],[0.5,0.714],[0.374,0.714]]],"we-0-03":[[[0.5,0.764],[0.623,0.764],[0.626,0.714],[0.5,0.714]]],"we-0-04":[[[0.623,0.764],[0.746,0.764],[0.751,0.714],[0.626,0.714]]],"we-1-01":[[[0.249,0.714],[0.374,0.714],[0.372,0.662],[0.244,0.662]]],"we-1-02":[[[0.374,0.714],[0.5,0.714],[0.5,0.662],[0.372,0.662]]],"we-1-03":[[[0.5,0.714],[0.626,0.714],[0.628,0.662],[0.5,0.662]]],"we-1-04":[[[0.626,0.714],[0.751,0.714],[0.756,0.662],[0.628,0.662]]],"we-2-01":[[[0.244,0.662],[0.372,0.662],[0.369,0.607],[0.238,0.607]]],"we-2-02":[[[0.372,0.662],[0.5,0.662],[0.5,0.607],[0.369,0.607]]],"we-2-03":[[[0.5,0.662],[0.628,0.662],[0.631,0.607],[0.5,0.607]]],"we-2-04":[[[0.628,0.662],[0.756,0.662],[0.762,0.607],[0.631,0.607]]],"we-3-01":[[[0.238,0.607],[0.369,0.607],[0.366,0.551],[0.233,0.551]]],"we-3-02":[[[0.369,0.607],[0.5,0.607],[0.5,0.551],[0.366,0.551]]],"we-3-03":[[[0.5,0.607],[0.631,0.607],[0.634,0.551],[0.5,0.551]]],"we-3-04":[[[0.631,0.607],[0.762,0.607],[0.767,0.551],[0.634,0.551]]],"we-4-01":[[[0.233,0.551],[0.366,0.551],[0.363,0.491],[0.227,0.491]]],"we-4-02":[[[0.366,0.551],[0.5,0.551],[0.5,0.491],[0.363,0.491]]],"we-4-03":[[[0.5,0.551],[0.634,0.551],[0.636,0.491],[0.5,0.491]]],"we-4-04":[[[0.634,0.551],[0.767,0.551],[0.773,0.491],[0.636,0.491]]],"we-5-01":[[[0.227,0.491],[0.363,0.491],[0.36,0.429],[0.221,0.429]]],"we-5-02":[[[0.363,0.491],[0.5,0.491],[0.5,0.429],[0.36,0.429]]],"we-5-03":[[[0.5,0.491],[0.636,0.491],[0.64,0.429],[0.5,0.429]]],"we-5-04":[[[0.636,0.491],[0.773,0.491],[0.779,0.429],[0.64,0.429]]],"we-6-01":[[[0.315,0.389],[0.498,0.389],[0.498,0.326],[0.311,0.326]]],"we-6-02":[[[0.501,0.389],[0.685,0.389],[0.689,0.326],[0.501,0.326]]]}},"v1":{"img":"aussen8/v1.jpg","polys":{"we-0-01":[[[0.273,0.566],[0.34,0.642],[0.337,0.594],[0.269,0.519]]],"we-0-02":[[[0.34,0.642],[0.415,0.726],[0.413,0.677],[0.337,0.594]]],"we-0-03":[[[0.415,0.726],[0.5,0.822],[0.5,0.771],[0.413,0.677]]],"we-0-04":[[[0.5,0.822],[0.597,0.93],[0.599,0.878],[0.5,0.771]],[[0.597,0.93],[0.681,0.822],[0.684,0.771],[0.599,0.878]]],"we-0-08":[[[0.681,0.822],[0.755,0.726],[0.76,0.677],[0.684,0.771]]],"we-1-01":[[[0.269,0.519],[0.337,0.594],[0.334,0.543],[0.265,0.471]]],"we-1-02":[[[0.337,0.594],[0.413,0.677],[0.412,0.625],[0.334,0.543]]],"we-1-03":[[[0.413,0.677],[0.5,0.771],[0.5,0.718],[0.412,0.625]]],"we-1-04":[[[0.5,0.771],[0.599,0.878],[0.601,0.824],[0.5,0.718]],[[0.599,0.878],[0.684,0.771],[0.688,0.718],[0.601,0.824]]],"we-1-08":[[[0.684,0.771],[0.76,0.677],[0.765,0.625],[0.688,0.718]]],"we-2-01":[[[0.265,0.471],[0.334,0.543],[0.331,0.491],[0.261,0.42]]],"we-2-02":[[[0.334,0.543],[0.412,0.625],[0.41,0.571],[0.331,0.491]]],"we-2-03":[[[0.412,0.625],[0.5,0.718],[0.5,0.662],[0.41,0.571]]],"we-2-04":[[[0.5,0.718],[0.601,0.824],[0.603,0.766],[0.5,0.662]],[[0.601,0.824],[0.688,0.718],[0.692,0.662],[0.603,0.766]]],"we-2-08":[[[0.688,0.718],[0.765,0.625],[0.77,0.571],[0.692,0.662]]],"we-3-01":[[[0.261,0.42],[0.331,0.491],[0.327,0.437],[0.256,0.368]]],"we-3-02":[[[0.331,0.491],[0.41,0.571],[0.408,0.515],[0.327,0.437]]],"we-3-03":[[[0.41,0.571],[0.5,0.662],[0.5,0.604],[0.408,0.515]]],"we-3-04":[[[0.5,0.662],[0.603,0.766],[0.606,0.707],[0.5,0.604]],[[0.603,0.766],[0.692,0.662],[0.697,0.604],[0.606,0.707]]],"we-3-08":[[[0.692,0.662],[0.77,0.571],[0.776,0.515],[0.697,0.604]]],"we-4-01":[[[0.256,0.368],[0.327,0.437],[0.324,0.381],[0.252,0.314]]],"we-4-02":[[[0.327,0.437],[0.408,0.515],[0.406,0.457],[0.324,0.381]]],"we-4-03":[[[0.408,0.515],[0.5,0.604],[0.5,0.544],[0.406,0.457]]],"we-4-04":[[[0.5,0.604],[0.606,0.707],[0.608,0.644],[0.5,0.544]],[[0.606,0.707],[0.697,0.604],[0.701,0.544],[0.608,0.644]]],"we-4-08":[[[0.697,0.604],[0.776,0.515],[0.782,0.457],[0.701,0.544]]],"we-5-01":[[[0.252,0.314],[0.324,0.381],[0.32,0.322],[0.247,0.257]]],"we-5-02":[[[0.324,0.381],[0.406,0.457],[0.404,0.396],[0.32,0.322]]],"we-5-03":[[[0.406,0.457],[0.5,0.544],[0.5,0.48],[0.404,0.396]]],"we-5-04":[[[0.5,0.544],[0.608,0.644],[0.611,0.578],[0.5,0.48]],[[0.608,0.644],[0.701,0.544],[0.706,0.48],[0.611,0.578]]],"we-5-08":[[[0.701,0.544],[0.782,0.457],[0.788,0.396],[0.706,0.48]]],"we-6-01":[[[0.323,0.273],[0.434,0.366],[0.433,0.304],[0.319,0.214]]],"we-6-02":[[[0.436,0.368],[0.57,0.48],[0.572,0.414],[0.435,0.306]],[[0.57,0.48],[0.693,0.366],[0.697,0.304],[0.572,0.414]]]}},"v2":{"img":"aussen8/v2.jpg","polys":{"we-0-04":[[[0.365,0.91],[0.5,0.91],[0.5,0.859],[0.362,0.859]]],"we-0-08":[[[0.5,0.91],[0.635,0.91],[0.638,0.859],[0.5,0.859]]],"we-1-04":[[[0.362,0.859],[0.5,0.859],[0.5,0.804],[0.359,0.804]]],"we-1-08":[[[0.5,0.859],[0.638,0.859],[0.641,0.804],[0.5,0.804]]],"we-2-04":[[[0.359,0.804],[0.5,0.804],[0.5,0.748],[0.356,0.748]]],"we-2-08":[[[0.5,0.804],[0.641,0.804],[0.644,0.748],[0.5,0.748]]],"we-3-04":[[[0.356,0.748],[0.5,0.748],[0.5,0.688],[0.352,0.688]]],"we-3-08":[[[0.5,0.748],[0.644,0.748],[0.648,0.688],[0.5,0.688]]],"we-4-04":[[[0.352,0.688],[0.5,0.688],[0.5,0.626],[0.349,0.626]]],"we-4-08":[[[0.5,0.688],[0.648,0.688],[0.651,0.626],[0.5,0.626]]],"we-5-04":[[[0.349,0.626],[0.5,0.626],[0.5,0.56],[0.345,0.56]]],"we-5-08":[[[0.5,0.626],[0.651,0.626],[0.655,0.56],[0.5,0.56]]],"we-6-02":[[[0.4,0.469],[0.6,0.469],[0.602,0.404],[0.398,0.404]]]}},"v3":{"img":"aussen8/v3.jpg","polys":{"we-0-04":[[[0.245,0.726],[0.319,0.822],[0.316,0.771],[0.24,0.677]]],"we-0-05":[[[0.727,0.566],[0.66,0.642],[0.663,0.594],[0.731,0.519]]],"we-0-06":[[[0.66,0.642],[0.585,0.726],[0.587,0.677],[0.663,0.594]]],"we-0-07":[[[0.585,0.726],[0.5,0.822],[0.5,0.771],[0.587,0.677]]],"we-0-08":[[[0.5,0.822],[0.404,0.93],[0.401,0.878],[0.5,0.771]],[[0.319,0.822],[0.404,0.93],[0.401,0.878],[0.316,0.771]]],"we-1-04":[[[0.24,0.677],[0.316,0.771],[0.312,0.718],[0.235,0.625]]],"we-1-05":[[[0.731,0.519],[0.663,0.594],[0.666,0.543],[0.735,0.471]]],"we-1-06":[[[0.663,0.594],[0.587,0.677],[0.588,0.625],[0.666,0.543]]],"we-1-07":[[[0.587,0.677],[0.5,0.771],[0.5,0.718],[0.588,0.625]]],"we-1-08":[[[0.5,0.771],[0.401,0.878],[0.399,0.824],[0.5,0.718]],[[0.316,0.771],[0.401,0.878],[0.399,0.824],[0.312,0.718]]],"we-2-04":[[[0.235,0.625],[0.312,0.718],[0.308,0.662],[0.23,0.571]]],"we-2-05":[[[0.735,0.471],[0.666,0.543],[0.669,0.491],[0.74,0.42]]],"we-2-06":[[[0.666,0.543],[0.588,0.625],[0.59,0.571],[0.669,0.491]]],"we-2-07":[[[0.588,0.625],[0.5,0.718],[0.5,0.662],[0.59,0.571]]],"we-2-08":[[[0.5,0.718],[0.399,0.824],[0.397,0.766],[0.5,0.662]],[[0.312,0.718],[0.399,0.824],[0.397,0.766],[0.308,0.662]]],"we-3-04":[[[0.23,0.571],[0.308,0.662],[0.303,0.604],[0.224,0.515]]],"we-3-05":[[[0.74,0.42],[0.669,0.491],[0.673,0.437],[0.744,0.368]]],"we-3-06":[[[0.669,0.491],[0.59,0.571],[0.592,0.515],[0.673,0.437]]],"we-3-07":[[[0.59,0.571],[0.5,0.662],[0.5,0.604],[0.592,0.515]]],"we-3-08":[[[0.5,0.662],[0.397,0.766],[0.394,0.707],[0.5,0.604]],[[0.308,0.662],[0.397,0.766],[0.394,0.707],[0.303,0.604]]],"we-4-04":[[[0.224,0.515],[0.303,0.604],[0.299,0.544],[0.218,0.457]]],"we-4-05":[[[0.744,0.368],[0.673,0.437],[0.676,0.381],[0.749,0.314]]],"we-4-06":[[[0.673,0.437],[0.592,0.515],[0.594,0.457],[0.676,0.381]]],"we-4-07":[[[0.592,0.515],[0.5,0.604],[0.5,0.544],[0.594,0.457]]],"we-4-08":[[[0.5,0.604],[0.394,0.707],[0.392,0.644],[0.5,0.544]],[[0.303,0.604],[0.394,0.707],[0.392,0.644],[0.299,0.544]]],"we-5-04":[[[0.218,0.457],[0.299,0.544],[0.294,0.48],[0.212,0.396]]],"we-5-05":[[[0.749,0.314],[0.676,0.381],[0.68,0.322],[0.753,0.257]]],"we-5-06":[[[0.676,0.381],[0.594,0.457],[0.596,0.396],[0.68,0.322]]],"we-5-07":[[[0.594,0.457],[0.5,0.544],[0.5,0.48],[0.596,0.396]]],"we-5-08":[[[0.5,0.544],[0.392,0.644],[0.389,0.578],[0.5,0.48]],[[0.299,0.544],[0.392,0.644],[0.389,0.578],[0.294,0.48]]],"we-6-01":[[[0.566,0.366],[0.677,0.273],[0.681,0.214],[0.567,0.304]]],"we-6-02":[[[0.43,0.48],[0.564,0.368],[0.565,0.306],[0.428,0.414]],[[0.307,0.366],[0.43,0.48],[0.428,0.414],[0.303,0.304]]]}},"v4":{"img":"aussen8/v4.jpg","polys":{"we-0-05":[[[0.746,0.764],[0.623,0.764],[0.626,0.714],[0.751,0.714]]],"we-0-06":[[[0.623,0.764],[0.5,0.764],[0.5,0.714],[0.626,0.714]]],"we-0-07":[[[0.5,0.764],[0.377,0.764],[0.374,0.714],[0.5,0.714]]],"we-0-08":[[[0.377,0.764],[0.254,0.764],[0.249,0.714],[0.374,0.714]]],"we-1-05":[[[0.751,0.714],[0.626,0.714],[0.628,0.662],[0.756,0.662]]],"we-1-06":[[[0.626,0.714],[0.5,0.714],[0.5,0.662],[0.628,0.662]]],"we-1-07":[[[0.5,0.714],[0.374,0.714],[0.372,0.662],[0.5,0.662]]],"we-1-08":[[[0.374,0.714],[0.249,0.714],[0.244,0.662],[0.372,0.662]]],"we-2-05":[[[0.756,0.662],[0.628,0.662],[0.631,0.607],[0.762,0.607]]],"we-2-06":[[[0.628,0.662],[0.5,0.662],[0.5,0.607],[0.631,0.607]]],"we-2-07":[[[0.5,0.662],[0.372,0.662],[0.369,0.607],[0.5,0.607]]],"we-2-08":[[[0.372,0.662],[0.244,0.662],[0.238,0.607],[0.369,0.607]]],"we-3-05":[[[0.762,0.607],[0.631,0.607],[0.634,0.551],[0.767,0.551]]],"we-3-06":[[[0.631,0.607],[0.5,0.607],[0.5,0.551],[0.634,0.551]]],"we-3-07":[[[0.5,0.607],[0.369,0.607],[0.366,0.551],[0.5,0.551]]],"we-3-08":[[[0.369,0.607],[0.238,0.607],[0.233,0.551],[0.366,0.551]]],"we-4-05":[[[0.767,0.551],[0.634,0.551],[0.636,0.491],[0.773,0.491]]],"we-4-06":[[[0.634,0.551],[0.5,0.551],[0.5,0.491],[0.636,0.491]]],"we-4-07":[[[0.5,0.551],[0.366,0.551],[0.363,0.491],[0.5,0.491]]],"we-4-08":[[[0.366,0.551],[0.233,0.551],[0.227,0.491],[0.363,0.491]]],"we-5-05":[[[0.773,0.491],[0.636,0.491],[0.64,0.429],[0.779,0.429]]],"we-5-06":[[[0.636,0.491],[0.5,0.491],[0.5,0.429],[0.64,0.429]]],"we-5-07":[[[0.5,0.491],[0.363,0.491],[0.36,0.429],[0.5,0.429]]],"we-5-08":[[[0.363,0.491],[0.227,0.491],[0.221,0.429],[0.36,0.429]]],"we-6-01":[[[0.501,0.389],[0.685,0.389],[0.689,0.326],[0.501,0.326]]],"we-6-02":[[[0.315,0.389],[0.498,0.389],[0.498,0.326],[0.311,0.326]]]}},"v5":{"img":"aussen8/v5.jpg","polys":{"we-0-01":[[[0.755,0.726],[0.681,0.822],[0.684,0.771],[0.76,0.677]]],"we-0-05":[[[0.597,0.93],[0.5,0.822],[0.5,0.771],[0.599,0.878]],[[0.681,0.822],[0.597,0.93],[0.599,0.878],[0.684,0.771]]],"we-0-06":[[[0.5,0.822],[0.415,0.726],[0.413,0.677],[0.5,0.771]]],"we-0-07":[[[0.415,0.726],[0.34,0.642],[0.337,0.594],[0.413,0.677]]],"we-0-08":[[[0.34,0.642],[0.273,0.566],[0.269,0.519],[0.337,0.594]]],"we-1-01":[[[0.76,0.677],[0.684,0.771],[0.688,0.718],[0.765,0.625]]],"we-1-05":[[[0.599,0.878],[0.5,0.771],[0.5,0.718],[0.601,0.824]],[[0.684,0.771],[0.599,0.878],[0.601,0.824],[0.688,0.718]]],"we-1-06":[[[0.5,0.771],[0.413,0.677],[0.412,0.625],[0.5,0.718]]],"we-1-07":[[[0.413,0.677],[0.337,0.594],[0.334,0.543],[0.412,0.625]]],"we-1-08":[[[0.337,0.594],[0.269,0.519],[0.265,0.471],[0.334,0.543]]],"we-2-01":[[[0.765,0.625],[0.688,0.718],[0.692,0.662],[0.77,0.571]]],"we-2-05":[[[0.601,0.824],[0.5,0.718],[0.5,0.662],[0.603,0.766]],[[0.688,0.718],[0.601,0.824],[0.603,0.766],[0.692,0.662]]],"we-2-06":[[[0.5,0.718],[0.412,0.625],[0.41,0.571],[0.5,0.662]]],"we-2-07":[[[0.412,0.625],[0.334,0.543],[0.331,0.491],[0.41,0.571]]],"we-2-08":[[[0.334,0.543],[0.265,0.471],[0.261,0.42],[0.331,0.491]]],"we-3-01":[[[0.77,0.571],[0.692,0.662],[0.697,0.604],[0.776,0.515]]],"we-3-05":[[[0.603,0.766],[0.5,0.662],[0.5,0.604],[0.606,0.707]],[[0.692,0.662],[0.603,0.766],[0.606,0.707],[0.697,0.604]]],"we-3-06":[[[0.5,0.662],[0.41,0.571],[0.408,0.515],[0.5,0.604]]],"we-3-07":[[[0.41,0.571],[0.331,0.491],[0.327,0.437],[0.408,0.515]]],"we-3-08":[[[0.331,0.491],[0.261,0.42],[0.256,0.368],[0.327,0.437]]],"we-4-01":[[[0.776,0.515],[0.697,0.604],[0.701,0.544],[0.782,0.457]]],"we-4-05":[[[0.606,0.707],[0.5,0.604],[0.5,0.544],[0.608,0.644]],[[0.697,0.604],[0.606,0.707],[0.608,0.644],[0.701,0.544]]],"we-4-06":[[[0.5,0.604],[0.408,0.515],[0.406,0.457],[0.5,0.544]]],"we-4-07":[[[0.408,0.515],[0.327,0.437],[0.324,0.381],[0.406,0.457]]],"we-4-08":[[[0.327,0.437],[0.256,0.368],[0.252,0.314],[0.324,0.381]]],"we-5-01":[[[0.782,0.457],[0.701,0.544],[0.706,0.48],[0.788,0.396]]],"we-5-05":[[[0.608,0.644],[0.5,0.544],[0.5,0.48],[0.611,0.578]],[[0.701,0.544],[0.608,0.644],[0.611,0.578],[0.706,0.48]]],"we-5-06":[[[0.5,0.544],[0.406,0.457],[0.404,0.396],[0.5,0.48]]],"we-5-07":[[[0.406,0.457],[0.324,0.381],[0.32,0.322],[0.404,0.396]]],"we-5-08":[[[0.324,0.381],[0.252,0.314],[0.247,0.257],[0.32,0.322]]],"we-6-01":[[[0.436,0.368],[0.57,0.48],[0.572,0.414],[0.435,0.306]],[[0.693,0.366],[0.57,0.48],[0.572,0.414],[0.697,0.304]]],"we-6-02":[[[0.323,0.273],[0.434,0.366],[0.433,0.304],[0.319,0.214]]]}},"v6":{"img":"aussen8/v6.jpg","polys":{"we-0-01":[[[0.635,0.91],[0.5,0.91],[0.5,0.859],[0.638,0.859]]],"we-0-05":[[[0.5,0.91],[0.365,0.91],[0.362,0.859],[0.5,0.859]]],"we-1-01":[[[0.638,0.859],[0.5,0.859],[0.5,0.804],[0.641,0.804]]],"we-1-05":[[[0.5,0.859],[0.362,0.859],[0.359,0.804],[0.5,0.804]]],"we-2-01":[[[0.641,0.804],[0.5,0.804],[0.5,0.748],[0.644,0.748]]],"we-2-05":[[[0.5,0.804],[0.359,0.804],[0.356,0.748],[0.5,0.748]]],"we-3-01":[[[0.644,0.748],[0.5,0.748],[0.5,0.688],[0.648,0.688]]],"we-3-05":[[[0.5,0.748],[0.356,0.748],[0.352,0.688],[0.5,0.688]]],"we-4-01":[[[0.648,0.688],[0.5,0.688],[0.5,0.626],[0.651,0.626]]],"we-4-05":[[[0.5,0.688],[0.352,0.688],[0.349,0.626],[0.5,0.626]]],"we-5-01":[[[0.651,0.626],[0.5,0.626],[0.5,0.56],[0.655,0.56]]],"we-5-05":[[[0.5,0.626],[0.349,0.626],[0.345,0.56],[0.5,0.56]]],"we-6-01":[[[0.6,0.469],[0.4,0.469],[0.398,0.404],[0.602,0.404]]]}},"v7":{"img":"aussen8/v7.jpg","polys":{"we-0-01":[[[0.404,0.93],[0.5,0.822],[0.5,0.771],[0.401,0.878]],[[0.404,0.93],[0.319,0.822],[0.316,0.771],[0.401,0.878]]],"we-0-02":[[[0.5,0.822],[0.585,0.726],[0.587,0.677],[0.5,0.771]]],"we-0-03":[[[0.585,0.726],[0.66,0.642],[0.663,0.594],[0.587,0.677]]],"we-0-04":[[[0.66,0.642],[0.727,0.566],[0.731,0.519],[0.663,0.594]]],"we-0-05":[[[0.319,0.822],[0.245,0.726],[0.24,0.677],[0.316,0.771]]],"we-1-01":[[[0.401,0.878],[0.5,0.771],[0.5,0.718],[0.399,0.824]],[[0.401,0.878],[0.316,0.771],[0.312,0.718],[0.399,0.824]]],"we-1-02":[[[0.5,0.771],[0.587,0.677],[0.588,0.625],[0.5,0.718]]],"we-1-03":[[[0.587,0.677],[0.663,0.594],[0.666,0.543],[0.588,0.625]]],"we-1-04":[[[0.663,0.594],[0.731,0.519],[0.735,0.471],[0.666,0.543]]],"we-1-05":[[[0.316,0.771],[0.24,0.677],[0.235,0.625],[0.312,0.718]]],"we-2-01":[[[0.399,0.824],[0.5,0.718],[0.5,0.662],[0.397,0.766]],[[0.399,0.824],[0.312,0.718],[0.308,0.662],[0.397,0.766]]],"we-2-02":[[[0.5,0.718],[0.588,0.625],[0.59,0.571],[0.5,0.662]]],"we-2-03":[[[0.588,0.625],[0.666,0.543],[0.669,0.491],[0.59,0.571]]],"we-2-04":[[[0.666,0.543],[0.735,0.471],[0.74,0.42],[0.669,0.491]]],"we-2-05":[[[0.312,0.718],[0.235,0.625],[0.23,0.571],[0.308,0.662]]],"we-3-01":[[[0.397,0.766],[0.5,0.662],[0.5,0.604],[0.394,0.707]],[[0.397,0.766],[0.308,0.662],[0.303,0.604],[0.394,0.707]]],"we-3-02":[[[0.5,0.662],[0.59,0.571],[0.592,0.515],[0.5,0.604]]],"we-3-03":[[[0.59,0.571],[0.669,0.491],[0.673,0.437],[0.592,0.515]]],"we-3-04":[[[0.669,0.491],[0.74,0.42],[0.744,0.368],[0.673,0.437]]],"we-3-05":[[[0.308,0.662],[0.23,0.571],[0.224,0.515],[0.303,0.604]]],"we-4-01":[[[0.394,0.707],[0.5,0.604],[0.5,0.544],[0.392,0.644]],[[0.394,0.707],[0.303,0.604],[0.299,0.544],[0.392,0.644]]],"we-4-02":[[[0.5,0.604],[0.592,0.515],[0.594,0.457],[0.5,0.544]]],"we-4-03":[[[0.592,0.515],[0.673,0.437],[0.676,0.381],[0.594,0.457]]],"we-4-04":[[[0.673,0.437],[0.744,0.368],[0.749,0.314],[0.676,0.381]]],"we-4-05":[[[0.303,0.604],[0.224,0.515],[0.218,0.457],[0.299,0.544]]],"we-5-01":[[[0.392,0.644],[0.5,0.544],[0.5,0.48],[0.389,0.578]],[[0.392,0.644],[0.299,0.544],[0.294,0.48],[0.389,0.578]]],"we-5-02":[[[0.5,0.544],[0.594,0.457],[0.596,0.396],[0.5,0.48]]],"we-5-03":[[[0.594,0.457],[0.676,0.381],[0.68,0.322],[0.596,0.396]]],"we-5-04":[[[0.676,0.381],[0.749,0.314],[0.753,0.257],[0.68,0.322]]],"we-5-05":[[[0.299,0.544],[0.218,0.457],[0.212,0.396],[0.294,0.48]]],"we-6-01":[[[0.43,0.48],[0.564,0.368],[0.565,0.306],[0.428,0.414]],[[0.43,0.48],[0.307,0.366],[0.303,0.304],[0.428,0.414]]],"we-6-02":[[[0.566,0.366],[0.677,0.273],[0.681,0.214],[0.567,0.304]]]}}},"frames":{"1":"aussen8/frames/f01.jpg","2":"aussen8/frames/f02.jpg","3":"aussen8/frames/f03.jpg","4":"aussen8/frames/f04.jpg","5":"aussen8/frames/f05.jpg","7":"aussen8/frames/f07.jpg","8":"aussen8/frames/f08.jpg","9":"aussen8/frames/f09.jpg","10":"aussen8/frames/f10.jpg","11":"aussen8/frames/f11.jpg","13":"aussen8/frames/f13.jpg","14":"aussen8/frames/f14.jpg","15":"aussen8/frames/f15.jpg","16":"aussen8/frames/f16.jpg","17":"aussen8/frames/f17.jpg","19":"aussen8/frames/f19.jpg","20":"aussen8/frames/f20.jpg","21":"aussen8/frames/f21.jpg","22":"aussen8/frames/f22.jpg","23":"aussen8/frames/f23.jpg","25":"aussen8/frames/f25.jpg","26":"aussen8/frames/f26.jpg","27":"aussen8/frames/f27.jpg","28":"aussen8/frames/f28.jpg","29":"aussen8/frames/f29.jpg","31":"aussen8/frames/f31.jpg","32":"aussen8/frames/f32.jpg","33":"aussen8/frames/f33.jpg","34":"aussen8/frames/f34.jpg","35":"aussen8/frames/f35.jpg","37":"aussen8/frames/f37.jpg","38":"aussen8/frames/f38.jpg","39":"aussen8/frames/f39.jpg","40":"aussen8/frames/f40.jpg","41":"aussen8/frames/f41.jpg","43":"aussen8/frames/f43.jpg","44":"aussen8/frames/f44.jpg","45":"aussen8/frames/f45.jpg","46":"aussen8/frames/f46.jpg","47":"aussen8/frames/f47.jpg"}}</script>
+<script id="pano" type="application/json">{"cams":{"wohnen":[-2.1,-2.85],"schlafen":[1.9,-2.2],"kind":[2.2,2.3],"flur":[-0.7,2.3],"bad":[-3.0,2.4],"balkon":[-2.6,-4.75]},"doors":{"flur":{"bad":[-2,2.3],"kind":[0.6,2.3],"wohnen":[-0.7,0.6]},"bad":{"flur":[-2,2.3]},"kind":{"flur":[0.6,2.3]},"wohnen":{"flur":[-0.7,0.6],"schlafen":[0.8,-1.7],"balkon":[-2.1,-4.0]},"schlafen":{"wohnen":[0.8,-1.7]},"balkon":{"wohnen":[-2.1,-4.0]}},"img":{"wohnen":"innen/wohnen.jpg?v=3","schlafen":"innen/schlafen.jpg?v=3","kind":"innen/kind.jpg?v=3","flur":"innen/flur.jpg?v=3","bad":"innen/bad.jpg?v=3","balkon":"innen/balkon.jpg?v=3"}}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ================= Daten & Grundrisslogik =================
+const STATUS = {
+  frei:       { color: '#2FAE6E', hex: 0x2FAE6E, rent: 'Verfügbar',  buy: 'Verfügbar' },
+  reserviert: { color: '#E58A2B', hex: 0xE58A2B, rent: 'Reserviert', buy: 'Reserviert' },
+  vergeben:   { color: '#D2433B', hex: 0xD2433B, rent: 'Vermietet',  buy: 'Verkauft' }
+};
+
+const TYPES = {
+  D: { zi: 1, label: '1-Zimmer-Apartment', rent: 13.9, buy: 5450,
+    rooms: [
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 0, y: 0, w: 3, h: 2.4 },
+      { id: 'bad', name: 'Duschbad', kind: 'bad', x: 3, y: 0, w: 3, h: 2.4 },
+      { id: 'wohnen', name: 'Wohnen & Schlafen', kind: 'studio', x: 0, y: 2.4, w: 6, h: 4.6 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 7, w: 4, h: 1.4 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'wohnen'], ['wohnen', 'balkon']] },
+  A: { zi: 2, label: '2-Zimmer-Wohnung', rent: 12.9, buy: 5150,
+    rooms: [
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 0, y: 0, w: 4.5, h: 2.4 },
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 4.5, y: 0, w: 4, h: 2.4 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 2.4, w: 4.8, h: 5 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 4.8, y: 2.4, w: 3.7, h: 5 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 7.4, w: 4.8, h: 1.5 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'wohnen'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
+  B: { zi: 3, label: '3-Zimmer-Wohnung', rent: 12.4, buy: 4950,
+    rooms: [
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 0, y: 0, w: 3, h: 3.4 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 3, y: 0, w: 2.6, h: 3.4 },
+      { id: 'kind', name: 'Kinderzimmer', kind: 'kind', x: 5.6, y: 0, w: 4.4, h: 3.4 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.4, w: 5.8, h: 4.6 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 5.8, y: 3.4, w: 4.2, h: 4.6 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 8, w: 5.8, h: 1.6 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'kind'], ['flur', 'wohnen'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
+  C: { zi: 4, label: '4-Zimmer-Wohnung', rent: 12.1, buy: 4850,
+    rooms: [
+      { id: 'kind1', name: 'Kinderzimmer', kind: 'kind', x: 0, y: 0, w: 3.6, h: 3.6 },
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 3.6, y: 0, w: 2.6, h: 3.6 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 6.2, y: 0, w: 2.2, h: 3.6 },
+      { id: 'kind2', name: 'Arbeiten', kind: 'arbeiten', x: 8.4, y: 0, w: 3.2, h: 3.6 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.6, w: 7.6, h: 5.2 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 7.6, y: 3.6, w: 4, h: 5.2 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 8.8, w: 7.6, h: 1.6 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'kind2'], ['flur', 'wohnen'], ['wohnen', 'kind1'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
+  P: { zi: 4, label: 'Penthouse', rent: 16.5, buy: 6900,
+    rooms: [
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 0, y: 0, w: 3.4, h: 3.8 },
+      { id: 'gaeste', name: 'Gästezimmer', kind: 'gaeste', x: 3.4, y: 0, w: 3.6, h: 3.8 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 7, y: 0, w: 2.8, h: 3.8 },
+      { id: 'arbeiten', name: 'Arbeiten', kind: 'arbeiten', x: 9.8, y: 0, w: 4.2, h: 3.8 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.8, w: 8.6, h: 6.2 },
+      { id: 'schlafen', name: 'Schlafen & Ankleide', kind: 'schlafen', x: 8.6, y: 3.8, w: 5.4, h: 6.2 },
+      { id: 'terrasse', name: 'Dachterrasse', kind: 'balkon', x: 0, y: 10, w: 14, h: 3.5 }
+    ],
+    doors: [['flur', 'gaeste'], ['flur', 'arbeiten'], ['flur', 'wohnen'], ['flur', 'schlafen'], ['wohnen', 'bad'], ['wohnen', 'terrasse'], ['schlafen', 'terrasse']] }
+};
+
+const EPS = 0.01;
+function sharedWall(a, b) {
+  const ovY = [Math.max(a.y, b.y), Math.min(a.y + a.h, b.y + b.h)];
+  const ovX = [Math.max(a.x, b.x), Math.min(a.x + a.w, b.x + b.w)];
+  if (Math.abs(a.x + a.w - b.x) < EPS && ovY[1] - ovY[0] > 0.5) return { aw: 'e', bw: 'w', x: b.x, y: (ovY[0] + ovY[1]) / 2, len: ovY[1] - ovY[0] };
+  if (Math.abs(b.x + b.w - a.x) < EPS && ovY[1] - ovY[0] > 0.5) return { aw: 'w', bw: 'e', x: a.x, y: (ovY[0] + ovY[1]) / 2, len: ovY[1] - ovY[0] };
+  if (Math.abs(a.y + a.h - b.y) < EPS && ovX[1] - ovX[0] > 0.5) return { aw: 's', bw: 'n', x: (ovX[0] + ovX[1]) / 2, y: b.y, len: ovX[1] - ovX[0] };
+  if (Math.abs(b.y + b.h - a.y) < EPS && ovX[1] - ovX[0] > 0.5) return { aw: 'n', bw: 's', x: (ovX[0] + ovX[1]) / 2, y: a.y, len: ovX[1] - ovX[0] };
+  return null;
+}
+
+for (const code in TYPES) {
+  const t = TYPES[code];
+  t.code = code;
+  t.byId = {};
+  t.rooms.forEach(r => { t.byId[r.id] = r; r.area = +(r.w * r.h).toFixed(1); });
+  const living = t.rooms.filter(r => r.kind !== 'balkon');
+  const outdoor = t.rooms.filter(r => r.kind === 'balkon');
+  t.bb = {
+    x0: Math.min(...living.map(r => r.x)), y0: Math.min(...living.map(r => r.y)),
+    x1: Math.max(...living.map(r => r.x + r.w)), y1: Math.max(...living.map(r => r.y + r.h))
+  };
+  t.outdoor = +outdoor.reduce((s, r) => s + r.w * r.h, 0).toFixed(1);
+  // Wohnfläche nach WoFlV: Balkon/Terrasse zu 1/4
+  t.area = +(living.reduce((s, r) => s + r.w * r.h, 0) + t.outdoor * 0.25).toFixed(1);
+  t.rooms.forEach(r => { r.walls = computeWalls(t, r); });
+}
+
+function computeWalls(t, room) {
+  const walls = {
+    n: { len: room.w, doors: [], win: 'none' }, s: { len: room.w, doors: [], win: 'none' },
+    w: { len: room.h, doors: [], win: 'none' }, e: { len: room.h, doors: [], win: 'none' }
+  };
+  t.doors.forEach(([i, j]) => {
+    if (i !== room.id && j !== room.id) return;
+    const other = t.byId[i === room.id ? j : i];
+    const sw = sharedWall(room, other);
+    if (!sw) { console.warn('Keine gemeinsame Wand', t.code, i, j); return; }
+    const along = (sw.aw === 'n' || sw.aw === 's') ? sw.x - (room.x + room.w / 2) : sw.y - (room.y + room.h / 2);
+    const balcony = other.kind === 'balkon' || room.kind === 'balkon';
+    walls[sw.aw].doors.push({ along, to: other.id, len: sw.len, balcony, leaf: j === room.id });
+  });
+  if (room.kind === 'balkon') return walls;
+  const bb = t.bb;
+  const onN = Math.abs(room.y - bb.y0) < EPS, onS = Math.abs(room.y + room.h - bb.y1) < EPS;
+  const onW = Math.abs(room.x - bb.x0) < EPS, onE = Math.abs(room.x + room.w - bb.x1) < EPS;
+  if (room.kind === 'flur') { if (onN) walls.n.entry = true; return walls; }
+  if (onS) walls.s.win = 'std';
+  if (onN) walls.n.win = 'std';
+  for (const k in walls) if (walls[k].doors.some(d => d.balcony)) walls[k].win = 'full';
+  const hasWin = Object.values(walls).some(w => w.win !== 'none');
+  if (!hasWin) { if (onW) walls.w.win = 'std'; else if (onE) walls.e.win = 'std'; }
+  return walls;
+}
+
+function freeWalls(room) {
+  const ws = room.walls;
+  const free = [], second = [];
+  for (const k of ['n', 'e', 'w', 's']) {
+    const w = ws[k];
+    if (w.doors.length || w.entry) continue;
+    if (w.win === 'none') free.push(k); else if (w.win === 'std') second.push(k);
+  }
+  const byLen = (a, b) => ws[b].len - ws[a].len;
+  return { free: free.sort(byLen), second: second.sort(byLen) };
+}
+
+// ---------- Wohneinheiten ----------
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+const FLOORS = [
+  { id: 0, short: 'EG', long: 'Erdgeschoss' },
+  { id: 1, short: '1', long: '1. Obergeschoss' },
+  { id: 2, short: '2', long: '2. Obergeschoss' },
+  { id: 3, short: '3', long: '3. Obergeschoss' },
+  { id: 4, short: '4', long: '4. Obergeschoss' },
+  { id: 5, short: '5', long: '5. Obergeschoss' },
+  { id: 6, short: 'DG', long: 'Dachgeschoss' }
+];
+const FLOOR_H = 3.0;
+const PAT = [['C', 'A', 'B', 'C', 'B', 'D', 'A', 'B'], ['C', 'B', 'A', 'C', 'B', 'A', 'D', 'B']];
+
+function buildUnits() {
+  const rng = mulberry32(20261105);
+  const units = [];
+  for (let f = 0; f < 6; f++) {
+    for (let p = 0; p < 8; p++) {
+      const type = TYPES[PAT[f % 2][p]];
+      const front = p < 4, col = p % 4;
+      const corner = col === 0 || col === 3;
+      const r = rng();
+      const soldP = 0.6 - f * 0.05;
+      const status = r < soldP ? 'vergeben' : r < soldP + 0.13 ? 'reserviert' : 'frei';
+      units.push(makeUnit({ f, idx: p + 1, type, front, col, corner, status }));
+    }
+  }
+  units.push(makeUnit({ f: 6, idx: 1, type: TYPES.P, front: true, col: 0, corner: true, status: 'frei', ph: true }));
+  units.push(makeUnit({ f: 6, idx: 2, type: TYPES.P, front: true, col: 1, corner: true, status: 'reserviert', ph: true }));
+  return units;
+}
+
+function makeUnit(o) {
+  const t = o.type;
+  const no = `${o.f}.${String(o.idx).padStart(2, '0')}`;
+  const rentSqm = +(t.rent + 0.2 * o.f).toFixed(2);
+  const buySqm = Math.round(t.buy + 70 * o.f);
+  const kalt = Math.round(t.area * rentSqm);
+  const nk = Math.round(t.area * 2.9);
+  const price = Math.round(t.area * buySqm / 100) * 100;
+  let orient = o.ph ? 'Rundum verglast, Terrasse Südwest' : (o.front ? 'Südwest' : 'Nordost');
+  if (o.corner && !o.ph) orient += ', Eckwohnung';
+  return {
+    id: 'we-' + no.replace('.', '-'), no, floor: o.f, type: t, typeCode: t.code, zi: t.zi, area: t.area,
+    front: o.front, col: o.col, corner: o.corner, ph: !!o.ph, status: o.status,
+    rentSqm, kalt, nk, warm: kalt + nk, price, buySqm,
+    yield: kalt * 12 / price * 100, orient,
+    outdoorLabel: o.ph ? 'Dachterrasse' : 'Balkon', outdoor: t.outdoor
+  };
+}
+
+// ---------- Grundriss als SVG ----------
+function planSVG(t, opts = {}) {
+  const pad = 0.5;
+  const minX = 0, minY = 0;
+  const maxX = Math.max(...t.rooms.map(r => r.x + r.w)), maxY = Math.max(...t.rooms.map(r => r.y + r.h));
+  const vw = maxX - minX + pad * 2, vh = maxY - minY + pad * 2;
+  let s = `<svg class="plan" viewBox="${minX - pad} ${minY - pad} ${vw} ${vh}" role="img" aria-label="Grundriss ${t.label}">`;
+  s += `<defs><pattern id="hatch-${t.code}" width="0.35" height="0.35" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="0.35" class="hatch"/></pattern></defs>`;
+  for (const r of t.rooms) {
+    const cur = opts.current === r.id ? ' current' : '';
+    const fill = r.kind === 'balkon' ? `url(#hatch-${t.code})` : '';
+    s += `<g class="room k-${r.kind}${cur}" data-room="${r.id}"${opts.interactive ? ` tabindex="0" role="button" aria-label="${r.name} ansehen"` : ''}>`;
+    s += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}"${fill ? ` style="fill:${fill}"` : ''}/>`;
+    const fs = Math.min(0.42, r.w / (r.name.length * 0.62));
+    s += `<text x="${r.x + r.w / 2}" y="${r.y + r.h / 2 - 0.05}" font-size="${fs.toFixed(2)}">${r.name}</text>`;
+    s += `<text class="m2" x="${r.x + r.w / 2}" y="${r.y + r.h / 2 + 0.45}" font-size="0.34">${String(r.area).replace('.', ',')} m²</text>`;
+    s += `</g>`;
+  }
+  // Türen: Lücke in der Wand + Öffnungsbogen
+  for (const [i, j] of t.doors) {
+    const sw = sharedWall(t.byId[i], t.byId[j]);
+    if (!sw) continue;
+    const bal = t.byId[i].kind === 'balkon' || t.byId[j].kind === 'balkon';
+    const L = bal ? Math.min(sw.len - 0.4, 2.4) : 0.9;
+    if (sw.aw === 'n' || sw.aw === 's') {
+      s += `<line class="gap" x1="${sw.x - L / 2}" y1="${sw.y}" x2="${sw.x + L / 2}" y2="${sw.y}"/>`;
+      if (!bal) s += `<path class="swing" d="M ${sw.x - L / 2} ${sw.y} L ${sw.x - L / 2} ${sw.y - L} A ${L} ${L} 0 0 1 ${sw.x + L / 2} ${sw.y}"/>`;
+      else s += `<line class="glass" x1="${sw.x - L / 2}" y1="${sw.y}" x2="${sw.x + L / 2}" y2="${sw.y}"/>`;
+    } else {
+      s += `<line class="gap" x1="${sw.x}" y1="${sw.y - L / 2}" x2="${sw.x}" y2="${sw.y + L / 2}"/>`;
+      s += `<path class="swing" d="M ${sw.x} ${sw.y - L / 2} L ${sw.x + L} ${sw.y - L / 2} A ${L} ${L} 0 0 1 ${sw.x} ${sw.y + L / 2}"/>`;
+    }
+  }
+  // Fenster
+  for (const r of t.rooms) {
+    for (const k in r.walls) {
+      const w = r.walls[k];
+      if (w.win !== 'std') continue;
+      const L = Math.min(1.4, w.len - 0.6);
+      const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+      if (k === 'n' || k === 's') { const y = k === 'n' ? r.y : r.y + r.h; s += `<line class="win" x1="${cx - L / 2}" y1="${y}" x2="${cx + L / 2}" y2="${y}"/>`; }
+      else { const x = k === 'w' ? r.x : r.x + r.w; s += `<line class="win" x1="${x}" y1="${cy - L / 2}" x2="${x}" y2="${cy + L / 2}"/>`; }
+    }
+    if (r.walls.n.entry) s += `<path class="entry" d="M ${r.x + r.w / 2 - 0.35} ${r.y - 0.42} L ${r.x + r.w / 2} ${r.y - 0.12} L ${r.x + r.w / 2 + 0.35} ${r.y - 0.42}"/>`;
+  }
+  if (opts.current && t.byId[opts.current]) {
+    const r = t.byId[opts.current];
+    s += `<circle class="you" cx="${r.x + r.w / 2}" cy="${r.y + r.h / 2 - 0.7}" r="0.22"/>`;
+  }
+  s += `</svg>`;
+  return s;
+}
+
+function roomPath(t, from, to) {
+  if (from === to) return [from];
+  const adj = {}; t.rooms.forEach(r => { adj[r.id] = []; });
+  t.doors.forEach(([a, b]) => { adj[a].push(b); adj[b].push(a); });
+  const prev = { [from]: null }, q = [from];
+  while (q.length) { const c = q.shift(); if (c === to) break; for (const n of adj[c]) if (!(n in prev)) { prev[n] = c; q.push(n); } }
+  const path = []; let c = to; while (c) { path.unshift(c); c = prev[c]; }
+  return path;
+}
+
+
+
+(function () {
+  'use strict';
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nf0 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
+  const nf1 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const nf2 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const eur = v => nf0.format(v) + ' €';
+  const m2 = v => nf1.format(v) + ' m²';
+  const A = JSON.parse(document.getElementById('assets').textContent);
+
+  const units = buildUnits();
+  const byId = Object.fromEntries(units.map(u => [u.id, u]));
+  const MAX_RENT = Math.ceil(Math.max(...units.map(u => u.kalt)) / 50) * 50;
+  const MAX_BUY = Math.ceil(Math.max(...units.map(u => u.price)) / 10000) * 10000;
+  const state = {
+    mode: 'rent', sel: null, hover: null, floor: null, view: 'sw',
+    f: { onlyFree: false, zi: new Set(), minArea: 30, maxPrice: null, favOnly: false, sort: 'floor' },
+    fav: loadFav(), tourOpen: false
+  };
+  function loadFav() { try { return new Set(JSON.parse(localStorage.getItem('rer-merkliste') || '[]')); } catch (e) { return new Set(); } }
+  function saveFav() { try { localStorage.setItem('rer-merkliste', JSON.stringify([...state.fav])); } catch (e) { /* kein Speicher */ } }
+  const statusLabel = u => STATUS[u.status][state.mode];
+  const priceOf = u => state.mode === 'rent' ? u.kalt : u.price;
+  const maxPrice = () => state.mode === 'rent' ? MAX_RENT : MAX_BUY;
+  const floorName = f => FLOORS[f].long;
+  function matches(u) {
+    const f = state.f;
+    if (f.onlyFree && u.status !== 'frei') return false;
+    if (f.zi.size && !f.zi.has(Math.min(u.zi, 4))) return false;
+    if (u.area < f.minArea) return false;
+    if (f.maxPrice !== null && f.maxPrice < maxPrice() && priceOf(u) > f.maxPrice) return false;
+    if (f.favOnly && !state.fav.has(u.id)) return false;
+    return true;
+  }
+
+  // ================= Außenansicht (Renderings + Flächen) =================
+  const VIEWS = [
+    { id: 'v7', name: 'Südwest', az: 315 },
+    { id: 'v0', name: 'Straßenseite', az: 0 },
+    { id: 'v1', name: 'Südost', az: 45 },
+    { id: 'v2', name: 'Ostseite', az: 90 },
+    { id: 'v3', name: 'Nordost', az: 135 },
+    { id: 'v4', name: 'Gartenseite', az: 180 },
+    { id: 'v5', name: 'Nordwest', az: 225 },
+    { id: 'v6', name: 'Westseite', az: 270 }
+  ].filter(v => A.ext[v.id]);
+  const IW = A.extSize[0], IH = A.extSize[1];
+  const svg = $('#scene'), polyG = $('#polys');
+  const vb = { cx: IW / 2, cy: IH / 2, z: 1 };
+  // Drehscheibe: 48 Bilder (alle 7,5°), jedes 6. ist eine hochauflösende Ansicht mit Klickflächen
+  const NF = 48;
+  const cvs = $('#bg'), ctx = cvs.getContext('2d');
+  const frames = Array.from({ length: NF }, (_, i) => {
+    const src = i % 6 === 0 ? (A.ext['v' + (i / 6)] || {}).img : (A.frames || {})[i];
+    if (!src) return null;
+    const im = new Image(); const f = { im, ready: false };
+    im.onload = () => { (im.decode ? im.decode() : Promise.resolve()).catch(() => {}).then(() => { f.ready = true; if (Math.round(state.frame) % NF === i) draw(); }); };
+    im.src = src; return f;
+  });
+  state.frame = 42;
+  const keyOf = id => +id.slice(1) * 6;
+  function frameImg(i) {
+    i = ((Math.round(i) % NF) + NF) % NF;
+    if (frames[i] && frames[i].ready) return frames[i].im;
+    const k = Math.round(i / 6) % 8 * 6; return frames[k] && frames[k].ready ? frames[k].im : null;
+  }
+  function draw() {
+    const r = cvs.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
+    if (cvs.width !== w || cvs.height !== h) { cvs.width = w; cvs.height = h; }
+    if (!vb.w) return;
+    ctx.imageSmoothingQuality = 'high';
+    const f = state.frame, f0 = Math.floor(f), t = f - f0;
+    const blit = (im, alpha) => {
+      if (!im) return;
+      const sx = im.naturalWidth / IW;
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(im, (vb.cx - vb.w / 2) * sx, (vb.cy - vb.h / 2) * sx, vb.w * sx, vb.h * sx, 0, 0, w, h);
+    };
+    blit(frameImg(f0), 1);
+    if (t > 0.01) blit(frameImg(f0 + 1), t);
+    ctx.globalAlpha = 1;
+  }
+  let spin = null;
+  const easeIOc = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  function animateTo(target, ms) {
+    const from = state.frame; cancelAnimationFrame(spin && spin.raf);
+    polyG.style.transition = 'opacity .2s ease'; polyG.style.opacity = '0';
+    if (reduceMotion) ms = 1;
+    const t0 = performance.now();
+    spin = { raf: 0 };
+    const step = now => {
+      const k = Math.min(1, (now - t0) / ms);
+      state.frame = from + (target - from) * easeIOc(k); draw();
+      if (k < 1) spin.raf = requestAnimationFrame(step);
+      else { state.frame = ((Math.round(target) % NF) + NF) % NF; draw(); spin = null; polyG.style.transition = 'opacity .35s ease'; polyG.style.opacity = '1'; }
+    };
+    spin.raf = requestAnimationFrame(step);
+  }
+  function setView(id, instant, dir) {
+    state.view = id;
+    const target = keyOf(id);
+    renderPolys();
+    const vv = VIEWS.find(x => x.id === id);
+    $('#viewName').textContent = vv.name;
+    const nd = $('#needle'); if (nd) nd.style.transform = `rotate(${-vv.az}deg)`;
+    $$('#viewDots i').forEach((dd, i) => dd.classList.toggle('on', VIEWS[i].id === id));
+    if (instant) { state.frame = target; draw(); return; }
+    let cur = state.frame, d = target - cur;
+    if (dir) { while (dir > 0 && d <= 0) d += NF; while (dir < 0 && d >= 0) d -= NF; }
+    else { while (d > NF / 2) d -= NF; while (d < -NF / 2) d += NF; }
+    animateTo(cur + d, 380 + Math.abs(d) * 55);
+  }
+  function rotate(step) {
+    const i = VIEWS.findIndex(v => v.id === state.view);
+    setView(VIEWS[(i + step + VIEWS.length) % VIEWS.length].id, false, step);
+  }
+  function renderPolys() {
+    const polys = A.ext[state.view].polys;
+    let h = '';
+    for (const id in polys) {
+      const u = byId[id]; if (!u) continue;
+      const d = polys[id].map(p => 'M' + p.map(q => (q[0] * IW).toFixed(1) + ' ' + (q[1] * IH).toFixed(1)).join('L') + 'Z').join('');
+      h += `<path class="u st-${u.status}" data-id="${id}" d="${d}"><title>Wohnung ${u.no}</title></path>`;
+    }
+    polyG.innerHTML = h;
+    refreshPolys();
+  }
+  function refreshPolys() {
+    $$('#polys path').forEach(p => {
+      const u = byId[p.dataset.id];
+      p.classList.toggle('sel', state.sel === u.id);
+      p.classList.toggle('hov', state.hover === u.id);
+      p.classList.toggle('out', !matches(u));
+      p.classList.toggle('dim', state.floor !== null && u.floor !== state.floor);
+      p.classList.toggle('flr', state.floor !== null && u.floor === state.floor);
+    });
+    renderPlan();
+  }
+  function bestView(u) {
+    let best = null, ba = 0;
+    for (const v of VIEWS) { const p = A.ext[v.id].polys[u.id]; if (!p) continue; const a = p.reduce((s, q) => s + area(q), 0); if (a > ba) { ba = a; best = v.id; } }
+    return best;
+  }
+  // Ausschnitt, Zoom und Verschieben
+  function applyVB() {
+    const r = svg.getBoundingClientRect(); const asp = r.width / Math.max(1, r.height);
+    let vh = IH, vw = IH * asp;
+    if (vw > IW) { vw = IW; vh = IW / asp; }
+    vw /= vb.z; vh /= vb.z;
+    vb.cx = Math.max(vw / 2, Math.min(IW - vw / 2, vb.cx));
+    vb.cy = Math.max(vh / 2, Math.min(IH - vh / 2, vb.cy));
+    svg.setAttribute('viewBox', `${(vb.cx - vw / 2).toFixed(1)} ${(vb.cy - vh / 2).toFixed(1)} ${vw.toFixed(1)} ${vh.toFixed(1)}`);
+    vb.w = vw; vb.h = vh; vb.sx = vw / r.width;
+    draw();
+  }
+  function zoomAt(f, px, py) {
+    const r = svg.getBoundingClientRect();
+    const nx = px === undefined ? 0.5 : (px - r.left) / r.width, ny = py === undefined ? 0.5 : (py - r.top) / r.height;
+    const wx = vb.cx - vb.w / 2 + nx * vb.w, wy = vb.cy - vb.h / 2 + ny * vb.h;
+    const nz = Math.max(1, Math.min(3.2, vb.z * f));
+    const k = vb.z / nz;
+    vb.cx = wx + (vb.cx - wx) * k; vb.cy = wy + (vb.cy - wy) * k; vb.z = nz; applyVB();
+  }
+  function focusUnit(u) {
+    const p = A.ext[state.view].polys[u.id]; if (!p) return;
+    let sx = 0, sy = 0, n = 0; p.forEach(q => q.forEach(c => { sx += c[0]; sy += c[1]; n++; }));
+    vb.cx = sx / n * IW; vb.cy = sy / n * IH; applyVB();
+  }
+  new ResizeObserver(applyVB).observe(svg);
+  const ptr = new Map(); let drag = null, pinch = null;
+  svg.addEventListener('pointerdown', e => {
+    svg.setPointerCapture(e.pointerId); ptr.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (ptr.size === 2) { const [a, b] = [...ptr.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), z: vb.z }; drag = null; }
+    else drag = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, rx0: e.clientX, t: performance.now(), target: e.target };
+  });
+  svg.addEventListener('pointermove', e => {
+    if (ptr.has(e.pointerId)) ptr.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch && ptr.size === 2) { const [a, b] = [...ptr.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); zoomAt(pinch.z * d / pinch.d / vb.z, (a.x + b.x) / 2, (a.y + b.y) / 2); return; }
+    if (drag) {
+      if (vb.z <= 1.01 && !pinch) {
+        const dx = e.clientX - drag.sx;
+        if (Math.abs(dx) > 6 || drag.moved) {
+          if (!drag.moved) { drag.moved = true; drag.f0 = state.frame; if (spin) { cancelAnimationFrame(spin.raf); spin = null; } polyG.style.transition = 'opacity .15s ease'; polyG.style.opacity = '0'; }
+          state.frame = drag.f0 - dx / 16; draw();
+        }
+        drag.x = e.clientX; drag.y = e.clientY; return;
+      }
+      vb.cx -= (e.clientX - drag.x) * vb.sx; vb.cy -= (e.clientY - drag.y) * vb.sx; drag.x = e.clientX; drag.y = e.clientY; applyVB(); return;
+    }
+    if (e.pointerType === 'mouse') {
+      const t = e.target.closest && e.target.closest('#polys path');
+      setHover(t ? t.dataset.id : null, e);
+    }
+  });
+  const endP = e => {
+    ptr.delete(e.pointerId); if (ptr.size < 2) pinch = null;
+    if (drag && drag.moved && vb.z <= 1.01) {
+      const k = Math.round(state.frame / 6);
+      const id = 'v' + (((k % 8) + 8) % 8);
+      state.view = id; renderPolys();
+      const vv = VIEWS.find(x => x.id === id); $('#viewName').textContent = vv.name;
+      const nd = $('#needle'); if (nd) nd.style.transform = `rotate(${-vv.az}deg)`;
+      $$('#viewDots i').forEach((dd, i) => dd.classList.toggle('on', VIEWS[i].id === id));
+      animateTo(k * 6, 320);
+    }
+    if (drag && !drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 7 && performance.now() - drag.t < 600) {
+      const t = drag.target.closest && drag.target.closest('#polys path');
+      if (t) select(t.dataset.id, { focus: false }); else closeDetail();
+    }
+    drag = null;
+  };
+  svg.addEventListener('pointerup', endP);
+  svg.addEventListener('pointercancel', e => { ptr.delete(e.pointerId); drag = null; pinch = null; });
+  svg.addEventListener('pointerleave', () => setHover(null));
+  svg.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY); }, { passive: false });
+  const tip = $('#tip');
+  function setHover(id, e) {
+    if (state.hover !== id) { state.hover = id; refreshPolys(); }
+    if (!id) { tip.hidden = true; return; }
+    const u = byId[id];
+    tip.hidden = false;
+    tip.innerHTML = `<strong>Wohnung ${u.no}</strong><span>${u.ph ? 'Penthouse' : u.zi + ' Zimmer'}, ${m2(u.area)}</span><span class="st st-${u.status}">${statusLabel(u)}</span>`;
+    const r = $('#stage').getBoundingClientRect();
+    tip.style.transform = `translate(${Math.min(e.clientX - r.left + 16, r.width - 200)}px, ${e.clientY - r.top + 16}px)`;
+  }
+  $('#viewPrev').addEventListener('click', () => rotate(-1));
+  $('#viewNext').addEventListener('click', () => rotate(1));
+  $('#zIn').addEventListener('click', () => zoomAt(1.4));
+  $('#zOut').addEventListener('click', () => zoomAt(1 / 1.4));
+
+  // ================= Belegungsplan (Etagenwahl) =================
+  function renderPlan() {
+    const cw = 20, ch = 15, gap = 3, mid = 10, lab = 30;
+    const W = lab + 8 * cw + 6 * gap + mid + 2, H = 7 * (ch + gap) + 22;
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="group" aria-label="Belegungsplan nach Etagen">`;
+    for (let f = 6; f >= 0; f--) {
+      const y = (6 - f) * (ch + gap) + 2;
+      const on = state.floor === f;
+      s += `<g class="pl-row${on ? ' on' : ''}" data-floor="${f}" tabindex="0" role="button" aria-pressed="${on}" aria-label="${FLOORS[f].long} hervorheben">`;
+      s += `<rect class="pl-hit" x="0" y="${y - 1}" width="${W}" height="${ch + 2}" rx="4"/>`;
+      s += `<text x="${lab - 7}" y="${y + ch - 4}">${FLOORS[f].short}</text></g>`;
+      const row = units.filter(u => u.floor === f);
+      row.forEach(u => {
+        let x, w = cw;
+        if (u.ph) { x = lab + (u.col === 0 ? 1 : 5) * (cw + gap) + (u.col === 0 ? 0 : mid); w = 2 * cw + gap; }
+        else { const i = u.col + (u.front ? 0 : 4); x = lab + i * (cw + gap) + (i >= 4 ? mid : 0); }
+        s += `<rect class="pl-u st-${u.status}${matches(u) ? '' : ' out'}${state.sel === u.id ? ' sel' : ''}" data-id="${u.id}" x="${x}" y="${y}" width="${w}" height="${ch}" rx="3"><title>${u.no}, ${statusLabel(u)}</title></rect>`;
+      });
+    }
+    const yb = 7 * (ch + gap) + 14;
+    s += `<text class="pl-cap" x="${lab + 2 * (cw + gap) - gap / 2}" y="${yb}">Straße</text><text class="pl-cap" x="${lab + 6 * (cw + gap) + mid - gap / 2}" y="${yb}">Garten</text>`;
+    s += `</svg>`;
+    $('#planGrid').innerHTML = s;
+    $('#planFloor').textContent = state.floor === null ? 'Alle Etagen' : FLOORS[state.floor].long;
+  }
+  $('#belegung').addEventListener('click', e => {
+    const c = e.target.closest('.pl-u');
+    if (c) { select(c.dataset.id, { focus: true }); return; }
+    const r = e.target.closest('.pl-row');
+    if (r) { const f = +r.dataset.floor; state.floor = state.floor === f ? null : f; refreshPolys(); }
+    if (e.target.closest('#planAll')) { state.floor = null; refreshPolys(); }
+    if (e.target.closest('#planToggleM')) $('#belegung').classList.toggle('open');
+  });
+  $('#belegung').addEventListener('keydown', e => {
+    const r = e.target.closest('.pl-row');
+    if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); const f = +r.dataset.floor; state.floor = state.floor === f ? null : f; refreshPolys(); }
+  });
+
+  // ================= Filter & Liste =================
+  function renderLegend() {
+    const c = { frei: 0, reserviert: 0, vergeben: 0 };
+    units.forEach(u => c[u.status]++);
+    $('#legend').innerHTML = ['frei', 'reserviert', 'vergeben'].map(s => `<span class="lg"><i class="dot st-${s}"></i>${STATUS[s][state.mode]} <b>${c[s]}</b></span>`).join('');
+  }
+  function renderFilters() {
+    const mp = state.f.maxPrice === null ? maxPrice() : state.f.maxPrice;
+    const pr = $('#fPrice');
+    pr.max = maxPrice(); pr.min = state.mode === 'rent' ? 400 : 150000; pr.step = state.mode === 'rent' ? 50 : 10000; pr.value = mp;
+    $('#fPriceLabel').textContent = state.mode === 'rent' ? 'Kaltmiete bis' : 'Kaufpreis bis';
+    $('#fPriceVal').textContent = mp >= maxPrice() ? 'beliebig' : eur(mp);
+    $('#fArea').value = state.f.minArea;
+    $('#fAreaVal').textContent = state.f.minArea <= 30 ? 'beliebig' : 'ab ' + nf0.format(state.f.minArea) + ' m²';
+    $$('#fZi button').forEach(b => b.setAttribute('aria-pressed', String(state.f.zi.has(+b.dataset.zi))));
+    $('#fFree').setAttribute('aria-pressed', String(state.f.onlyFree));
+    $('#fFav').setAttribute('aria-pressed', String(state.f.favOnly));
+    $('#fFavCount').textContent = state.fav.size;
+    $('#fSort').value = state.f.sort;
+    $('#sortPriceOpt').textContent = state.mode === 'rent' ? 'Kaltmiete' : 'Kaufpreis';
+  }
+  function sorted(list) {
+    const cmp = { floor: (a, b) => a.floor - b.floor || a.no.localeCompare(b.no), area: (a, b) => b.area - a.area, price: (a, b) => priceOf(a) - priceOf(b), zi: (a, b) => b.zi - a.zi || b.area - a.area }[state.f.sort];
+    const rank = { frei: 0, reserviert: 1, vergeben: 2 };
+    return list.slice().sort((a, b) => rank[a.status] - rank[b.status] || cmp(a, b));
+  }
+  const heart = on => `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.8c0 5.5-7.5 10.1-7.5 10.1z" fill="${on ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`;
+  function renderList() {
+    const list = sorted(units.filter(matches));
+    const free = list.filter(u => u.status === 'frei').length;
+    $('#count').innerHTML = `${list.length} von ${units.length} Wohnungen, <b>${free} verfügbar</b>`;
+    $('#sheetCount').textContent = `${free} verfügbar, ${list.length} angezeigt`;
+    const el = $('#list');
+    if (!list.length) { el.innerHTML = `<div class="empty"><p>Keine Wohnung passt zu diesen Filtern.</p><button class="link" data-act="reset">Filter zurücksetzen</button></div>`; return; }
+    el.innerHTML = list.map(u => `
+      <div class="row${state.sel === u.id ? ' on' : ''}" role="listitem">
+        <button class="row-main" data-id="${u.id}" aria-label="Wohnung ${u.no}, ${u.zi} Zimmer, ${m2(u.area)}, ${statusLabel(u)}">
+          <span class="r-top"><span class="r-no">${u.no}</span><span class="tag st-${u.status}">${statusLabel(u)}</span></span>
+          <span class="r-t">${u.ph ? 'Penthouse' : u.zi + '-Zimmer'}, ${m2(u.area)}</span>
+          <span class="r-s">${floorName(u.floor)}</span>
+          <span class="r-p">${eur(priceOf(u))}${state.mode === 'rent' ? '<small> kalt</small>' : ''}</span>
+        </button>
+        <button class="fav" data-fav="${u.id}" aria-pressed="${state.fav.has(u.id)}" aria-label="${state.fav.has(u.id) ? 'Von der Merkliste nehmen' : 'Auf die Merkliste'}">${heart(state.fav.has(u.id))}</button>
+      </div>`).join('');
+  }
+  function toggleFav(id) { state.fav.has(id) ? state.fav.delete(id) : state.fav.add(id); saveFav(); update(); }
+  function update() { renderFilters(); renderList(); renderLegend(); refreshPolys(); if (state.sel) renderDetail(); }
+  function resetFilters() { Object.assign(state.f, { onlyFree: false, minArea: 30, maxPrice: null, favOnly: false }); state.f.zi.clear(); update(); }
+  const isMobile = () => window.matchMedia('(max-width: 899px)').matches;
+  function setSheet(open) { $('#side').classList.toggle('open', open); $('#sheetToggle').setAttribute('aria-expanded', String(open)); }
+  $('#side').addEventListener('click', e => {
+    const t = e.target.closest('button'); if (!t) return;
+    if (t.dataset.id) { select(t.dataset.id, { focus: true }); if (isMobile()) setSheet(false); }
+    else if (t.dataset.fav) toggleFav(t.dataset.fav);
+    else if (t.dataset.zi) { const z = +t.dataset.zi; state.f.zi.has(z) ? state.f.zi.delete(z) : state.f.zi.add(z); update(); }
+    else if (t.id === 'fFree') { state.f.onlyFree = !state.f.onlyFree; update(); }
+    else if (t.id === 'fFav') { state.f.favOnly = !state.f.favOnly; update(); }
+    else if (t.dataset.act === 'reset') resetFilters();
+    else if (t.id === 'sheetToggle') setSheet(!$('#side').classList.contains('open'));
+  });
+  $('#fArea').addEventListener('input', e => { state.f.minArea = +e.target.value; update(); });
+  $('#fPrice').addEventListener('input', e => { state.f.maxPrice = +e.target.value; update(); });
+  $('#fSort').addEventListener('change', e => { state.f.sort = e.target.value; renderList(); });
+  $('#mode').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || b.dataset.mode === state.mode) return;
+    state.mode = b.dataset.mode; state.f.maxPrice = null;
+    $$('#mode button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    update();
+  });
+
+  // ================= Detail =================
+  function select(id, opt = {}) {
+    const u = byId[id]; if (!u) return;
+    state.sel = id;
+    if (!A.ext[state.view].polys[id]) { const v = bestView(u); if (v) setView(v); }
+    if (opt.focus && vb.z > 1) focusUnit(u);
+    refreshPolys(); renderList(); renderDetail();
+    $('#detail').classList.add('open'); document.body.classList.add('has-detail');
+    if (location.hash !== '#' + id) location.replace('#' + id);
+  }
+  function closeDetail() {
+    if (!state.sel) return;
+    state.sel = null; refreshPolys(); renderList();
+    $('#detail').classList.remove('open'); document.body.classList.remove('has-detail');
+    location.replace('#uebersicht');
+  }
+  function similar(u) { return units.filter(x => x.status === 'frei' && x.id !== u.id && Math.abs(x.zi - u.zi) <= 1).sort((a, b) => Math.abs(a.area - u.area) - Math.abs(b.area - u.area)).slice(0, 3); }
+  const icon360 = () => `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><ellipse cx="12" cy="12" rx="9.5" ry="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4.5v15" stroke="currentColor" stroke-width="1.8"/><path d="M17.5 17.6l2.3-1-1-2.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  function renderDetail() {
+    const u = byId[state.sel]; if (!u) return;
+    const t = u.type, fav = state.fav.has(u.id), P = PANO;
+    const preview = P && P.img.wohnen ? `<button class="preview" data-act="tour" ${u.status !== 'frei' ? 'disabled' : ''} style="background-image:url('${P.img.wohnen}')" aria-label="360°-Rundgang starten"><span>${u.status === 'frei' ? icon360() + ' Rundgang Musterwohnung' : 'Musterwohnung: Wohnen & Kochen'}</span></button>` : '';
+    const price = state.mode === 'rent' ? `
+      <div class="price-main"><span>Kaltmiete</span><strong>${eur(u.kalt)}</strong></div>
+      <dl class="price-rows">
+        <div><dt>Nebenkosten (Vorauszahlung)</dt><dd>${eur(u.nk)}</dd></div>
+        <div><dt>Warmmiete</dt><dd>${eur(u.warm)}</dd></div>
+        <div><dt>Kaltmiete pro m²</dt><dd>${nf2.format(u.rentSqm)} €</dd></div>
+        <div><dt>Kaution</dt><dd>${eur(u.kalt * 3)}</dd></div>
+      </dl>` : `
+      <div class="price-main"><span>Kaufpreis</span><strong>${eur(u.price)}</strong></div>
+      <dl class="price-rows">
+        <div><dt>Preis pro m²</dt><dd>${eur(u.buySqm)}</dd></div>
+        <div><dt>Erwartete Kaltmiete</dt><dd>${eur(u.kalt)} / Monat</dd></div>
+        <div><dt>Bruttomietrendite</dt><dd>${nf1.format(u.yield)} %</dd></div>
+        <div><dt>Kaufnebenkosten (ca. 10 %)</dt><dd>${eur(Math.round(u.price * 0.1 / 100) * 100)}</dd></div>
+      </dl>`;
+    let actions;
+    if (u.status === 'frei') {
+      actions = `<button class="btn primary" data-act="tour">${icon360()}360°-Rundgang Musterwohnung</button>
+        <div class="btn-row"><button class="btn" data-act="ask">Besichtigung anfragen</button><button class="btn icon-only" data-act="fav" aria-pressed="${fav}" aria-label="${fav ? 'Von der Merkliste nehmen' : 'Auf die Merkliste'}">${heart(fav)}</button></div>`;
+    } else {
+      const sim = similar(u);
+      actions = `<p class="gone">${u.status === 'reserviert' ? 'Für diese Wohnung liegt eine Reservierung vor. Der Rundgang ist nur für verfügbare Wohnungen freigeschaltet.' : `Diese Wohnung ist bereits ${state.mode === 'rent' ? 'vermietet' : 'verkauft'}.`}</p>
+        ${sim.length ? `<p class="sim-h">Verfügbar und ähnlich geschnitten</p><div class="sim">${sim.map(s => `<button class="sim-b" data-goto="${s.id}"><i class="dot st-frei"></i><span>${s.no}</span><small>${s.zi} Zi., ${m2(s.area)}</small></button>`).join('')}</div>` : ''}
+        <div class="btn-row"><button class="btn" data-act="ask">${u.status === 'reserviert' ? 'Auf die Warteliste' : 'Ähnliche Wohnung anfragen'}</button><button class="btn icon-only" data-act="fav" aria-pressed="${fav}" aria-label="Merkliste">${heart(fav)}</button></div>`;
+    }
+    $('#detailBody').innerHTML = `
+      ${preview}
+      <p class="d-floor">${floorName(u.floor)}, Wohnung ${u.no}</p>
+      <h2 id="detailTitle">${t.label}</h2>
+      <span class="pill st-${u.status}">${statusLabel(u)}</span>
+      <dl class="facts">
+        <div><dt>Wohnfläche</dt><dd>${m2(u.area)}</dd></div>
+        <div><dt>Zimmer</dt><dd>${u.zi}</dd></div>
+        <div><dt>${u.outdoorLabel}</dt><dd>${m2(u.outdoor)}</dd></div>
+        <div><dt>Ausrichtung</dt><dd>${u.orient}</dd></div>
+      </dl>
+      <div class="price">${price}</div>
+      <div class="actions">${actions}</div>
+      <figure class="plan-fig">${planSVG(t)}<figcaption>Grundriss beispielhaft, Balkon zu einem Viertel angerechnet.</figcaption></figure>`;
+  }
+  $('#detail').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'detailClose') return closeDetail();
+    if (b.dataset.goto) return select(b.dataset.goto, { focus: true });
+    const u = byId[state.sel]; if (!u) return;
+    if (b.dataset.act === 'tour' && u.status === 'frei') openTour(u);
+    if (b.dataset.act === 'fav') toggleFav(u.id);
+    if (b.dataset.act === 'ask') openAsk(u);
+  });
+
+  // ================= Anfrage =================
+  const dlg = $('#ask');
+  function openAsk(u) {
+    $('#askUnit').textContent = `Wohnung ${u.no}, ${u.type.label}, ${m2(u.area)}`;
+    $('#askMsg').value = `Ich interessiere mich für Wohnung ${u.no} und bitte um einen Termin.`;
+    $('#askForm').hidden = false; $('#askDone').hidden = true;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  $('#askForm').addEventListener('submit', e => { e.preventDefault(); if (!e.target.reportValidity()) return; $('#askForm').hidden = true; $('#askDone').hidden = false; });
+  $$('[data-close-ask]').forEach(b => b.addEventListener('click', () => dlg.close ? dlg.close() : dlg.removeAttribute('open')));
+
+  // ================= 360°-Rundgang (Musterwohnung, gerendert in Blender) =================
+  const PANO = JSON.parse(document.getElementById('pano').textContent);
+  const MT = TYPES.B;
+  const tourEl = $('#tour');
+  let tr = null, tcam = null, tscene, sphA, sphB, spriteG, tour = null;
+  const look = { yaw: 0, pitch: -0.05, vy: 0, vp: 0 };
+  const texCache = {};
+  const b2t = v => [v[0], 0, -v[1]];            // Blender (x,y) -> three (x,z)
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
+  const yawTo = d => { const v = b2t(d); return Math.atan2(-v[0], -v[2]); };
+  function tex(room) {
+    if (!texCache[room]) {
+      const t = new THREE.TextureLoader().load(PANO.img[room]);
+      t.encoding = THREE.sRGBEncoding; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter;
+      if (tr) t.anisotropy = tr.capabilities.getMaxAnisotropy();
+      const im = new Image(); im.onload = () => { if (tr && tr.initTexture) { try { t.image = im; t.needsUpdate = true; tr.initTexture(t); } catch (e) { /* lädt beim ersten Zeichnen */ } } };
+      im.src = PANO.img[room];
+      texCache[room] = t;
+    }
+    return texCache[room];
+  }
+  function makeSphere(r) {
+    const g = new THREE.SphereGeometry(r, 64, 40); g.scale(-1, 1, 1);
+    const m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ transparent: true, opacity: 1, depthWrite: false }));
+    m.rotation.y = -Math.PI / 2; return m;
+  }
+  function hotTex(label) {
+    const c = document.createElement('canvas'); c.width = 640; c.height = 160;
+    const g = c.getContext('2d');
+    g.font = '600 46px "Albert Sans", "Helvetica Neue", Arial, sans-serif';
+    const tw = Math.min(440, g.measureText(label).width), pillW = tw + 140, x0 = (640 - pillW) / 2;
+    g.fillStyle = 'rgba(14,31,46,0.86)';
+    if (g.roundRect) { g.beginPath(); g.roundRect(x0, 30, pillW, 100, 50); g.fill(); } else g.fillRect(x0, 30, pillW, 100);
+    g.fillStyle = '#C8963E'; g.beginPath(); g.arc(x0 + 50, 80, 34, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = '#0E1F2E'; g.lineWidth = 8; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(x0 + 42, 63); g.lineTo(x0 + 59, 80); g.lineTo(x0 + 42, 97); g.stroke();
+    g.fillStyle = '#FFFFFF'; g.textBaseline = 'middle'; g.fillText(label, x0 + 98, 82, 440);
+    const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+  }
+  function initTour() {
+    tr = new THREE.WebGLRenderer({ antialias: true, canvas: $('#tourCanvas') });
+    tr.outputEncoding = THREE.sRGBEncoding; tr.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    tcam = new THREE.PerspectiveCamera(72, 1, 0.05, 200); tcam.rotation.order = 'YXZ';
+    tscene = new THREE.Scene();
+    sphA = makeSphere(60); sphB = makeSphere(55); sphB.material.opacity = 0; sphB.renderOrder = 1;
+    spriteG = new THREE.Group(); tscene.add(sphA, sphB, spriteG);
+  }
+  function buildSprites() {
+    spriteG.children.slice().forEach(s => { s.material.map.dispose(); s.material.dispose(); spriteG.remove(s); });
+    const cam = PANO.cams[tour.room];
+    for (const to in PANO.doors[tour.room]) {
+      const d = sub(PANO.doors[tour.room][to], cam), v = b2t(d);
+      const n = Math.hypot(v[0], v[2]) || 1, dist = Math.max(1.4, Math.min(5.5, n));
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: hotTex(MT.byId[to].name), depthTest: false, transparent: true }));
+      sp.position.set(v[0] / n * dist, -0.25, v[2] / n * dist);
+      const sc = 0.3 + dist * 0.16; sp.scale.set(sc * 4, sc, 1); sp.userData = { to, base: sc }; sp.renderOrder = 5;
+      spriteG.add(sp);
+    }
+  }
+  function setRoomUI() {
+    const room = MT.byId[tour.room];
+    $('#tourRoom').textContent = room.name; $('#tourArea').textContent = m2(room.area);
+    $('#tourPlan').innerHTML = planSVG(MT, { interactive: true, current: tour.room });
+    $$('#tourRooms button').forEach(b => b.setAttribute('aria-current', String(b.dataset.room === tour.room)));
+    const cur = document.querySelector(`#tourRooms button[data-room="${tour.room}"]`);
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest', inline: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+  const baseFov = () => tourEl.clientWidth < tourEl.clientHeight ? 88 : 72;
+  function tourResize() {
+    if (!tr) return;
+    const w = tourEl.clientWidth, h = tourEl.clientHeight;
+    tr.setSize(w, h, false); tcam.aspect = w / Math.max(1, h);
+    if (!tour || !tour.anim) tcam.fov = baseFov();
+    tcam.updateProjectionMatrix();
+  }
+  function openTour(u) {
+    if (!tr) initTour();
+    state.tourOpen = true; tourEl.hidden = false; document.body.classList.add('touring');
+    tour = { unit: u, room: 'flur', anim: null, queue: [] };
+    sphA.material.map = tex('flur'); sphA.material.needsUpdate = true; sphB.material.opacity = 0;
+    look.yaw = yawTo(sub(PANO.doors.flur.wohnen, PANO.cams.flur)); look.pitch = -0.05; look.vy = look.vp = 0;
+    $('#tourUnit').textContent = `Wohnung ${u.no}: Rundgang durch die Musterwohnung (3 Zimmer)`;
+    $('#tourRooms').innerHTML = MT.rooms.map(r => `<button data-room="${r.id}">${r.name}</button>`).join('');
+    $('#tourHint').classList.remove('gone');
+    buildSprites(); setRoomUI(); tourResize();
+    Object.keys(PANO.img).forEach(tex);
+    $('#tourClose').focus();
+  }
+  function closeTour() {
+    if (!tour) return;
+    tour = null; state.tourOpen = false; tourEl.hidden = true; document.body.classList.remove('touring');
+    const btn = document.querySelector('#detail [data-act="tour"]'); if (btn) btn.focus();
+  }
+  const angDiff = (a, b) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
+  function walkTo(id) {
+    if (!tour || tour.anim || id === tour.room) return;
+    tour.queue = roomPath(MT, tour.room, id).slice(1);
+    $('#tourHint').classList.add('gone'); nextHop();
+  }
+  function nextHop() {
+    const to = tour.queue.shift(); if (!to) return;
+    const door = PANO.doors[tour.room][to];
+    const turnTo = yawTo(sub(door, PANO.cams[tour.room])), arrive = yawTo(sub(PANO.cams[to], door));
+    spriteG.visible = false;
+    const dy = angDiff(look.yaw, turnTo);
+    tour.anim = { t0: performance.now(), to, y0: look.yaw, dy, p0: look.pitch, arrive,
+      turn: reduceMotion ? 1 : 450 + Math.abs(dy) * 220, move: reduceMotion ? 1 : 1500, swapped: false };
+    sphB.material.map = tex(to); sphB.material.needsUpdate = true; sphB.material.opacity = 0;
+  }
+  const eIO = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const eS = t => t * t * (3 - 2 * t);
+  function stepAnim(now) {
+    const a = tour.anim; if (!a) return;
+    const t = now - a.t0;
+    if (t < a.turn) { const k = eIO(t / a.turn); look.yaw = a.y0 + a.dy * k; look.pitch = a.p0 + (-0.03 - a.p0) * k; return; }
+    const k = Math.min(1, (t - a.turn) / a.move);
+    // Kamerafahrt: erst hineinzoomen (vorwärts), im Übergang einblenden, dann im neuen Raum zurück auf Normal
+    const zoomIn = k < 0.55 ? eS(k / 0.55) : 1 - eS((k - 0.55) / 0.45);
+    tcam.fov = baseFov() * (1 - 0.34 * zoomIn); tcam.updateProjectionMatrix();
+    if (!a.swapped) sphB.material.opacity = eS(Math.min(1, Math.max(0, (k - 0.3) / 0.35)));
+    const y1 = a.y0 + a.dy;
+    look.yaw = y1 + angDiff(y1, a.arrive) * eIO(k);
+    if (!a.swapped && k >= 0.66) {
+      a.swapped = true;
+      sphA.material.map = sphB.material.map; sphA.material.needsUpdate = true;
+      sphB.material.opacity = 0; tour.room = a.to; setRoomUI();
+    }
+    if (k >= 1) {
+      tcam.fov = baseFov(); tcam.updateProjectionMatrix();
+      tour.anim = null; look.yaw = y1 + angDiff(y1, a.arrive);
+      buildSprites(); spriteG.visible = true;
+      if (tour.queue.length) nextHop();
+    }
+  }
+  window.addEventListener('resize', () => { if (state.tourOpen) tourResize(); });
+  let tdrag = null;
+  const tc = $('#tourCanvas');
+  tc.addEventListener('pointerdown', e => { if (tdrag) return; tc.setPointerCapture(e.pointerId); tdrag = { id: e.pointerId, x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, t: performance.now() }; look.vy = look.vp = 0; });
+  tc.addEventListener('pointermove', e => {
+    if (!tdrag || e.pointerId !== tdrag.id || (tour && tour.anim)) return;
+    const k = 0.0034 * (tcam.fov / 72) * (tourEl.clientWidth < 700 ? 1.3 : 1), dx = e.clientX - tdrag.x, dy = e.clientY - tdrag.y;
+    look.yaw += dx * k; look.pitch = Math.max(-1.1, Math.min(1.1, look.pitch + dy * k));
+    look.vy = dx * k * 0.6; look.vp = dy * k * 0.6; tdrag.x = e.clientX; tdrag.y = e.clientY;
+    if (Math.hypot(e.clientX - tdrag.sx, e.clientY - tdrag.sy) > 10) $('#tourHint').classList.add('gone');
+  });
+  const tray = new THREE.Raycaster();
+  tc.addEventListener('pointerup', e => {
+    if (!tdrag || e.pointerId !== tdrag.id) return;
+    if (Math.hypot(e.clientX - tdrag.sx, e.clientY - tdrag.sy) < 8 && performance.now() - tdrag.t < 500 && tour && !tour.anim) {
+      look.vy = look.vp = 0;
+      const r = tc.getBoundingClientRect();
+      tray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), tcam);
+      tray.camera = tcam;
+      const hit = tray.intersectObjects(spriteG.children, false)[0];
+      if (hit) walkTo(hit.object.userData.to);
+    }
+    tdrag = null;
+  });
+  tc.addEventListener('pointercancel', () => { tdrag = null; });
+  function tourFrame(now) {
+    if (!tour) return;
+    stepAnim(now);
+    if (!tdrag && !tour.anim) { look.yaw += look.vy; look.pitch = Math.max(-1.1, Math.min(1.1, look.pitch + look.vp)); look.vy *= 0.9; look.vp *= 0.9; }
+    tcam.rotation.set(look.pitch, look.yaw, 0);
+    const pulse = 1 + Math.sin(now / 450) * 0.04;
+    spriteG.children.forEach(s => s.scale.set(s.userData.base * 4 * pulse, s.userData.base * pulse, 1));
+    tr.render(tscene, tcam);
+  }
+  $('#tourClose').addEventListener('click', closeTour);
+  $('#tourRooms').addEventListener('click', e => { const b = e.target.closest('button'); if (b) walkTo(b.dataset.room); });
+  $('#tourPlan').addEventListener('click', e => { const g = e.target.closest('[data-room]'); if (g) walkTo(g.dataset.room); });
+  $('#tourPlan').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.room) { e.preventDefault(); walkTo(e.target.dataset.room); } });
+  $('#planToggle').addEventListener('click', () => { const on = tourEl.classList.toggle('plan-open'); $('#planToggle').setAttribute('aria-pressed', String(on)); });
+  document.addEventListener('keydown', e => {
+    if (state.tourOpen) {
+      if (e.key === 'Escape') closeTour();
+      if (e.key === 'ArrowLeft') look.yaw += 0.12;
+      if (e.key === 'ArrowRight') look.yaw -= 0.12;
+      if (e.key === 'ArrowUp') look.pitch = Math.min(1.1, look.pitch + 0.08);
+      if (e.key === 'ArrowDown') look.pitch = Math.max(-1.1, look.pitch - 0.08);
+      return;
+    }
+    if (e.key === 'Escape' && !(dlg.open)) closeDetail();
+  });
+
+  function loop(now) { requestAnimationFrame(loop); if (state.tourOpen) tourFrame(now); }
+
+  // ================= Start =================
+  $('#viewDots').innerHTML = VIEWS.map(() => '<i></i>').join('');
+  $('#detailClose').addEventListener('click', closeDetail);
+  setView('v7', true);
+  update();
+  applyVB();
+  window.addEventListener('hashchange', () => { const id = location.hash.slice(1); if (byId[id] && id !== state.sel) select(id); });
+  const startId = location.hash.slice(1); if (byId[startId]) select(startId);
+  requestAnimationFrame(loop);
+  setTimeout(() => document.body.classList.add('ready'), 50);
+})();
+
+</script>
+</body>
+</html>
