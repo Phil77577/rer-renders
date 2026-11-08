@@ -46,3 +46,4 @@
 13:54:14 Aussen f40 (10 s) ok
 13:54:26 Aussen f41 (10 s) ok
 13:54:37 Aussen f42 (10 s) ok
+13:54:49 Aussen f43 (10 s) ok
