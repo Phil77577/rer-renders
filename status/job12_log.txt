@@ -12,3 +12,4 @@
 13:47:34 Aussen f06 (11 s) ok
 13:47:46 Aussen f07 (11 s) ok
 13:47:58 Aussen f08 (11 s) ok
+13:48:10 Aussen f09 (10 s) ok
