@@ -1,2 +1,3 @@
 13:10:00 Dusche [-4.94, 2.69, 0.0, -3.94, 3.94, 2.09]
 13:14:56 Innen bad (294 s) upload=ok
+13:21:24 Innen kind (387 s) upload=ok
