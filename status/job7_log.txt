@@ -6,3 +6,4 @@
 11:17:59 Zwischenbild 4 (7 s)
 11:18:05 Zwischenbild 5 (5 s)
 11:18:12 Zwischenbild 7 (5 s)
+11:18:18 Zwischenbild 8 (5 s)
