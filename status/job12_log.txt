@@ -31,3 +31,4 @@
 13:51:19 Aussen f25 (10 s) ok
 13:51:31 Aussen f26 (10 s) ok
 13:51:43 Aussen f27 (10 s) ok
+13:51:54 Aussen f28 (10 s) ok
