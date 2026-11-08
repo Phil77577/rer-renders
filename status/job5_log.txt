@@ -1,0 +1,1 @@
+10:49:02 Waschtisch aufgerichtet Masse=[0.77, 0.5, 1.35] z=-0.0..1.35
