@@ -20,3 +20,4 @@
 13:49:10 Aussen f14 (10 s) ok
 13:49:21 Aussen f15 (10 s) ok
 13:49:33 Aussen f16 (10 s) ok
+13:49:44 Aussen f17 (10 s) ok
