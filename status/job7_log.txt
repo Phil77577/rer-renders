@@ -19,3 +19,4 @@
 11:19:20 Zwischenbild 20 (5 s)
 11:19:27 Zwischenbild 21 (5 s)
 11:19:33 Zwischenbild 22 (5 s)
+11:19:39 Zwischenbild 23 (4 s)
