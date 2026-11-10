@@ -674,6 +674,7 @@ function roomPath(t, from, to) {
   const vb = { cx: IW / 2, cy: IH / 2, z: 1 };
   // Drehscheibe: 72 gleich scharfe Bilder (alle 5°), jedes 9. ist eine Ansicht mit Klickflächen
   const NF = 72, KS = 9;
+  const SMALL = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
   const cvs = $('#bg'), ctx = cvs.getContext('2d');
   const frames = Array.from({ length: NF }, () => ({ bmp: null, ready: false }));
   state.frame = 63;
@@ -686,7 +687,7 @@ function roomPath(t, from, to) {
       if (window.createImageBitmap) createImageBitmap(im).then(fin, () => fin(im)); else fin(im);
     };
     im.onerror = () => res();
-    im.src = 'aussen72/f' + String(i).padStart(2, '0') + '.jpg';
+    im.src = 'aussen72/' + (SMALL ? 'm/' : '') + 'f' + String(i).padStart(2, '0') + '.webp';
   });
   function showLoad() {
     const el = $('#loadbar'); if (!el) return;
@@ -1077,7 +1078,8 @@ function roomPath(t, from, to) {
   const texReady = {};
   function tex(room) {
     if (!texCache[room]) {
-      const t = new THREE.TextureLoader().load(PANO.img[room], () => {
+      const src = PANO.img[room].replace('innen/', SMALL ? 'innen/m/' : 'innen/').replace('.jpg', '.webp');
+      const t = new THREE.TextureLoader().load(src, () => {
         t.encoding = THREE.sRGBEncoding; t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter;
         if (tr) { t.anisotropy = tr.capabilities.getMaxAnisotropy(); if (tr.initTexture) tr.initTexture(t); }
         texReady[room] = true; tourLoadUI();
@@ -1156,7 +1158,7 @@ function roomPath(t, from, to) {
     $('#tourRooms').innerHTML = MT.rooms.map(r => `<button data-room="${r.id}">${r.name}</button>`).join('');
     $('#tourHint').classList.remove('gone');
     buildSprites(); setRoomUI(); tourResize();
-    Object.keys(PANO.img).forEach(tex);
+    tex('flur'); setTimeout(() => Object.keys(PANO.img).forEach(tex), 50);
     $('#tourClose').focus();
   }
   function closeTour() {
@@ -1178,30 +1180,25 @@ function roomPath(t, from, to) {
     spriteG.visible = false;
     const dy = angDiff(look.yaw, turnTo);
     tour.anim = { t0: performance.now(), to, y0: look.yaw, dy, p0: look.pitch, arrive,
-      turn: reduceMotion ? 1 : 500 + Math.abs(dy) * 240, move: reduceMotion ? 1 : 1700, swapped: false };
+      turn: reduceMotion ? 1 : Math.min(520, 220 + Math.abs(dy) * 140), move: reduceMotion ? 1 : 520, swapped: false };
     sphB.material.map = tex(to); sphB.material.needsUpdate = true; sphB.material.opacity = 0;
+    sphB.rotation.y = sphA.rotation.y;
   }
-  const eIO = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const eIO = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   const eS = t => t * t * (3 - 2 * t);
   function stepAnim(now) {
     const a = tour.anim; if (!a) return;
     const t = now - a.t0;
     if (t < a.turn) { const k = eIO(t / a.turn); look.yaw = a.y0 + a.dy * k; look.pitch = a.p0 + (-0.03 - a.p0) * k; return; }
     const k = Math.min(1, (t - a.turn) / a.move);
-    // Kamerafahrt: erst hineinzoomen (vorwärts), im Übergang einblenden, dann im neuen Raum zurück auf Normal
-    const zoomIn = k < 0.55 ? eS(k / 0.55) : 1 - eS((k - 0.55) / 0.45);
-    tcam.fov = baseFov() * (1 - 0.34 * zoomIn); tcam.updateProjectionMatrix();
-    if (!a.swapped) sphB.material.opacity = eS(Math.min(1, Math.max(0, (k - 0.3) / 0.35)));
+    // weiches Überblenden, Blickrichtung gleitet sanft in die Laufrichtung des neuen Raums
+    sphB.material.opacity = eS(k);
     const y1 = a.y0 + a.dy;
-    look.yaw = y1 + angDiff(y1, a.arrive) * eIO(k);
-    if (!a.swapped && k >= 0.66) {
-      a.swapped = true;
+    look.yaw = y1 + angDiff(y1, a.arrive) * eS(k) * 0.5;
+    if (k >= 1) {
       sphA.material.map = sphB.material.map; sphA.material.needsUpdate = true;
       sphB.material.opacity = 0; tour.room = a.to; setRoomUI();
-    }
-    if (k >= 1) {
-      tcam.fov = baseFov(); tcam.updateProjectionMatrix();
-      tour.anim = null; look.yaw = y1 + angDiff(y1, a.arrive);
+      tour.anim = null;
       buildSprites(); spriteG.visible = true;
       if (tour.queue.length) nextHop();
     }
