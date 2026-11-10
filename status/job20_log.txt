@@ -1,0 +1,9 @@
+16:36:15 FEHLER Traceback (most recent call last):
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job20.py", line 82, in <module>
+    p=os.path.join(OUT,'f%02d.jpg'%i); sc.render.filepath=p; bpy.ops.render.render(write_still=True)
+                                                             ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+RuntimeError: Error: Failed to build OptiX acceleration structure
+Error: System is out of GPU and shared host memory
+Error: System is out of GPU and shared host memory
+
+
