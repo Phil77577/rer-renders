@@ -7,3 +7,4 @@
 21:05:47 Ansicht 7/8 (81 s)
 21:07:16 Ansicht 8/8 (87 s)
 21:07:19 polys.json neu
+21:07:23 index Aussen v21 ok
