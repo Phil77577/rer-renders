@@ -684,7 +684,13 @@ function roomPath(t, from, to) {
   const loadOne = i => new Promise(res => {
     const im = new Image(); im.decoding = 'async';
     im.onload = () => {
-      const fin = b => { frames[i].bmp = b; frames[i].ready = true; loadedN++; showLoad(); if (Math.round(state.frame) % NF === i) requestDraw(); res(); };
+      const fin = b => {
+        frames[i].bmp = b; frames[i].ready = true; loadedN++; showLoad();
+        try { const c = document.createElement('canvas'); c.width = 8; c.height = 8; const x = c.getContext('2d'); x.drawImage(b, 0, 0, 8, 8);
+          const d = x.getImageData(0, 0, 8, 8).data; let r = 0, g = 0, bb = 0, n = 0;
+          for (let p = 0; p < 64; p++) { const yy = Math.floor(p / 8), xx = p % 8; if (yy === 0 || yy === 7 || xx === 0 || xx === 7) { r += d[p * 4]; g += d[p * 4 + 1]; bb += d[p * 4 + 2]; n++; } }
+          frames[i].edge = `rgb(${Math.round(r / n)},${Math.round(g / n)},${Math.round(bb / n)})`; } catch (e) { /* ohne Randfarbe */ }
+        if (Math.round(state.frame) % NF === i) requestDraw(); res(); };
       if (window.createImageBitmap) {
         const key = i % KS === 0, w = key ? im.naturalWidth : Math.min(im.naturalWidth, SMALL ? 640 : 1100);
         const opt = key ? {} : { resizeWidth: w, resizeHeight: Math.round(im.naturalHeight * w / im.naturalWidth), resizeQuality: 'medium' };
@@ -692,7 +698,7 @@ function roomPath(t, from, to) {
       } else fin(im);
     };
     im.onerror = () => res();
-    im.src = 'aussen72/' + (SMALL ? 'm/' : '') + 'f' + String(i).padStart(2, '0') + '.webp?v=23';
+    im.src = 'aussen72/' + (SMALL ? 'm/' : '') + 'f' + String(i).padStart(2, '0') + '.webp?v=27';
   });
   function showLoad() {
     const el = $('#loadbar'); if (!el) return;
@@ -705,7 +711,7 @@ function roomPath(t, from, to) {
     const q = order.slice(); const workers = Array.from({ length: 6 }, async () => { while (q.length) await loadOne(q.shift()); });
     await Promise.all(workers);
   })();
-  fetch('aussen72/polys.json').then(r => r.json()).then(p => { for (const k in p) A.ext[k] = { polys: p[k] }; renderPolys(); }).catch(() => {});
+  fetch('aussen72/polys.json?v=27').then(r => r.json()).then(p => { for (const k in p) A.ext[k] = { polys: p[k] }; renderPolys(); }).catch(() => {});
   let drawQueued = false;
   const requestDraw = () => { if (!drawQueued) { drawQueued = true; requestAnimationFrame(() => { drawQueued = false; draw(); }); } };
   function frameImg(i) {
@@ -728,6 +734,8 @@ function roomPath(t, from, to) {
       ctx.drawImage(im, -(vb.cx - vb.w / 2) * kx, -(vb.cy - vb.h / 2) * ky, IW * kx, IH * ky);
     };
     ctx.clearRect(0, 0, w, h);
+    const fr = frames[((Math.round(f) % NF) + NF) % NF];
+    if (fr && fr.edge) { ctx.fillStyle = fr.edge; ctx.fillRect(0, 0, w, h); }
     blit(frameImg(f0), 1);
     if (t > 0.01) blit(frameImg(f0 + 1), t);
     ctx.globalAlpha = 1;
