@@ -674,7 +674,7 @@ function roomPath(t, from, to) {
   const vb = { cx: IW / 2, cy: IH / 2, z: 1 };
   // Drehscheibe: 72 gleich scharfe Bilder (alle 5°), jedes 9. ist eine Ansicht mit Klickflächen
   const NF = 72, KS = 9;
-  const SMALL = Math.min(screen.width, screen.height) < 820 || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
+  const SMALL = (navigator.maxTouchPoints > 0 && Math.min(screen.width, screen.height) < 820) || (navigator.connection && /2g|3g/.test(navigator.connection.effectiveType || ''));
   const cvs = $('#bg'), ctx = cvs.getContext('2d');
   const frames = Array.from({ length: NF }, () => ({ bmp: null, ready: false }));
   const USE = Array.from({ length: NF }, (_, i) => i).filter(i => i % KS === 0);
