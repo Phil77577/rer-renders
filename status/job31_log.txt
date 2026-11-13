@@ -5,3 +5,4 @@
 20:08:17 konvertiert innen/bad.webp
 20:08:27 konvertiert innen/balkon.webp
 20:08:37 konvertiert innen/A/flur.webp
+20:08:45 konvertiert innen/A/wohnen.webp
