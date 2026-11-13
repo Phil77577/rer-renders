@@ -1,0 +1,8 @@
+23:44:53 FEHLER Traceback (most recent call last):
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job33.py", line 68, in <module>
+    p=os.path.join(ROOT,'renders','4k',rid+'.jpg'); sc.render.filepath=p; bpy.ops.render.render(write_still=True)
+                                                                          ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+RuntimeError: Error: System is out of GPU and shared host memory
+Error: System is out of GPU and shared host memory
+
+
