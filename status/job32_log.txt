@@ -1,9 +1,8 @@
-23:24:34 A flur fertig
-23:32:37 FEHLER Traceback (most recent call last):
+00:03:26 FEHLER Traceback (most recent call last):
   File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job32.py", line 62, in <module>
     p=os.path.join(ROOT,'renders','A',rid+'.jpg'); sc.render.filepath=p; bpy.ops.render.render(write_still=True)
                                                                          ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-RuntimeError: Error: System is out of GPU and shared host memory
-Error: System is out of GPU and shared host memory
+RuntimeError: Error: Out of memory in CUDA queue enqueue (integrator_shade_surface integrator_sorted_paths_array integrator_compact_shadow_states prefix_sum)
+Error: Out of memory in CUDA queue enqueue (integrator_shade_surface integrator_sorted_paths_array integrator_compact_shadow_states prefix_sum)
 
 
