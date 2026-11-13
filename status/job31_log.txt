@@ -9,3 +9,4 @@
 20:08:54 konvertiert innen/A/schlafen.webp
 20:09:03 konvertiert innen/A/bad.webp
 20:09:12 konvertiert innen/A/abstell.webp
+20:09:22 konvertiert innen/A/balkon.webp
