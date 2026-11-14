@@ -15,3 +15,4 @@
 13:18:04 4k bad fertig (Helligkeit 0.112, Belichtung -0.16, 551 s)
 13:23:45 4k balkon fertig (Helligkeit 0.041, Belichtung +1.30, 321 s)
 13:23:46 Navigator: Kameras B aktualisiert
+13:23:50 index B v34 ok
