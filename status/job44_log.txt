@@ -1,3 +1,4 @@
 21:26:12 Teppich-Material korrigiert (BaseColor, Metallic 0)
 21:27:56 Vorschau B2 schlafen (Belichtung +1.10) k=0.40
 21:27:58 CHECK
+21:38:10 4k schlafen fertig (Helligkeit 0.047, Belichtung +1.10, 580 s, Glas k=0.40)
