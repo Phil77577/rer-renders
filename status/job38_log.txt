@@ -11,3 +11,4 @@
 12:38:35 4k wohnen fertig (Helligkeit 0.044, Belichtung +1.17, 520 s)
 12:48:00 4k schlafen fertig (Helligkeit 0.036, Belichtung +1.47, 545 s)
 12:58:46 4k kind fertig (Helligkeit 0.089, Belichtung +0.17, 626 s)
+13:08:33 4k flur fertig (Helligkeit 0.060, Belichtung +0.74, 566 s)
