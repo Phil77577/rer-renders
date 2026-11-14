@@ -2,3 +2,4 @@
 21:08:16 AUSSICHT2 OK
 21:10:15 Vorschau B wohnen (Belichtung +1.58) 
 21:11:24 Vorschau B balkon (Belichtung +0.30) 
+21:13:06 Vorschau Bk wohnen (Belichtung +1.57) s0=2.40
