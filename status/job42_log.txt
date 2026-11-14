@@ -2,3 +2,4 @@
 17:42:44 A schlafen fertig (Helligkeit 0.081, Belichtung +0.31, 559 s)
 17:52:04 A flur fertig (Helligkeit 0.063, Belichtung +0.67, 541 s)
 18:02:55 A abstell fertig (Helligkeit 0.069, Belichtung +0.54, 634 s)
+18:06:29 A balkon fertig (Helligkeit 0.330, Belichtung -1.00, 197 s)
