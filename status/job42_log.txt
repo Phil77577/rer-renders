@@ -5,3 +5,4 @@
 18:06:29 A balkon fertig (Helligkeit 0.330, Belichtung -1.00, 197 s)
 18:15:54 A bad fertig (Helligkeit 0.115, Belichtung +0.23, 535 s)
 18:15:58 index A v36 ok
+18:24:47 4k wohnen fertig (Helligkeit 0.034, Belichtung +1.58, 488 s)
