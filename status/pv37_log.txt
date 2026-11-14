@@ -1,2 +1,3 @@
 10:54:46 Zielhelligkeit 0.10 (linear, Median)
 10:54:59 Kameras {"wohnen": [4.04, 2.2, 1.5], "schlafen": [6.71, 0.44, 1.5], "bad": [1.3, 5.76, 1.5], "flur": [4.89, 5.76, 1.5], "abstell": [6.89, 5.45, 1.5], "balkon": [2.45, -1.05, 1.5]}
+10:55:53 A_pv wohnen fertig (Helligkeit 0.030, Belichtung +1.72, 35 s)
