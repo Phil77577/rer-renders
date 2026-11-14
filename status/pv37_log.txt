@@ -3,3 +3,4 @@
 10:55:53 A_pv wohnen fertig (Helligkeit 0.030, Belichtung +1.72, 35 s)
 10:56:06 Kameras {"wohnen": [-0.11, -1.7, 1.5], "schlafen": [1.37, -1.7, 1.5], "kind": [1.94, 1.73, 1.5], "flur": [-0.82, 2.3, 1.5], "bad": [-3.43, 2.14, 1.5], "balkon": [-2.6, -4.75, 1.5]}
 10:57:14 B_pv wohnen fertig (Helligkeit 0.040, Belichtung +1.33, 40 s)
+10:57:16 VORSCHAU FERTIG
