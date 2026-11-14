@@ -19,3 +19,4 @@ ReferenceError: StructRNA of type Object has been removed
 17:20:48 Vorschau B wohnen (Belichtung +1.58)
 17:21:39 Vorschau B schlafen (Belichtung +1.15)
 17:22:23 Vorschau B balkon (Belichtung +0.45)
+17:22:25 VORSCHAU FERTIG
