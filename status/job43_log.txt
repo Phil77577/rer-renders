@@ -1,13 +1,1 @@
-20:48:51 Aussicht Etage 0 fertig (769 s)
-20:51:11 FEHLER Traceback (most recent call last):
-  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job43.py", line 189, in <module>
-    aussicht2((0,2))
-    ~~~~~~~~~^^^^^^^
-  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job43.py", line 150, in aussicht2
-    sc.render.filepath=raw; t0=time.time(); bpy.ops.render.render(write_still=True)
-                                            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-RuntimeError: Error: Failed to build OptiX acceleration structure
-Error: System is out of GPU and shared host memory
-Error: System is out of GPU and shared host memory
-
-
+21:08:14 Aussicht Etage 2 fertig (734 s)
