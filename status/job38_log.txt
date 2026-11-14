@@ -10,3 +10,4 @@
 12:29:28 Kameras {"wohnen": [-0.7, -0.46, 1.5], "schlafen": [1.86, -1.7, 1.5], "kind": [1.66, 2.3, 1.5], "flur": [-0.82, 2.3, 1.5], "bad": [-3.06, 2.3, 1.5], "balkon": [-2.6, -4.75, 1.5]}
 12:38:35 4k wohnen fertig (Helligkeit 0.044, Belichtung +1.17, 520 s)
 12:48:00 4k schlafen fertig (Helligkeit 0.036, Belichtung +1.47, 545 s)
+12:58:46 4k kind fertig (Helligkeit 0.089, Belichtung +0.17, 626 s)
