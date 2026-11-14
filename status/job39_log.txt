@@ -4,3 +4,4 @@
 14:00:58 A flur fertig (Helligkeit 0.060, Belichtung +0.73, 540 s)
 14:10:20 A bad fertig (Helligkeit 0.076, Belichtung +0.82, 530 s)
 14:10:24 index A v35 ok
+14:20:03 4k bad fertig (Helligkeit 0.112, Belichtung +0.27, 541 s)
