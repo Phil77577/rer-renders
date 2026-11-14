@@ -1,1 +1,2 @@
 17:33:09 A wohnen fertig (Helligkeit 0.031, Belichtung +1.68, 449 s)
+17:42:44 A schlafen fertig (Helligkeit 0.081, Belichtung +0.31, 559 s)
