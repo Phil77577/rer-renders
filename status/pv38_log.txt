@@ -1,1 +1,2 @@
 11:00:38 Zielhelligkeit 0.10 (linear, Median)
+11:00:52 Kameras {"wohnen": [4.04, 2.2, 1.5], "schlafen": [6.71, 0.44, 1.5], "bad": [1.3, 5.76, 1.5], "flur": [4.89, 5.76, 1.5], "abstell": [7.32, 6.1, 1.5], "balkon": [2.45, -1.05, 1.5]}
