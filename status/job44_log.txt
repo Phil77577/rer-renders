@@ -15,3 +15,4 @@
 23:02:13 A flur fertig (Helligkeit 0.063, Belichtung +0.67, 534 s, Glas k=0.40)
 23:12:53 A abstell fertig (Helligkeit 0.069, Belichtung +0.54, 623 s, Glas k=0.40)
 23:12:57 index A v37 ok
+23:12:59 FERTIG
