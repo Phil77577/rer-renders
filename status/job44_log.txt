@@ -1,6 +1,1 @@
-21:18:14 Teppiche {"Laeufer": [-1.15, 1.0, -0.25, 3.6], "Teppich Kind": [1.4, 1.55, 3.2, 2.85], "Teppich Schlafen": [2.1, -3.2, 4.5, -0.6]}
-21:20:01 Vorschau B wohnen (Belichtung +1.61) k=0.40
-21:21:22 Vorschau B schlafen (Belichtung +1.17) k=0.40
-21:22:46 Vorschau B kind (Belichtung +0.56) k=0.40
-21:24:09 Vorschau B flur (Belichtung +0.81) k=0.40
-21:24:10 VORSCHAU FERTIG
+21:26:12 Teppich-Material korrigiert (BaseColor, Metallic 0)
