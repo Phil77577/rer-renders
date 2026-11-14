@@ -7,3 +7,4 @@
 22:08:48 4k wohnen fertig (Helligkeit 0.034, Belichtung +1.54, 495 s, Glas k=0.40)
 22:18:08 4k bad fertig (Helligkeit 0.113, Belichtung +0.25, 541 s, Glas k=0.40)
 22:22:50 4k balkon fertig (Helligkeit 0.054, Belichtung +0.90, 264 s, Glas aus)
+22:22:54 index B v37 ok
