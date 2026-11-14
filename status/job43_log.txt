@@ -3,3 +3,4 @@
 21:10:15 Vorschau B wohnen (Belichtung +1.58) 
 21:11:24 Vorschau B balkon (Belichtung +0.30) 
 21:13:06 Vorschau Bk wohnen (Belichtung +1.57) s0=2.40
+21:14:19 Vorschau A balkon (Belichtung -1.00) 
