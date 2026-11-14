@@ -3,3 +3,4 @@
 21:21:22 Vorschau B schlafen (Belichtung +1.17) k=0.40
 21:22:46 Vorschau B kind (Belichtung +0.56) k=0.40
 21:24:09 Vorschau B flur (Belichtung +0.81) k=0.40
+21:24:10 VORSCHAU FERTIG
