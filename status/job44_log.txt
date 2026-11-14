@@ -5,3 +5,4 @@
 21:49:12 4k flur fertig (Helligkeit 0.068, Belichtung +0.55, 636 s, Glas k=0.40)
 22:00:11 4k kind fertig (Helligkeit 0.077, Belichtung +0.37, 631 s, Glas k=0.40)
 22:08:48 4k wohnen fertig (Helligkeit 0.034, Belichtung +1.54, 495 s, Glas k=0.40)
+22:18:08 4k bad fertig (Helligkeit 0.113, Belichtung +0.25, 541 s, Glas k=0.40)
