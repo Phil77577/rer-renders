@@ -13,3 +13,4 @@
 12:58:46 4k kind fertig (Helligkeit 0.089, Belichtung +0.17, 626 s)
 13:08:33 4k flur fertig (Helligkeit 0.060, Belichtung +0.74, 566 s)
 13:18:04 4k bad fertig (Helligkeit 0.112, Belichtung -0.16, 551 s)
+13:23:45 4k balkon fertig (Helligkeit 0.041, Belichtung +1.30, 321 s)
