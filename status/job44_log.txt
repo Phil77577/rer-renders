@@ -9,3 +9,4 @@
 22:22:50 4k balkon fertig (Helligkeit 0.054, Belichtung +0.90, 264 s, Glas aus)
 22:22:54 index B v37 ok
 22:31:06 A wohnen fertig (Helligkeit 0.031, Belichtung +1.69, 455 s, Glas k=0.40)
+22:40:41 A schlafen fertig (Helligkeit 0.080, Belichtung +0.32, 554 s, Glas k=0.40)
