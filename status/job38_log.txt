@@ -4,3 +4,4 @@
 11:57:04 A flur fertig (Helligkeit 0.060, Belichtung +0.73, 541 s)
 12:05:08 A schlafen fertig (Helligkeit 0.047, Belichtung +1.09, 466 s)
 12:14:18 A bad fertig (Helligkeit 0.076, Belichtung +0.39, 531 s)
+12:25:27 A abstell fertig (Helligkeit 0.068, Belichtung +0.55, 649 s)
