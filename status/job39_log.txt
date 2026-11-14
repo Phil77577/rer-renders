@@ -3,3 +3,4 @@
 13:51:40 A schlafen fertig (Helligkeit 0.061, Belichtung +0.71, 531 s)
 14:00:58 A flur fertig (Helligkeit 0.060, Belichtung +0.73, 540 s)
 14:10:20 A bad fertig (Helligkeit 0.076, Belichtung +0.82, 530 s)
+14:10:24 index A v35 ok
