@@ -11,3 +11,4 @@
 22:31:06 A wohnen fertig (Helligkeit 0.031, Belichtung +1.69, 455 s, Glas k=0.40)
 22:40:41 A schlafen fertig (Helligkeit 0.080, Belichtung +0.32, 554 s, Glas k=0.40)
 22:49:47 A bad fertig (Helligkeit 0.115, Belichtung +0.23, 527 s, Glas k=0.40)
+22:52:59 A balkon fertig (Helligkeit 0.348, Belichtung -1.00, 176 s, Glas aus)
