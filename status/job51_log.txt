@@ -1,2 +1,3 @@
 13:19:11 RER_Wohnung_A_2Zi.blend: Bettwaesche hellgrau gesetzt (1 Matratzen)
 13:19:32 RER_Wohnung_E_5Zi.blend: Bettwaesche hellgrau gesetzt (4 Matratzen)
+13:21:36 Vorschau E2 kind2 (Belichtung -0.08) k=0.40
