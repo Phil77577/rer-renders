@@ -5,3 +5,4 @@
 13:34:44 E flur fertig (Helligkeit 0.069, Belichtung +0.54, 643 s, Glas k=0.40)
 13:44:08 E wohnen fertig (Helligkeit 0.043, Belichtung +1.20, 543 s, Glas k=0.40)
 13:55:40 E kind1 fertig (Helligkeit 0.066, Belichtung +0.61, 672 s, Glas k=0.40)
+14:09:22 E kind2 fertig (Helligkeit 0.105, Belichtung -0.08, 799 s, Glas k=0.40)
