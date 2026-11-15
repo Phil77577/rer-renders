@@ -415,13 +415,13 @@ const TYPES = {
     doors: [['flur', 'bad'], ['flur', 'kind'], ['flur', 'wohnen'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
   C: { zi: 4, label: '4-Zimmer-Wohnung', rent: 12.1, buy: 4850,
     rooms: [
-      { id: 'kind1', name: 'Kinderzimmer', kind: 'kind', x: 0, y: 0, w: 3.6, h: 3.6 },
-      { id: 'bad', name: 'Bad', kind: 'bad', x: 3.6, y: 0, w: 2.6, h: 3.6 },
-      { id: 'flur', name: 'Flur', kind: 'flur', x: 6.2, y: 0, w: 2.2, h: 3.6 },
-      { id: 'kind2', name: 'Arbeiten', kind: 'arbeiten', x: 8.4, y: 0, w: 3.2, h: 3.6 },
-      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.6, w: 7.6, h: 5.2 },
-      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 7.6, y: 3.6, w: 4, h: 5.2 },
-      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 8.8, w: 7.6, h: 1.6 }
+      { id: 'kind1', name: 'Kinderzimmer 1', kind: 'kind', x: 0, y: 0, w: 3.54, h: 3.48 },
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 3.66, y: 0, w: 2.48, h: 3.48 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 6.26, y: 0, w: 2.08, h: 3.48 },
+      { id: 'kind2', name: 'Kinderzimmer 2', kind: 'kind', x: 8.46, y: 0, w: 3.14, h: 3.48 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.6, w: 7.54, h: 5.2 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 7.66, y: 3.6, w: 3.94, h: 5.2 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 9.1, w: 7.54, h: 1.6 }
     ],
     doors: [['flur', 'bad'], ['flur', 'kind2'], ['flur', 'wohnen'], ['wohnen', 'kind1'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
   P: { zi: 4, label: 'Penthouse', rent: 16.5, buy: 6900,
@@ -1079,7 +1079,14 @@ function roomPath(t, from, to) {
       doors: { flur: { wohnen: [3.7, 4.46], schlafen: [5.6, 4.46], bad: [2.66, 5.8], abstell: [6.26, 6.1] },
         wohnen: { flur: [3.7, 4.46], balkon: [1.6, -0.15] }, schlafen: { flur: [5.6, 4.46] }, bad: { flur: [2.66, 5.8] },
         abstell: { flur: [6.26, 6.1] }, balkon: { wohnen: [1.6, -0.15] } },
-      img: Object.fromEntries(['flur', 'wohnen', 'schlafen', 'bad', 'abstell', 'balkon'].map(r => [r, 'innen/A/' + r + '.jpg?v=39'])) } };
+      img: Object.fromEntries(['flur', 'wohnen', 'schlafen', 'bad', 'abstell', 'balkon'].map(r => [r, 'innen/A/' + r + '.jpg?v=39'])) },
+    C: { id: 'C',
+      cams: { kind1: [2.6, 6.17], bad: [4.9, 6.71], flur: [7.3, 6.1], kind2: [9.31, 6.0], wohnen: [6.9, 4.2], schlafen: [8.66, 3.8], balkon: [2.27, -1.1] },
+      doors: { flur: { wohnen: [6.9, 5.26], bad: [6.2, 6.0], kind2: [8.4, 6.0] },
+        wohnen: { flur: [6.9, 5.26], kind1: [2.6, 5.26], schlafen: [7.6, 3.8], balkon: [1.6, -0.15] },
+        kind1: { wohnen: [2.6, 5.26] }, bad: { flur: [6.2, 6.0] }, kind2: { flur: [8.4, 6.0] },
+        schlafen: { wohnen: [7.6, 3.8] }, balkon: { wohnen: [1.6, -0.15] } },
+      img: Object.fromEntries(['flur', 'wohnen', 'kind1', 'kind2', 'schlafen', 'bad', 'balkon'].map(r => [r, 'innen/C/' + r + '.jpg?v=1'])) } };
   let PANO = PANOS.B, MT = TYPES.B;
   const tkey = r => PANO.id + ':' + r;
   const tourEl = $('#tour');
