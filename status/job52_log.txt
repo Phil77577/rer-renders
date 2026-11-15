@@ -5,3 +5,4 @@
 16:55:38 Vorschau F52A bad (Belichtung +0.16) k=0.40
 16:57:53 Vorschau F52C bad (Belichtung -0.03) k=0.40
 16:59:47 Vorschau F52D bad (Belichtung -0.05) k=0.40
+17:01:22 Vorschau F52D wohnen (Belichtung +0.72) k=0.40
