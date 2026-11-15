@@ -2,3 +2,4 @@
 09:27:43 Sitzgruppe RER_Musterwohnun gedreht -> [-1.92, -5.19, -0.08, -4.41] (3 Teile)
 09:33:08 A balkon fertig (Helligkeit 0.081, Belichtung +0.31, 290 s, Glas aus)
 09:42:13 A wohnen fertig (Helligkeit 0.031, Belichtung +1.69, 501 s, Glas k=0.40)
+09:49:40 4k balkon fertig (Helligkeit 0.081, Belichtung +0.31, 390 s, Glas aus)
