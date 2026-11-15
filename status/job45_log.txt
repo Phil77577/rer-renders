@@ -5,3 +5,4 @@
 09:49:40 4k balkon fertig (Helligkeit 0.081, Belichtung +0.31, 390 s, Glas aus)
 09:58:33 4k wohnen fertig (Helligkeit 0.034, Belichtung +1.55, 503 s, Glas k=0.40)
 09:58:36 index v38 ok
+09:58:38 FERTIG
