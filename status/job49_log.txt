@@ -1,2 +1,3 @@
 12:11:20 Aussicht Etage 3 fertig (853 s)
 12:14:54 Regeln [["schuhschrank", "S"], ["waschtisch", "S"], ["wc", "N"], ["handtuch", "E"], ["bett", "W"], ["kueche", "N"], ["tv", "E"], ["sofa", true]] | Aussicht etage_3.exr (1 Knoten)
+12:14:55 ausserhalb []
