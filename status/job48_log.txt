@@ -1,2 +1,3 @@
 10:40:18 RER_Wohnung_A_2Zi.blend: Katalog ergänzt [bpy.data.objects['KAT_kinderdecke'], bpy.data.objects['KAT_teppich2']]
 10:40:34 RER_Wohnung_C_4Zi.blend: Katalog ergänzt [bpy.data.objects['KAT_kinderdecke']] | 2 Kinderbetten bezogen
+10:42:42 Vorschau C2 kind1 (Belichtung +0.13) k=0.40
