@@ -5,3 +5,4 @@
 12:56:14 index D ok
 13:02:20 Regeln [["kinderbett", "E"], ["schreibtisch", "W"], ["kommode", "E"], ["baumregal", "S"], ["waschtisch", "S"], ["wc", "W"], ["handtuch", "E"], ["schuhschrank", "W"], ["kinderbett", "E"], ["schreibtisch", "W"], ["kommode", "S"], ["baumregal", "E"], ["kinderbett", "E"], ["schreibtisch", "W"], ["kommode", "E"], ["baumregal", null], ["kueche", "E"], ["tv", "W"], ["sofa", "frei"], ["essgruppe", [8.77, 3.68]], ["sideboard", "N"], ["bett", "E"], ["schrank", "W"]] | Aussicht etage_2.exr (1 Knoten)
 13:02:21 ausserhalb []
+13:02:25 Kameras {"kind1": [2.6, 6.32, 1.5], "abstell": [5.14, 6.16, 1.5], "bad": [5.14, 8.6, 1.5], "flur": [7.2, 8.98, 1.5], "diele": [11.93, 5.78, 1.5], "kind2": [10.9, 7.59, 1.5], "kind3": [12.7, 7.74, 1.5], "wohnen": [7.0, 4.2, 1.5], "schlafen": [11.3, 4.2, 1.5], "balkon": [2.27, -1.1, 1.5]} | gespeichert RER_Wohnung_E_5Zi.blend
