@@ -9,3 +9,4 @@
 11:51:40 C bad fertig (Helligkeit 0.136, Belichtung -0.01, 638 s, Glas k=0.40)
 11:56:50 C balkon fertig (Helligkeit 0.117, Belichtung -0.22, 289 s, Glas k=0.40)
 11:56:54 index C ok
+11:56:56 FERTIG
