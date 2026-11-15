@@ -1,2 +1,3 @@
 12:32:03 D flur fertig (Helligkeit 0.053, Belichtung +0.93, 562 s, Glas k=0.40)
 12:41:22 D wohnen fertig (Helligkeit 0.061, Belichtung +0.72, 541 s, Glas k=0.40)
+12:51:31 D bad fertig (Helligkeit 0.139, Belichtung -0.05, 590 s, Glas k=0.40)
