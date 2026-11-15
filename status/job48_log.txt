@@ -3,3 +3,4 @@
 10:42:42 Vorschau C2 kind1 (Belichtung +0.13) k=0.40
 10:54:16 C flur fertig (Helligkeit 0.100, Belichtung +0.00, 657 s, Glas k=0.40)
 11:05:07 C wohnen fertig (Helligkeit 0.053, Belichtung +0.90, 619 s, Glas k=0.40)
+11:16:51 C kind1 fertig (Helligkeit 0.092, Belichtung +0.13, 677 s, Glas k=0.40)
