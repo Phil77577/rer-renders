@@ -2,3 +2,4 @@
 16:52:42 RER_Wohnung_C_4Zi.blend: Nische entfernt [0], Flaschen 0 | NEU_dusche.001: verschoben (0.0, 0.0, 0.0) | [('x', 1, 1.483, 'Wand bad.005', -0.023), ('x', -1, -0.0, 'Wand bad.008', -0.006), ('y', 1, 0.003, 'Wand bad', 0.282), ('y', -1, 2.511, 'Wand bad.007', -0.004)]
 16:53:06 RER_Wohnung_D_1Zi.blend: Nische entfernt [9], Flaschen 6 | NEU_dusche.001: verschoben (0.0, -0.279, 0.0) | [('x', 1, 0.0, 'Wand bad.004', -0.006), ('x', -1, None, None, -0.023), ('y', 1, 1.032, 'Wand bad.001', -0.004), ('y', -1, 0.282, 'Wand bad.005', 0.282)] || Sofa entfernt
 16:53:26 RER_Wohnung_E_5Zi.blend: Nische entfernt [9], Flaschen 6 | NEU_dusche.001: verschoben (0.0, 0.279, 0.0) | [('x', 1, 1.483, 'Wand bad.005', -0.023), ('x', -1, -0.0, 'Wand bad.008', -0.006), ('y', 1, 0.282, 'Wand bad', 0.282), ('y', -1, 1.832, 'Wand bad.007', -0.004)]
+16:55:38 Vorschau F52A bad (Belichtung +0.16) k=0.40
