@@ -1,1 +1,2 @@
 10:28:46 A Brüstungsglas eigenes Material (3 Teile)
+10:33:38 A balkon fertig (Helligkeit 0.079, Belichtung +0.34, 255 s, Glas k=0.40)
