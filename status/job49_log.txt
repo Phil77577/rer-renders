@@ -6,3 +6,4 @@
 12:18:34 Vorschau D bad (Belichtung -0.05) k=0.40
 12:19:56 Vorschau D wohnen (Belichtung +0.72) k=0.40
 12:20:58 Vorschau D balkon (Belichtung -0.67) k=0.40
+12:20:59 VORSCHAU FERTIG
