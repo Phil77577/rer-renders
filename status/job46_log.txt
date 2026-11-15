@@ -9,3 +9,4 @@
 10:25:30 Vorschau C wohnen (Belichtung +0.90) k=0.40
 10:27:07 Vorschau C schlafen (Belichtung +0.54) k=0.40
 10:28:17 Vorschau C balkon (Belichtung -0.22) k=0.40
+10:28:19 VORSCHAU FERTIG
