@@ -9,3 +9,4 @@
 17:03:39 Vorschau F52E bad (Belichtung -0.09) k=0.40
 17:03:41 VORSCHAU FERTIG
 17:15:00 A bad fertig (Helligkeit 0.121, Belichtung +0.16, 638 s, Glas k=0.40)
+17:27:19 C bad fertig (Helligkeit 0.138, Belichtung -0.03, 690 s, Glas k=0.40)
