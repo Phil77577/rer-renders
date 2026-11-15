@@ -1,2 +1,11 @@
 16:50:27 RER_Wohnung_A_2Zi.blend: Nische entfernt [9], Flaschen 6 | NEU_dusche.001: verschoben (-0.279, 0.0, 0.0) | [('x', 1, 1.352, 'Wand bad.004', -0.004), ('x', -1, 0.282, 'Wand bad.008', 0.282), ('y', 1, 1.483, 'Wand bad.002', -0.023), ('y', -1, 0.0, 'Wand bad.007', -0.006)]
 16:50:47 RER_Wohnung_C_4Zi.blend: Nische entfernt [0], Flaschen 0 | NEU_dusche.001: verschoben (0.0, 0.0, 0.0) | [('x', 1, 1.483, 'Wand bad.005', -0.023), ('x', -1, -0.0, 'Wand bad.008', -0.006), ('y', 1, 0.003, 'Wand bad', 0.282), ('y', -1, 2.511, 'Wand bad.007', -0.004)]
+16:51:03 FEHLER Traceback (most recent call last):
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job52.py", line 464, in <module>
+    for b,c,R,f,rm in JOBS: fix_dusche(b,sofa=(f=='D'))
+                            ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job52.py", line 449, in fix_dusche
+    if o.name.startswith('KAT_sofa3') and o.parent is None and 'Moebel' in [c.name for c in o.users_collection]:
+       ^^^^^^
+ReferenceError: StructRNA of type Object has been removed
+
