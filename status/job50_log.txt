@@ -12,3 +12,4 @@
 13:09:38 Vorschau E diele (Belichtung -0.65) k=0.40
 13:11:27 Vorschau E kind2 (Belichtung -0.02) k=0.40
 13:13:14 Vorschau E kind3 (Belichtung -0.17) k=0.40
+13:14:52 Vorschau E wohnen (Belichtung +1.20) k=0.40
