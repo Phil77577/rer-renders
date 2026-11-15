@@ -1,3 +1,4 @@
 10:11:40 Aussicht Etage 1 fertig (763 s)
 10:16:56 Regeln [["kinderbett", "E"], ["schreibtisch", "W"], ["kommode", "S"], ["baumregal", "E"], ["waschtisch", "S"], ["wc", "E"], ["handtuch", "W"], ["schuhschrank", "E"], ["kinderbett", "E"], ["schreibtisch", "W"], ["kommode", "S"], ["baumregal", "E"], ["kueche", "E"], ["tv", "W"], ["sofa", "frei"], ["essgruppe", [5.97, 1.78]], ["sideboard", "N"], ["bett", "E"], ["schrank", "N"]] | Aussicht etage_1.exr (1 Knoten)
 10:16:57 ausserhalb []
+10:17:01 Kameras {"kind1": [2.6, 6.17, 1.5], "bad": [4.9, 6.71, 1.5], "flur": [7.3, 6.1, 1.5], "kind2": [9.31, 6.0, 1.5], "wohnen": [6.9, 4.2, 1.5], "schlafen": [8.66, 3.8, 1.5], "balkon": [2.27, -1.1, 1.5]} | gespeichert RER_Wohnung_C_4Zi.blend
