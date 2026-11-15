@@ -3,3 +3,4 @@
 12:14:55 ausserhalb []
 12:15:05 Kameras {"flur": [1.47, 6.09, 1.5], "bad": [4.06, 5.86, 1.5], "wohnen": [2.3, 3.75, 1.5], "balkon": [1.03, -1.0, 1.5]} | gespeichert RER_Wohnung_D_1Zi.blend
 12:17:11 Vorschau D flur (Belichtung +0.93) k=0.40
+12:18:34 Vorschau D bad (Belichtung -0.05) k=0.40
