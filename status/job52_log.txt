@@ -14,3 +14,4 @@
 17:48:32 D wohnen fertig (Helligkeit 0.061, Belichtung +0.72, 584 s, Glas k=0.40)
 18:00:25 E bad fertig (Helligkeit 0.144, Belichtung -0.09, 663 s, Glas k=0.40)
 18:00:29 index v ok
+18:00:31 FERTIG
