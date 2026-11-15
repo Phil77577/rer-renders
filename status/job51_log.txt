@@ -12,3 +12,4 @@
 14:58:06 E diele fertig (Helligkeit 0.157, Belichtung -0.65, 766 s, Glas k=0.40)
 15:04:16 E balkon fertig (Helligkeit 0.123, Belichtung -0.30, 339 s, Glas k=0.40)
 15:04:20 index E ok
+15:04:21 FERTIG
