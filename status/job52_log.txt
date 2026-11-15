@@ -7,3 +7,4 @@
 16:59:47 Vorschau F52D bad (Belichtung -0.05) k=0.40
 17:01:22 Vorschau F52D wohnen (Belichtung +0.72) k=0.40
 17:03:39 Vorschau F52E bad (Belichtung -0.09) k=0.40
+17:03:41 VORSCHAU FERTIG
