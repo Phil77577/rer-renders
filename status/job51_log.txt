@@ -4,3 +4,4 @@
 13:23:18 Vorschau E2 schlafen (Belichtung +0.54) k=0.40
 13:34:44 E flur fertig (Helligkeit 0.069, Belichtung +0.54, 643 s, Glas k=0.40)
 13:44:08 E wohnen fertig (Helligkeit 0.043, Belichtung +1.20, 543 s, Glas k=0.40)
+13:55:40 E kind1 fertig (Helligkeit 0.066, Belichtung +0.61, 672 s, Glas k=0.40)
