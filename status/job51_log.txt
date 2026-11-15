@@ -7,3 +7,4 @@
 13:55:40 E kind1 fertig (Helligkeit 0.066, Belichtung +0.61, 672 s, Glas k=0.40)
 14:09:22 E kind2 fertig (Helligkeit 0.105, Belichtung -0.08, 799 s, Glas k=0.40)
 14:22:34 E kind3 fertig (Helligkeit 0.116, Belichtung -0.22, 758 s, Glas k=0.40)
+14:34:11 E schlafen fertig (Helligkeit 0.069, Belichtung +0.54, 669 s, Glas k=0.40)
