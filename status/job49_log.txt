@@ -1,3 +1,4 @@
 12:11:20 Aussicht Etage 3 fertig (853 s)
 12:14:54 Regeln [["schuhschrank", "S"], ["waschtisch", "S"], ["wc", "N"], ["handtuch", "E"], ["bett", "W"], ["kueche", "N"], ["tv", "E"], ["sofa", true]] | Aussicht etage_3.exr (1 Knoten)
 12:14:55 ausserhalb []
+12:15:05 Kameras {"flur": [1.47, 6.09, 1.5], "bad": [4.06, 5.86, 1.5], "wohnen": [2.3, 3.75, 1.5], "balkon": [1.03, -1.0, 1.5]} | gespeichert RER_Wohnung_D_1Zi.blend
