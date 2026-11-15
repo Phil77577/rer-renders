@@ -12,3 +12,4 @@
 17:27:19 C bad fertig (Helligkeit 0.138, Belichtung -0.03, 690 s, Glas k=0.40)
 17:38:26 D bad fertig (Helligkeit 0.140, Belichtung -0.05, 623 s, Glas k=0.40)
 17:48:32 D wohnen fertig (Helligkeit 0.061, Belichtung +0.72, 584 s, Glas k=0.40)
+18:00:25 E bad fertig (Helligkeit 0.144, Belichtung -0.09, 663 s, Glas k=0.40)
