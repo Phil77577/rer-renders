@@ -3,3 +3,4 @@
 10:33:56 B Brüstungsglas eigenes Material (1 Teile)
 10:39:21 4k balkon fertig (Helligkeit 0.077, Belichtung +0.38, 283 s, Glas k=0.40)
 10:39:25 index v39 ok
+10:39:26 FERTIG
