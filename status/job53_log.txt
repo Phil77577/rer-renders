@@ -14,3 +14,4 @@
 10:16:13 VORSCHAU FERTIG
 10:25:15 A bad fertig (Helligkeit 0.121, Belichtung +0.16, 501 s, Glas k=0.40)
 10:34:40 4k bad fertig (Helligkeit 0.113, Belichtung +0.25, 523 s, Glas k=0.40)
+10:44:31 4k kind fertig (Helligkeit 0.079, Belichtung +0.34, 567 s, Glas k=0.40)
