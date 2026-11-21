@@ -1,3 +1,4 @@
 22:07:53 RER_Wohnung_C_4Zi.blend: Rueckwand Achse y bei 9.095, Breite 6.66-7.94, Kamera-Seite -
 22:08:08 RER_Wohnung_D_1Zi.blend: Rueckwand Achse y bei 7.295, Breite 0.36-1.64, Kamera-Seite -
 22:08:25 RER_Wohnung_E_5Zi.blend: Rueckwand Achse y bei 10.495, Breite 6.66-7.94, Kamera-Seite -
+22:09:58 Vorschau F55D flur (Belichtung +0.95) k=0.40
