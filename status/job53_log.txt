@@ -13,3 +13,4 @@
 10:16:11 Vorschau F53E kind3 (Belichtung -0.21) k=0.40
 10:16:13 VORSCHAU FERTIG
 10:25:15 A bad fertig (Helligkeit 0.121, Belichtung +0.16, 501 s, Glas k=0.40)
+10:34:40 4k bad fertig (Helligkeit 0.113, Belichtung +0.25, 523 s, Glas k=0.40)
