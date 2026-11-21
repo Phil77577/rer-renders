@@ -1,2 +1,3 @@
 09:44:25 Original-Nische: Mesh Plane.012 24v, 2 Flaschen
 09:44:43 RER_Wohnung_A_2Zi.blend: Nische zurueck (24v) | NEU_dusche.001: Ausschnitt in ['Wand bad.008'], Tiefe 0.28, Wand 0.30
+09:45:06 RER_Musterwohnung_3Zi.blend: Nische war vorhanden | NEU_dusche: Ausschnitt in ['Wand bad'], Tiefe 0.28, Wand 0.36 | kind: Kopf x+1, neu [2.74,0.55]-[4.93,1.72], Kissen 2, alte Decken 1
