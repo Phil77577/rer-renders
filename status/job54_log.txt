@@ -3,3 +3,4 @@
 21:55:59 RER_Wohnung_D_1Zi.blend: Schwelle [0.4, 6.96, 0.004]-[1.6, 7.5, 0.004], Tuer [0.51, 7.095, 0.0]-[1.49, 7.265, 2.12], Material ['Schwelle dunkel']
 21:56:22 RER_Wohnung_E_5Zi.blend: Schwelle [6.7, 10.16, 0.004]-[7.9, 10.7, 0.004], Tuer [6.81, 10.295, 0.0]-[7.79, 10.465, 2.12], Material ['Schwelle dunkel']
 21:58:56 Vorschau F54C flur (Belichtung +0.00) k=0.40
+22:00:27 Vorschau F54D flur (Belichtung +0.95) k=0.40
