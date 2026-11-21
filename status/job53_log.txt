@@ -4,3 +4,4 @@
 09:55:09 Vorschau F534k bad (Belichtung +0.25) k=0.40
 09:56:48 Vorschau F534k kind (Belichtung +0.30) k=0.40
 09:59:08 Vorschau F53C bad (Belichtung -0.02) k=0.40
+10:01:11 Vorschau F53C kind1 (Belichtung +0.05) k=0.40
