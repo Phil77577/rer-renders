@@ -19,3 +19,4 @@
 11:06:09 C kind1 fertig (Helligkeit 0.093, Belichtung +0.11, 640 s, Glas k=0.40)
 11:17:44 C kind2 fertig (Helligkeit 0.111, Belichtung -0.15, 654 s, Glas k=0.40)
 11:27:05 D bad fertig (Helligkeit 0.139, Belichtung -0.05, 520 s, Glas k=0.40)
+11:38:25 E bad fertig (Helligkeit 0.143, Belichtung -0.08, 605 s, Glas k=0.40)
