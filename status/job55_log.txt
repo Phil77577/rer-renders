@@ -3,3 +3,4 @@
 22:08:25 RER_Wohnung_E_5Zi.blend: Rueckwand Achse y bei 10.495, Breite 6.66-7.94, Kamera-Seite -
 22:09:58 Vorschau F55D flur (Belichtung +0.95) k=0.40
 22:10:00 VORSCHAU FERTIG
+22:20:44 C flur fertig (Helligkeit 0.100, Belichtung +0.01, 598 s, Glas k=0.40)
