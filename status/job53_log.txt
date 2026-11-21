@@ -17,3 +17,4 @@
 10:44:31 4k kind fertig (Helligkeit 0.079, Belichtung +0.34, 567 s, Glas k=0.40)
 10:54:50 C bad fertig (Helligkeit 0.137, Belichtung -0.02, 571 s, Glas k=0.40)
 11:06:09 C kind1 fertig (Helligkeit 0.093, Belichtung +0.11, 640 s, Glas k=0.40)
+11:17:44 C kind2 fertig (Helligkeit 0.111, Belichtung -0.15, 654 s, Glas k=0.40)
