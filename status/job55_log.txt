@@ -7,3 +7,4 @@
 22:29:34 D flur fertig (Helligkeit 0.052, Belichtung +0.95, 498 s, Glas k=0.40)
 22:40:38 E flur fertig (Helligkeit 0.068, Belichtung +0.56, 603 s, Glas k=0.40)
 22:40:42 index v ok
+22:40:43 FERTIG
