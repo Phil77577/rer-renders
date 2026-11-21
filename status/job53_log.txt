@@ -23,3 +23,4 @@
 11:49:58 E kind1 fertig (Helligkeit 0.066, Belichtung +0.60, 636 s, Glas k=0.40)
 12:01:28 E kind2 fertig (Helligkeit 0.106, Belichtung -0.09, 646 s, Glas k=0.40)
 12:12:29 E kind3 fertig (Helligkeit 0.116, Belichtung -0.21, 622 s, Glas k=0.40)
+12:12:33 index v ok
