@@ -1,2 +1,3 @@
 09:50:27 Original-Nische: Mesh Plane.012 24v, 2 Flaschen
 09:50:45 RER_Wohnung_E_5Zi.blend: Nische zurueck (24v) | NEU_dusche.001: Ausschnitt in ['Wand bad'], Tiefe 0.28, Wand 0.30 | kind1: Kopf y+1, neu [2.48,8.00]-[3.65,10.20], Kissen 2, alte Decken 1 | kind2: Kopf y+1, neu [10.82,8.00]-[11.99,10.20], Kissen 2, alte Decken 1 | kind3: Kopf y+1, neu [14.34,8.00]-[15.51,10.20], Kissen 2, alte Decken 1
+09:53:06 Vorschau F53A bad (Belichtung +0.16) k=0.40
