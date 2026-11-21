@@ -1,2 +1,16 @@
 09:43:05 B aus Sicherung (vor dem Test) wiederhergestellt
 09:43:18 Original-Nische: Mesh Plane.012 24v, 2 Flaschen
+09:43:36 FEHLER Traceback (most recent call last):
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 653, in <module>
+    m=restore_and_cut(b,BD)
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 481, in restore_and_cut
+    bmn,bmx,nmn,nmx,ax=nich()
+                       ~~~~^^
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 475, in nich
+    bmn,bmx=wbox(body); nmn,nmx=niche_info(wall); c=(nmn+nmx)/2
+                                ~~~~~~~~~~^^^^^^
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 444, in niche_info
+    if not onp(f): vs.update(v.co.copy() for v in f.verts)
+                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: Vector is not frozen (mutable), call freeze first
+
