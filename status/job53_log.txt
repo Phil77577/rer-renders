@@ -5,3 +5,14 @@
 09:45:45 RER_Wohnung_C_4Zi.blend: Nische zurueck (24v) | NEU_dusche.001: Ausschnitt in ['Wand bad'], Tiefe 0.28, Wand 0.30 | kind1: Kopf y+1, neu [2.48,6.60]-[3.65,8.80], Kissen 2, alte Decken 1 | kind2: Kopf y+1, neu [10.54,6.60]-[11.71,8.80], Kissen 2, alte Decken 1
 09:46:16 RER_Wohnung_D_1Zi.blend: Nische zurueck (24v) | gespiegelt (Wand zu duenn), neue Seite x+1 Dicke 0.30 | NEU_dusche.001: Ausschnitt in ['Wand bad.004'], Tiefe 0.28, Wand 0.30
 09:46:42 RER_Wohnung_E_5Zi.blend: Badfenster +0.30 m (4 Wandteile, ['Fensterbank.001', 'Fensterrahmen.004', 'Fensterrahmen.005', 'Fensterrahmen.006', 'Fensterrahmen.007', 'Glas.001', 'Portal.001'])
+09:46:55 FEHLER Traceback (most recent call last):
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 653, in <module>
+    m=restore_and_cut(b,BD)
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 481, in restore_and_cut
+    bmn,bmx,nmn,nmx,ax=nich()
+                       ~~~~^^
+  File "C:\Users\philg\Documents\RER_Wohnungsnavigator\rer_job53.py", line 475, in nich
+    bmn,bmx=wbox(body); nmn,nmx=niche_info(wall); c=(nmn+nmx)/2
+                        ^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+
