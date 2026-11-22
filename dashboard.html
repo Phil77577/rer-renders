@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Immone Portal – Dashboard</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0E1F2E; --navy-2: #16304A; --gold: #C8963E; --gold-ink: #8A611F;
+  --paper: #EEF1F2; --surface: #FFFFFF; --surface-2: #F4F6F6; --ink: #0E1F2E; --ink-2: #33424F; --muted: #5A6874; --line: #E2E6E7;
+  --frei: #1F8A53; --reserviert: #B25E0E; --vergeben: #C33A33;
+  --c-frei: #2BB673; --c-reserviert: #F0952E; --c-vergeben: #E5483F;
+  --t-frei: rgba(43,182,115,.14); --t-reserviert: rgba(240,149,46,.17); --t-vergeben: rgba(229,72,63,.12);
+  --bar: #2C5A80; --bar-2: #9DB5C9; --grid: #E6EAEC;
+  --sev-hoch: #C33A33; --sev-mittel: #B25E0E; --sev-info: #2C5A80;
+  --shadow: 0 1px 2px rgba(14,31,46,.05), 0 8px 24px -14px rgba(14,31,46,.25);
+  --font: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif;
+  --r: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0B1620; --surface: #132433; --surface-2: #1A2E40; --ink: #E8EDF0; --ink-2: #C6D2DB; --muted: #9CAEBC; --line: #24394C; --gold-ink: #DDB06A;
+    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA9CC; --bar-2: #3B5873; --grid: #20354A;
+    --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
+    --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #7FA9CC; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #0B1620; --surface: #132433; --surface-2: #1A2E40; --ink: #E8EDF0; --ink-2: #C6D2DB; --muted: #9CAEBC; --line: #24394C; --gold-ink: #DDB06A;
+  --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA9CC; --bar-2: #3B5873; --grid: #20354A;
+  --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
+  --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #7FA9CC; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; overflow-x: clip; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 14.5px; line-height: 1.45; -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Layout ---------- */
+.app { display: grid; grid-template-columns: 236px 1fr; min-height: 100vh; }
+.side { background: var(--navy); color: #DCE4EA; padding: 22px 14px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 2px 10px 22px; color: #fff; text-decoration: none; }
+.brand .mark { width: 32px; height: 32px; border-radius: 9px; background: var(--gold); display: grid; place-items: center; color: var(--navy); font-weight: 800; font-size: 17px; }
+.brand b { font-size: 18px; letter-spacing: -.01em; }
+.brand small { display: block; font-size: 11.5px; color: #93A6B6; font-weight: 500; margin-top: -2px; }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav a { display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 10px; text-decoration: none; color: #C9D5DE; font-weight: 550; }
+.nav a svg { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
+.nav a[aria-current="page"] { background: rgba(200,150,62,.16); color: #fff; }
+.nav a[aria-current="page"] svg { stroke: var(--gold); }
+.nav .cnt { margin-left: auto; background: var(--gold); color: var(--navy); font-size: 11.5px; font-weight: 800; border-radius: 99px; padding: 1px 7px; }
+.side-foot { margin-top: auto; padding: 12px; font-size: 12px; color: #93A6B6; border-top: 1px solid rgba(255,255,255,.08); }
+.side-foot a { color: #E3C48C; }
+
+.main { min-width: 0; display: flex; flex-direction: column; }
+.top { display: flex; align-items: center; gap: 14px; padding: 16px 28px; background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+.top h1 { font-size: 20px; margin: 0; letter-spacing: -.015em; white-space: nowrap; }
+.top .grow { flex: 1; }
+.sel, .inp { height: 38px; border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 0 12px; min-width: 0; }
+.sel { padding-right: 30px; appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: right 15px top 16px, right 10px top 16px; background-size: 5px 5px; background-repeat: no-repeat; }
+.search { width: 210px; }
+.user { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 13.5px; white-space: nowrap; }
+.user i { width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-style: normal; font-weight: 700; font-size: 13px; }
+:root[data-theme="dark"] .user i { background: var(--gold); color: var(--navy); }
+.demo { margin: 16px 28px 0; padding: 10px 14px; border-radius: 10px; background: rgba(200,150,62,.12); color: var(--ink-2); font-size: 13.5px; display: flex; gap: 10px; align-items: center; }
+.demo svg { flex: none; width: 18px; height: 18px; stroke: var(--gold-ink); fill: none; stroke-width: 1.8; }
+.demo a { color: var(--gold-ink); font-weight: 650; }
+#view { padding: 20px 28px 48px; display: flex; flex-direction: column; gap: 18px; max-width: 1480px; width: 100%; }
+
+/* ---------- Cards & tiles ---------- */
+.grid { display: grid; gap: 18px; }
+.g-kpi { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.g-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.g-21 { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+.g-12 { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr); }
+.g-obj { grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+.fill { display: flex; flex-direction: column; }
+.fill .chart { flex: 1; min-height: 220px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow); min-width: 0; }
+.card h2 { font-size: 15.5px; margin: 0 0 2px; letter-spacing: -.005em; }
+.card .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+.card-h { display: flex; align-items: baseline; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
+.link { background: none; border: 0; padding: 0; color: var(--gold-ink); font-weight: 650; font-size: 13.5px; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+.kpi { padding: 15px 16px; }
+.kpi .l { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.kpi .v { font-size: 26px; font-weight: 750; letter-spacing: -.02em; margin-top: 3px; line-height: 1.15; white-space: nowrap; }
+.kpi .v small { font-size: 15px; font-weight: 650; color: var(--muted); margin-left: 2px; }
+.kpi .h { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.up { color: var(--frei); font-weight: 650; } .down { color: var(--vergeben); font-weight: 650; }
+
+.obj { cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 10px; transition: border-color .15s, transform .15s; }
+.obj:hover { border-color: var(--gold); }
+.obj .t { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+.obj h3 { margin: 0; font-size: 15.5px; }
+.obj .a { color: var(--muted); font-size: 12.5px; }
+.amp { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.amp::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.amp.ok { color: var(--frei); background: var(--t-frei); } .amp.mid { color: var(--reserviert); background: var(--t-reserviert); } .amp.bad { color: var(--vergeben); background: var(--t-vergeben); }
+.nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.nums div { font-size: 12px; color: var(--muted); } .nums b { display: block; font-size: 16px; color: var(--ink); }
+
+/* Status */
+.stack { display: flex; gap: 2px; height: 10px; }
+.stack span { display: block; height: 100%; min-width: 3px; }
+.stack span:first-child { border-radius: 4px 0 0 4px; } .stack span:last-child { border-radius: 0 4px 4px 0; } .stack span:only-child { border-radius: 4px; }
+.s-frei { background: var(--c-frei); } .s-reserviert { background: var(--c-reserviert); } .s-vergeben { background: var(--c-vergeben); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.legend b { color: var(--ink); }
+.tag { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 99px; white-space: nowrap; }
+.tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.tag.st-frei { background: var(--t-frei); color: var(--frei); } .tag.st-reserviert { background: var(--t-reserviert); color: var(--reserviert); } .tag.st-vergeben { background: var(--t-vergeben); color: var(--vergeben); }
+.tag.plain { background: var(--surface-2); color: var(--ink-2); } .tag.plain::before { display: none; }
+.tag.live { background: rgba(200,150,62,.18); color: var(--gold-ink); }
+
+/* Hinweise */
+.hints { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.hint { display: grid; grid-template-columns: 30px 1fr auto; gap: 12px; align-items: start; padding: 12px 4px; border-top: 1px solid var(--line); }
+.hint:first-child { border-top: 0; }
+.hint .ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; }
+.hint .ic svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hint.hoch .ic { color: var(--sev-hoch); background: var(--t-vergeben); }
+.hint.mittel .ic { color: var(--sev-mittel); background: var(--t-reserviert); }
+.hint.info .ic { color: var(--sev-info); background: rgba(44,90,128,.12); }
+.hint b { display: block; font-size: 14px; }
+.hint p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.hint .sev { font-size: 11px; font-weight: 750; text-transform: uppercase; letter-spacing: .04em; margin-right: 6px; }
+.hint.hoch .sev { color: var(--sev-hoch); } .hint.mittel .sev { color: var(--sev-mittel); } .hint.info .sev { color: var(--sev-info); }
+.btn { height: 34px; padding: 0 13px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); font-weight: 650; font-size: 13px; white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
+.btn:hover { border-color: var(--gold); }
+.btn.pri { background: var(--navy); color: #fff; border-color: var(--navy); }
+:root[data-theme="dark"] .btn.pri { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.pri { background: var(--gold); color: var(--navy); border-color: var(--gold); } :root:not([data-theme="light"]) .user i { background: var(--gold); color: var(--navy); } }
+.btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* Charts */
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; overflow: visible; }
+.chart text { font-family: var(--font); fill: var(--muted); font-size: 11.5px; }
+.hb { display: flex; flex-direction: column; gap: 9px; }
+.hb-row { display: grid; grid-template-columns: minmax(90px, 34%) 1fr 64px; gap: 10px; align-items: center; font-size: 13px; }
+.hb-row .lb { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hb-row .tr { height: 12px; position: relative; }
+.hb-row .fl { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 3px; }
+.hb-row .vl { text-align: right; font-weight: 650; }
+.hb-row .vl small { color: var(--muted); font-weight: 500; }
+.funnel .hb-row { grid-template-columns: minmax(142px, 34%) 1fr 92px; }
+.funnel .fl { background: var(--bar); }
+.split { display: flex; gap: 2px; height: 12px; margin: 6px 0 10px; }
+.split span:first-child { border-radius: 4px 0 0 4px; } .split span:last-child { border-radius: 0 4px 4px 0; }
+#tip { position: fixed; pointer-events: none; z-index: 90; background: var(--navy); color: #fff; padding: 8px 11px; border-radius: 9px; font-size: 12.5px; line-height: 1.35; box-shadow: 0 8px 22px rgba(0,0,0,.25); opacity: 0; transform: translateY(4px); transition: opacity .12s, transform .12s; max-width: 240px; }
+#tip.on { opacity: 1; transform: none; }
+#tip b { display: block; font-size: 13px; }
+:root[data-theme="dark"] #tip { background: #F2F5F7; color: var(--navy); }
+
+/* Building */
+.bld { display: flex; flex-direction: column; gap: 5px; }
+.fl-row { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 8px; align-items: stretch; }
+.fl-row > span { white-space: nowrap; font-size: 12px; font-weight: 700; color: var(--muted); display: flex; align-items: center; }
+.cells { display: grid; gap: 5px; }
+.cell { border: 1px solid var(--line); border-left: 4px solid var(--muted); border-radius: 7px; padding: 6px 7px; text-align: left; background: var(--surface); min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.cell b { font-size: 12.5px; } .cell small { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cell.st-frei { border-left-color: var(--c-frei); background: var(--t-frei); } .cell.st-reserviert { border-left-color: var(--c-reserviert); background: var(--t-reserviert); } .cell.st-vergeben { border-left-color: var(--c-vergeben); background: var(--t-vergeben); }
+.cell:hover, .cell.sel { outline: 2px solid var(--gold); outline-offset: 1px; }
+.cell.dim { opacity: .28; }
+
+/* Table */
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.chip { text-decoration: none; height: 32px; padding: 0 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.chip[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+:root[data-theme="dark"] .chip[aria-pressed="true"] { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chip[aria-pressed="true"] { background: var(--gold); color: var(--navy); border-color: var(--gold); } }
+.tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 11px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 12px; color: var(--muted); font-weight: 700; background: var(--surface-2); position: sticky; top: 0; }
+th button { background: none; border: 0; padding: 0; font-weight: 700; color: inherit; font-size: 12px; }
+th button[data-dir]::after { content: ' ↓'; } th button[data-dir="asc"]::after { content: ' ↑'; }
+td.n, th.n { text-align: right; }
+tbody tr { cursor: pointer; } tbody tr:hover td { background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: 0; }
+.empty { color: var(--muted); padding: 18px 4px; font-size: 13.5px; }
+
+/* Drawer */
+#scrim { position: fixed; inset: 0; background: rgba(8,18,28,.42); z-index: 60; opacity: 0; pointer-events: none; transition: opacity .2s; }
+#scrim.on { opacity: 1; pointer-events: auto; }
+#drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100%); background: var(--surface); z-index: 70; box-shadow: -18px 0 40px rgba(0,0,0,.18); transform: translateX(104%); transition: transform .24s ease, visibility 0s linear .24s; visibility: hidden; display: flex; flex-direction: column; }
+#drawer.on { transform: none; visibility: visible; transition: transform .24s ease, visibility 0s; }
+.dr-h { padding: 18px 22px 14px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: flex-start; }
+.dr-h h2 { margin: 0; font-size: 19px; letter-spacing: -.01em; }
+.dr-h p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.x { margin-left: auto; width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; flex: none; }
+.x svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; }
+.dr-b { overflow-y: auto; padding: 18px 22px 32px; display: flex; flex-direction: column; gap: 20px; }
+.dr-b h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 9px; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.facts div { background: var(--surface-2); border-radius: 10px; padding: 9px 11px; font-size: 12px; color: var(--muted); }
+.facts b { display: block; font-size: 15px; color: var(--ink); margin-top: 1px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.seg button { height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 7px; }
+.seg button i { width: 9px; height: 9px; border-radius: 50%; }
+.seg button[aria-pressed="true"] { border-width: 2px; }
+.seg button[aria-pressed="true"].st-frei { border-color: var(--c-frei); background: var(--t-frei); }
+.seg button[aria-pressed="true"].st-reserviert { border-color: var(--c-reserviert); background: var(--t-reserviert); }
+.seg button[aria-pressed="true"].st-vergeben { border-color: var(--c-vergeben); background: var(--t-vergeben); }
+.row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.fld { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.fld .inp { color: var(--ink); font-weight: 500; width: 100%; min-width: 0; }
+textarea.inp { height: 84px; padding: 9px 12px; resize: vertical; }
+.hist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.hist li { display: grid; grid-template-columns: 96px 1fr; gap: 10px; }
+.hist time { color: var(--muted); font-size: 12.5px; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mini div { text-align: center; background: var(--surface-2); border-radius: 10px; padding: 9px 4px; font-size: 11.5px; color: var(--muted); }
+.mini b { display: block; font-size: 17px; color: var(--ink); }
+.note-hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+/* Live */
+.feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.feed li { display: grid; grid-template-columns: 10px 1fr auto; gap: 11px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.feed li:first-child { border-top: 0; }
+.feed li i { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+.feed time { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c-frei); margin-right: 6px; box-shadow: 0 0 0 0 rgba(43,182,115,.6); animation: pl 1.8s infinite; }
+@keyframes pl { 0% { box-shadow: 0 0 0 0 rgba(43,182,115,.55); } 70% { box-shadow: 0 0 0 8px rgba(43,182,115,0); } 100% { box-shadow: 0 0 0 0 rgba(43,182,115,0); } }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } #drawer, #scrim { transition: none; } }
+
+pre.code { background: var(--navy); color: #E7EEF3; padding: 14px; border-radius: 10px; font-size: 12.5px; overflow-x: auto; white-space: pre; margin: 0; }
+.swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.sw { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.sw i { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); }
+
+#toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--navy); color: #fff; padding: 11px 16px; border-radius: 11px; font-size: 13.5px; font-weight: 600; z-index: 95; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; max-width: calc(100% - 32px); box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+#toast.on { opacity: 1; transform: translate(-50%, 0); }
+:root[data-theme="dark"] #toast { background: #F2F5F7; color: var(--navy); }
+
+/* Responsive */
+@media (max-width: 1280px) { .g-kpi { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1080px) { .g-21, .g-12, .g-2 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); } .side, .nav { min-width: 0; }
+  .side { position: sticky; top: 0; height: auto; z-index: 30; flex-direction: row; align-items: center; padding: 10px 12px; gap: 8px; }
+  .brand { padding: 0 6px 0 0; } .brand small { display: none; } .brand b { display: none; }
+  .nav { flex-direction: row; overflow-x: auto; scrollbar-width: none; gap: 2px; flex: 1; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { padding: 8px 10px; white-space: nowrap; font-size: 13.5px; }
+  .nav a svg { display: none; }
+  .side-foot { display: none; }
+  .top { position: static; flex-wrap: wrap; padding: 14px 16px; gap: 10px; }
+  .top h1 { width: 100%; font-size: 19px; }
+  .top .grow, .user { display: none; }
+  .top .sel { flex: 1; } .search { width: auto; flex: 1; }
+  .demo { margin: 12px 16px 0; }
+  #view { padding: 14px 16px 40px; gap: 14px; }
+  .g-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .kpi .v { font-size: 22px; }
+  .card { padding: 15px 15px; }
+  .facts { grid-template-columns: repeat(2, 1fr); }
+  .mini { grid-template-columns: repeat(2, 1fr); }
+  .hint { grid-template-columns: 30px 1fr; } .hint .btn { grid-column: 2; justify-self: start; }
+  .fl-row { grid-template-columns: 34px minmax(0, 1fr); gap: 4px; } .fl-row > span { font-size: 10.5px; } .cells { gap: 3px; }
+  .cell small { display: none; } .cell { padding: 5px 4px; border-left-width: 3px; } .cell b { font-size: 11px; }
+}
+
+@media print {
+  body * { visibility: hidden; }
+  #drawer, #drawer * { visibility: visible; }
+  #drawer { position: absolute; inset: 0; width: 100%; box-shadow: none; transform: none; }
+  #drawer .x, #drawer .no-print { display: none !important; }
+  .dr-b { overflow: visible; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="Hauptnavigation">
+    <a class="brand" href="#/uebersicht"><span class="mark">i</span><span><b>Immone</b><small>Portal · Beispiel Wohnbau GmbH</small></span></a>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">Prototyp mit Beispieldaten.<br><a href="index.html" target="_blank" rel="noopener">Navigator öffnen ↗</a></div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <h1 id="pageTitle">Übersicht</h1>
+      <span class="grow"></span>
+      <label class="sr" for="objSel">Objekt auswählen</label>
+      <select id="objSel" class="sel"></select>
+      <label class="sr" for="q">Wohnung suchen</label>
+      <input id="q" class="inp search" type="search" placeholder="Wohnung suchen, z. B. 3.02" autocomplete="off">
+      <span class="user"><i>PG</i>Phil G.</span>
+    </header>
+    <div class="demo" role="note"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Demo mit erfundenen Beispieldaten. Statusänderungen bei <b>Lindenhain-Höfe</b> wirken sofort im <a href="index.html" target="_blank" rel="noopener">Navigator</a>, Klicks und Anfragen dort erscheinen hier live.</span></div>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+<div id="scrim"></div>
+<aside id="drawer" aria-label="Wohnungsakte" aria-hidden="true"></aside>
+<div id="tip" role="status" aria-live="polite"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const TYPES = {
+  D: { zi: 1, label: '1-Zimmer-Apartment', rent: 13.9, buy: 5450,
+    rooms: [
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 0, y: 0, w: 2.94, h: 2.28 },
+      { id: 'bad', name: 'Duschbad', kind: 'bad', x: 3.06, y: 0, w: 2.94, h: 2.28 },
+      { id: 'wohnen', name: 'Wohnen & Schlafen', kind: 'studio', x: 0, y: 2.4, w: 6, h: 4.6 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 7.3, w: 4, h: 1.4 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'wohnen'], ['wohnen', 'balkon']] },
+  A: { zi: 2, label: '2-Zimmer-Wohnung', rent: 12.9, buy: 5150,
+    rooms: [
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 0, y: 0, w: 2.6, h: 2.48 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 2.72, y: 0, w: 3.48, h: 2.48 },
+      { id: 'abstell', name: 'Abstellraum', kind: 'abstell', x: 6.32, y: 0, w: 2.08, h: 2.48 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 2.6, w: 4.9, h: 4.4 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 5.02, y: 2.6, w: 3.38, h: 4.4 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 7.3, w: 4.9, h: 1.45 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'wohnen'], ['flur', 'schlafen'], ['flur', 'abstell'], ['wohnen', 'balkon']] },
+  B: { zi: 3, label: '3-Zimmer-Wohnung', rent: 12.4, buy: 4950,
+    rooms: [
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 0, y: 0, w: 3, h: 3.4 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 3, y: 0, w: 2.6, h: 3.4 },
+      { id: 'kind', name: 'Kinderzimmer', kind: 'kind', x: 5.6, y: 0, w: 4.4, h: 3.4 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.4, w: 5.8, h: 4.6 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 5.8, y: 3.4, w: 4.2, h: 4.6 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 8, w: 5.8, h: 1.6 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'kind'], ['flur', 'wohnen'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
+  C: { zi: 4, label: '4-Zimmer-Wohnung', rent: 12.1, buy: 4850,
+    rooms: [
+      { id: 'kind1', name: 'Kinderzimmer 1', kind: 'kind', x: 0, y: 0, w: 3.54, h: 3.48 },
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 3.66, y: 0, w: 2.48, h: 3.48 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 6.26, y: 0, w: 2.08, h: 3.48 },
+      { id: 'kind2', name: 'Kinderzimmer 2', kind: 'kind', x: 8.46, y: 0, w: 3.14, h: 3.48 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.6, w: 7.54, h: 5.2 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 7.66, y: 3.6, w: 3.94, h: 5.2 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 9.1, w: 7.54, h: 1.6 }
+    ],
+    doors: [['flur', 'bad'], ['flur', 'kind2'], ['flur', 'wohnen'], ['wohnen', 'kind1'], ['wohnen', 'schlafen'], ['wohnen', 'balkon']] },
+  E: { zi: 5, label: '5-Zimmer-Wohnung', rent: 11.9, buy: 4750,
+    rooms: [
+      { id: 'kind1', name: 'Kinderzimmer 1', kind: 'kind', x: 0, y: 0, w: 3.54, h: 4.88 },
+      { id: 'abstell', name: 'Abstellraum', kind: 'abstell', x: 3.66, y: 3.2, w: 2.48, h: 1.68 },
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 3.66, y: 0, w: 2.48, h: 3.08 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 6.26, y: 0, w: 2.08, h: 4.88 },
+      { id: 'diele', name: 'Diele', kind: 'flur', x: 8.46, y: 3.58, w: 6.94, h: 1.3 },
+      { id: 'kind2', name: 'Kinderzimmer 2', kind: 'kind', x: 8.46, y: 0, w: 3.42, h: 3.46 },
+      { id: 'kind3', name: 'Kinderzimmer 3', kind: 'kind', x: 12, y: 0, w: 3.4, h: 3.46 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 5, w: 10.4, h: 5.2 },
+      { id: 'schlafen', name: 'Schlafen', kind: 'schlafen', x: 10.52, y: 5, w: 4.88, h: 5.2 },
+      { id: 'balkon', name: 'Balkon', kind: 'balkon', x: 0, y: 10.5, w: 7.54, h: 1.6 }
+    ],
+    doors: [['flur', 'abstell'], ['flur', 'bad'], ['flur', 'wohnen'], ['flur', 'diele'], ['diele', 'kind2'], ['diele', 'kind3'], ['diele', 'schlafen'], ['wohnen', 'kind1'], ['wohnen', 'balkon']] },
+  P: { zi: 4, label: 'Penthouse', rent: 16.5, buy: 6900,
+    rooms: [
+      { id: 'bad', name: 'Bad', kind: 'bad', x: 0, y: 0, w: 3.4, h: 3.8 },
+      { id: 'gaeste', name: 'Gästezimmer', kind: 'gaeste', x: 3.4, y: 0, w: 3.6, h: 3.8 },
+      { id: 'flur', name: 'Flur', kind: 'flur', x: 7, y: 0, w: 2.8, h: 3.8 },
+      { id: 'arbeiten', name: 'Arbeiten', kind: 'arbeiten', x: 9.8, y: 0, w: 4.2, h: 3.8 },
+      { id: 'wohnen', name: 'Wohnen & Kochen', kind: 'wohnen', x: 0, y: 3.8, w: 8.6, h: 6.2 },
+      { id: 'schlafen', name: 'Schlafen & Ankleide', kind: 'schlafen', x: 8.6, y: 3.8, w: 5.4, h: 6.2 },
+      { id: 'terrasse', name: 'Dachterrasse', kind: 'balkon', x: 0, y: 10, w: 14, h: 3.5 }
+    ],
+    doors: [['flur', 'gaeste'], ['flur', 'arbeiten'], ['flur', 'wohnen'], ['flur', 'schlafen'], ['wohnen', 'bad'], ['wohnen', 'terrasse'], ['schlafen', 'terrasse']] }
+};
+
+</script>
+<script>
+(function () {
+'use strict';
+// ================= Grundlagen =================
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const nf0 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 });
+const nf1 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const nf2 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const eur = v => nf0.format(Math.round(v)) + ' €';
+const eurK = v => v >= 1e6 ? nf2.format(v / 1e6) + ' Mio. €' : nf0.format(Math.round(v)) + ' €';
+const pct = v => nf1.format(v) + ' %';
+const m2 = v => nf1.format(v) + ' m²';
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const DAY = 864e5;
+const TODAY = new Date(); TODAY.setHours(0, 0, 0, 0);
+const addDays = (d, n) => new Date(d.getTime() + n * DAY);
+const fmtD = d => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+const fmtDs = d => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+const isoD = d => { const z = new Date(d.getTime() - d.getTimezoneOffset() * 6e4); return z.toISOString().slice(0, 10); };
+const dDiff = (a, b) => Math.round((b - a) / DAY);
+const ago = t => { const s = Math.round((Date.now() - t) / 1000); if (s < 45) return 'gerade eben'; if (s < 3600) return 'vor ' + Math.round(s / 60) + ' Min.'; if (s < 86400) return 'vor ' + Math.round(s / 3600) + ' Std.'; return 'vor ' + Math.round(s / 86400) + ' Tagen'; };
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* kein Speicher */ } }
+};
+const K_STATUS = 'immone-status-v1', K_EVENTS = 'immone-events-v1', K_DASH = 'immone-dash-v1';
+const STATUS = { frei: { rent: 'Frei', buy: 'Frei', mix: 'Frei' }, reserviert: { rent: 'Reserviert', buy: 'Reserviert', mix: 'Reserviert' }, vergeben: { rent: 'Vermietet', buy: 'Verkauft', mix: 'Vermietet/verkauft' } };
+const FLOOR_NAME = f => f === 0 ? 'EG' : f === 6 ? 'DG' : f + '. OG';
+
+// Typ-Flächen wie im Navigator (WoFlV: Außenflächen zu 1/4)
+for (const code in TYPES) {
+  const t = TYPES[code]; t.code = code;
+  const living = t.rooms.filter(r => r.kind !== 'balkon'), outdoor = t.rooms.filter(r => r.kind === 'balkon');
+  t.outdoor = +outdoor.reduce((s, r) => s + r.w * r.h, 0).toFixed(1);
+  t.area = +(living.reduce((s, r) => s + r.w * r.h, 0) + t.outdoor * 0.25).toFixed(1);
+}
+
+// ================= Objekte & Wohnungen (Beispieldaten) =================
+const OBJECTS = [
+  { id: 'lindenhain', name: 'Lindenhain-Höfe', addr: 'Lindenhainer Allee 4–8', city: 'Berlin', kind: 'Neubau', phase: 'Erstvermietung', mode: 'rent', tour: true, views: 2650, seed: 11 },
+  { id: 'muehlenteich', name: 'Parkquartier Mühlenteich', addr: 'Am Mühlenteich 3–9', city: 'Bernau', kind: 'Bestand', phase: 'Vermietung', mode: 'rent', views: 980, seed: 23, floors: 4, per: 9, base: 10.4, free: 0.07, res: 0.03 },
+  { id: 'birkenweg', name: 'Stadtvillen Birkenweg', addr: 'Birkenweg 20–24', city: 'Potsdam', kind: 'Neubau', phase: 'Verkauf', mode: 'buy', views: 1420, seed: 37, floors: 3, per: 6, base: 6150, free: 0.3, res: 0.17 },
+  { id: 'garten', name: 'Wohnanlage Gartenstraße', addr: 'Gartenstraße 40–46', city: 'Eberswalde', kind: 'Bestand', phase: 'Vermietung', mode: 'rent', views: 1310, seed: 41, floors: 5, per: 12, base: 7.9, free: 0.12, res: 0.03 }
+];
+const OBJ = Object.fromEntries(OBJECTS.map(o => [o.id, o]));
+
+const PAT = [['C', 'A', 'B', 'C', 'B', 'D', 'A', 'B'], ['C', 'B', 'A', 'C', 'B', 'A', 'D', 'B']];
+function lindenhainUnits() {
+  // identisch zum Navigator (gleicher Zufallsstartwert), damit Status und Nummern übereinstimmen
+  const rng = mulberry32(20261105), out = [];
+  const mk = (f, idx, t, front, corner, status, ph) => {
+    const no = `${f}.${String(idx).padStart(2, '0')}`;
+    const rentSqm = +(t.rent + 0.2 * f).toFixed(2);
+    const kalt = Math.round(t.area * rentSqm);
+    let orient = ph ? 'Rundum verglast, Terrasse SW' : (front ? 'Südwest' : 'Nordost'); if (corner && !ph) orient += ', Ecke';
+    out.push({ id: 'we-' + no.replace('.', '-'), no, floor: f, pos: idx, zi: t.zi, area: t.area, typeCode: t.code, typeLabel: ph ? 'Penthouse' : t.label, status0: status,
+      kalt, nk: Math.round(t.area * 2.9), price: Math.round(t.area * (t.buy + 70 * f) / 100) * 100, orient, rooms: t.rooms.filter(r => r.kind !== 'balkon' || true).map(r => r.name) });
+  };
+  for (let f = 0; f < 6; f++) for (let p = 0; p < 8; p++) {
+    const t = TYPES[(f >= 2 && p === 3) ? 'E' : PAT[f % 2][p]];
+    const r = rng(), soldP = 0.6 - f * 0.05;
+    const st = r < soldP ? 'vergeben' : r < soldP + 0.13 ? 'reserviert' : 'frei';
+    mk(f, p + 1, t, p < 4, p % 4 === 0 || p % 4 === 3, st, false);
+  }
+  mk(6, 1, TYPES.P, true, true, 'frei', true); mk(6, 2, TYPES.P, true, true, 'reserviert', true);
+  return out;
+}
+const ZI_AREA = { 1: [31, 42], 2: [48, 64], 3: [66, 82], 4: [84, 102], 5: [104, 122] };
+const ZI_ROOMS = { 1: ['Flur', 'Duschbad', 'Wohnen & Schlafen', 'Balkon'], 2: ['Flur', 'Bad', 'Wohnen & Kochen', 'Schlafen', 'Balkon'], 3: ['Flur', 'Bad', 'Wohnen & Kochen', 'Schlafen', 'Kinderzimmer', 'Balkon'], 4: ['Flur', 'Bad', 'Wohnen & Kochen', 'Schlafen', 'Kinderzimmer 1', 'Kinderzimmer 2', 'Balkon'], 5: ['Flur', 'Bad', 'Gäste-WC', 'Wohnen & Kochen', 'Schlafen', 'Kinderzimmer 1', 'Kinderzimmer 2', 'Arbeiten', 'Balkon'] };
+function genericUnits(o) {
+  const rng = mulberry32(o.seed * 7919), out = [];
+  for (let f = 0; f < o.floors; f++) for (let p = 1; p <= o.per; p++) {
+    const r0 = rng();
+    const zi = o.mode === 'buy' ? (r0 < .2 ? 2 : r0 < .6 ? 3 : r0 < .9 ? 4 : 5) : (r0 < .12 ? 1 : r0 < .5 ? 2 : r0 < .85 ? 3 : 4);
+    const [a0, a1] = ZI_AREA[zi]; const area = +(a0 + rng() * (a1 - a0)).toFixed(1);
+    const r = rng(); const st = r < o.free ? 'frei' : r < o.free + o.res ? 'reserviert' : 'vergeben';
+    const no = `${f}.${String(p).padStart(2, '0')}`;
+    const sqm = o.mode === 'rent' ? o.base + f * 0.12 + (rng() - .5) * 0.6 : o.base + f * 90 + (rng() - .5) * 260;
+    out.push({ id: 'we-' + no.replace('.', '-'), no, floor: f, pos: p, zi, area, typeLabel: zi + '-Zimmer-Wohnung', status0: st,
+      kalt: Math.round(area * sqm), nk: Math.round(area * 2.7), price: Math.round(area * sqm / 100) * 100, orient: p % 2 ? 'Süd' : 'Nord', rooms: ZI_ROOMS[zi] });
+  }
+  return out;
+}
+const SOURCES = [['Eigene Website', .37], ['Immobilienportal', .27], ['Google-Suche', .14], ['QR-Code am Bauschild', .09], ['Geteilter Link', .08], ['Social Media', .05]];
+const UNITS = [];
+for (const o of OBJECTS) {
+  const list = o.id === 'lindenhain' ? lindenhainUnits() : genericUnits(o);
+  const rng = mulberry32(o.seed * 104729);
+  for (const u of list) {
+    u.obj = o.id; u.key = o.id + ':' + u.id; u.floors = o.floors;
+    u.rentSqm = u.kalt / u.area; u.buySqm = u.price / u.area;
+    u.dwell = Math.round(70 + rng() * 210);
+    u.w = u.status0 === 'frei' ? 0.7 + rng() * 0.9 : u.status0 === 'reserviert' ? 0.35 + rng() * 0.3 : 0.06 + rng() * 0.12;
+    u.freeSince = u.status0 === 'frei' ? addDays(TODAY, -Math.round(o.kind === 'Neubau' ? 18 + rng() * 70 : 6 + rng() * 95)) : null;
+    u.resUntil = u.status0 === 'reserviert' ? addDays(TODAY, Math.round(-1 + rng() * 13)) : null;
+    u.freiAb = (u.status0 === 'vergeben' && o.mode === 'rent' && o.kind === 'Bestand' && rng() < 0.07) ? addDays(TODAY, Math.round(12 + rng() * 70)) : null;
+    u.rv = {}; u.rooms.forEach(n => { u.rv[n] = Math.round(10 + rng() * 40 + (/Wohnen/.test(n) ? 40 : 0) + (/Bad/.test(n) ? 14 : 0) + (/Balkon|Terrasse/.test(n) ? 12 : 0)); });
+    u.baseInq = 0;
+    UNITS.push(u);
+  }
+  o.units = UNITS.filter(u => u.obj === o.id);
+  o.floors = o.floors || 7;
+  o.per = o.per || 8;
+  const ws = o.units.reduce((s, u) => s + u.w, 0);
+  o.units.forEach(u => { u.views = Math.max(2, Math.round(o.views * u.w / ws)); });
+  // Tagesverlauf Aufrufe (60 Tage), Wochentagsmuster + leichter Trend
+  const wd = [1.22, 1.12, 1.0, 0.96, 0.95, 0.82, 0.93];
+  o.daily = [];
+  for (let i = 59; i >= 0; i--) {
+    const d = addDays(TODAY, -i);
+    const trend = o.kind === 'Neubau' ? 0.78 + (59 - i) / 59 * 0.4 : 0.95 + (59 - i) / 59 * 0.08;
+    o.daily.push({ d, v: Math.max(1, Math.round(o.views / 30 * wd[d.getDay()] * trend * (0.82 + rng() * 0.36))) });
+  }
+  const last30 = o.daily.slice(30).reduce((s, x) => s + x.v, 0);
+  o.daily.slice(30).forEach(x => { x.v = Math.round(x.v * o.views / last30); });
+  o.sources = SOURCES.filter(s => o.kind === 'Neubau' || s[0] !== 'QR-Code am Bauschild').map(([n, p]) => [n, p * (0.8 + rng() * 0.4)]);
+  const sum = o.sources.reduce((s, x) => s + x[1], 0); o.sources = o.sources.map(([n, p]) => [n, p / sum]);
+  o.mobile = 0.58 + rng() * 0.1; o.tablet = 0.05 + rng() * 0.03;
+}
+const UBY = Object.fromEntries(UNITS.map(u => [u.key, u]));
+// Gezielte Beispielfälle, damit die Hinweise etwas zu zeigen haben
+(function seedCases() {
+  const g = OBJ.garten.units.filter(u => u.status0 === 'frei');
+  if (g[0]) { g[0].freeSince = addDays(TODAY, -142); g[0].views = 412; g[0].noInq = true; g[0].kalt = Math.round(g[0].area * 9.6); g[0].rentSqm = 9.6; }
+  if (g[1]) { g[1].freeSince = addDays(TODAY, -97); }
+  const m = OBJ.muehlenteich.units.filter(u => u.status0 === 'reserviert');
+  if (m[0]) m[0].resUntil = addDays(TODAY, 1);
+  const mv = OBJ.muehlenteich.units.filter(u => u.status0 === 'vergeben');
+  if (mv[3]) mv[3].freiAb = addDays(TODAY, 24);
+})();
+
+// ================= Anfragen (Beispieldaten) =================
+const FIRST = ['Laura', 'Jonas', 'Mia', 'Leon', 'Hannah', 'Paul', 'Emilia', 'Ben', 'Sophie', 'Lukas', 'Lea', 'Elias', 'Marie', 'Noah', 'Anna', 'Felix', 'Clara', 'Tim', 'Lena', 'David', 'Sarah', 'Jan', 'Nora', 'Max', 'Julia', 'Tom', 'Ella', 'Finn', 'Ida', 'Moritz'];
+const LAST = 'ABDEFGHKLMNPRSTWZ';
+const CHANNELS = ['Rundgang-Formular', 'Eigene Website', 'Immobilienportal', 'Telefon'];
+const INQ_ST = { neu: 'Neu', kontaktiert: 'Kontaktiert', besichtigung: 'Besichtigung', zusage: 'Zusage', absage: 'Absage' };
+const INQUIRIES = [];
+(function genInq() {
+  const rng = mulberry32(777);
+  let n = 0;
+  for (const o of OBJECTS) {
+    const cand = o.units.filter(u => u.status0 !== 'vergeben' && !u.noInq);
+    const count = Math.round(o.views * (o.mode === 'buy' ? 0.016 : 0.019));
+    for (let i = 0; i < count; i++) {
+      const u = cand[Math.floor(rng() * cand.length)]; if (!u) break;
+      const age = rng() * 29.5;
+      const t = Date.now() - age * DAY - rng() * 3e6;
+      const r = rng();
+      let st = age < 2.2 ? (r < .7 ? 'neu' : 'kontaktiert') : age < 7 ? (r < .12 ? 'neu' : r < .55 ? 'kontaktiert' : r < .9 ? 'besichtigung' : 'absage') : (r < .3 ? 'kontaktiert' : r < .62 ? 'besichtigung' : r < .8 ? 'zusage' : 'absage');
+      if (u.status0 === 'frei' && st === 'zusage') st = 'besichtigung';
+      const ch = CHANNELS[rng() < .46 ? 0 : rng() < .5 ? 1 : rng() < .7 ? 2 : 3];
+      INQUIRIES.push({ id: 'a' + (++n), obj: o.id, key: u.key, t, name: FIRST[Math.floor(rng() * FIRST.length)] + ' ' + LAST[Math.floor(rng() * LAST.length)] + '.', ch, st0: st,
+        art: ['Video-Besichtigung', 'Termin vor Ort', 'Rückruf'][Math.floor(rng() * 3)] });
+    }
+  }
+})();
+
+// ================= Gespeicherter Zustand =================
+let D = store.get(K_DASH, { notes: {}, hist: {}, price: {}, res: {}, avail: {}, inq: {} });
+['notes', 'hist', 'price', 'res', 'avail', 'inq'].forEach(k => { D[k] = D[k] || {}; });
+let SO = store.get(K_STATUS, {});
+let EV = store.get(K_EVENTS, []);
+const saveD = () => store.set(K_DASH, D);
+function st(u) { const v = SO[u.key]; return STATUS[v] ? v : u.status0; }
+function kalt(u) { return D.price[u.key] != null ? D.price[u.key] : u.kalt; }
+function price(u) { return D.price[u.key] != null ? D.price[u.key] : u.price; }
+function val(u) { return OBJ[u.obj].mode === 'rent' ? kalt(u) : price(u); }
+function sqm(u) { return val(u) / u.area; }
+function stLabel(u, s) { return STATUS[s || st(u)][OBJ[u.obj].mode]; }
+function resUntil(u) { return D.res[u.key] ? new Date(D.res[u.key]) : u.resUntil; }
+function freeSince(u) {
+  if (st(u) !== 'frei') return null;
+  if (u.status0 === 'frei' && !SO[u.key]) return u.freeSince;
+  const h = (D.hist[u.key] || []).filter(x => x.to === 'frei').pop();
+  return h ? new Date(new Date(h.t).setHours(0, 0, 0, 0)) : (u.freeSince || TODAY);
+}
+// Live-Ereignisse aus dem Navigator (nur Lindenhain-Höfe)
+function liveEv(days = 30) { const lim = Date.now() - days * DAY; return EV.filter(e => e.t >= lim && UBY['lindenhain:' + e.unit]); }
+function unitViews(u) { return u.views + (u.obj === 'lindenhain' ? liveEv().filter(e => e.type === 'view' && e.unit === u.id).length : 0); }
+function unitRooms(u) {
+  const rv = Object.assign({}, u.rv);
+  if (u.obj === 'lindenhain') liveEv().filter(e => e.type === 'room' && e.unit === u.id && e.roomName).forEach(e => { rv[e.roomName] = (rv[e.roomName] || 0) + 1; });
+  return rv;
+}
+function inqStatus(a) { return D.inq[a.id] || a.st0; }
+function allInquiries() {
+  const live = liveEv(90).filter(e => e.type === 'ask').map(e => ({ id: 'live-' + e.t, obj: 'lindenhain', key: 'lindenhain:' + e.unit, t: e.t, name: e.name || 'Interessent (Demo)', ch: 'Rundgang-Formular', st0: 'neu', art: e.art || 'Besichtigung', live: true }));
+  return live.concat(INQUIRIES).sort((a, b) => b.t - a.t);
+}
+function unitInq(u) { return allInquiries().filter(a => a.key === u.key && a.t > Date.now() - 30 * DAY); }
+
+// ================= Kennzahlen =================
+let FILTER = store.get('immone-dash-filter', 'alle');
+const objList = () => FILTER === 'alle' ? OBJECTS : [OBJ[FILTER]];
+function objStats(o) {
+  const c = { frei: 0, reserviert: 0, vergeben: 0 };
+  let ausfall = 0, freeDays = [], sold = 0, open = 0, soldArea = 0;
+  o.units.forEach(u => { const s = st(u); c[s]++;
+    if (s === 'frei') { ausfall += kalt(u); const fs = freeSince(u); if (fs) freeDays.push(dDiff(fs, TODAY)); }
+    if (s === 'vergeben') { sold += price(u); soldArea += u.area; } else open += price(u);
+  });
+  const n = o.units.length;
+  const quote = c.frei / n * 100, vq = c.vergeben / n * 100;
+  const avgFree = freeDays.length ? freeDays.reduce((a, b) => a + b, 0) / freeDays.length : 0;
+  let amp;
+  if (o.mode === 'buy' || o.phase === 'Erstvermietung') { const prog = (c.vergeben + c.reserviert) / n; amp = prog >= .6 ? 'ok' : prog >= .45 ? 'mid' : 'bad'; }
+  else amp = quote < 5 ? 'ok' : quote < 10 ? 'mid' : 'bad';
+  return { c, n, quote, vq, ausfall, avgFree, sold, open, soldArea, amp };
+}
+const AMP_TXT = { ok: 'Im Plan', mid: 'Beobachten', bad: 'Handeln' };
+
+// ================= Hinweise (werden laufend aus den Daten berechnet) =================
+function hints(objs = objList()) {
+  const H = [];
+  const all = objs.flatMap(o => o.units);
+  for (const o of objs) {
+    const s = objStats(o);
+    const rentObjs = OBJECTS.filter(x => x.mode === 'rent' && x.phase !== 'Erstvermietung');
+    const avgQ = rentObjs.reduce((a, x) => a + objStats(x).quote, 0) / rentObjs.length;
+    if (o.mode === 'rent' && o.phase !== 'Erstvermietung' && s.quote > avgQ * 1.35 && s.quote > 6)
+      H.push({ sev: 'mittel', obj: o.id, title: `${o.name}: Leerstand über dem Schnitt`, text: `${pct(s.quote)} Leerstand gegenüber ${pct(avgQ)} im Bestand, das kostet ${eur(s.ausfall)} Kaltmiete im Monat.`, act: ['Öffnen', '#/objekt/' + o.id] });
+  }
+  for (const u of all) {
+    const o = OBJ[u.obj], s = st(u);
+    if (s === 'frei') {
+      const fs = freeSince(u); const days = fs ? dDiff(fs, TODAY) : 0;
+      const v = unitViews(u), q = unitInq(u).length;
+      const objSqm = median(o.units.map(sqm));
+      if (v > 150 && q === 0) H.push({ sev: 'hoch', key: u.key, score: 3, title: `${o.name}, Wohnung ${u.no}: viele Aufrufe, keine Anfrage`, text: `${nf0.format(v)} Aufrufe in 30 Tagen, aber keine Anfrage.${sqm(u) > objSqm * 1.08 ? ` Preis liegt mit ${nf2.format(sqm(u))} €/m² über dem Objektschnitt (${nf2.format(objSqm)} €/m²).` : ''} Preis oder Exposé prüfen.`, act: ['Öffnen', u.key] });
+      else if (o.mode === 'rent' && days > (o.phase === 'Erstvermietung' ? 120 : 90)) H.push({ sev: days > 120 ? 'hoch' : 'mittel', key: u.key, score: 2, title: `${o.name}, Wohnung ${u.no}: seit ${days} Tagen leer`, text: `Mietausfall bisher rund ${eur(kalt(u) * days / 30)}. Vermarktung prüfen.`, act: ['Öffnen', u.key] });
+    }
+    if (s === 'reserviert') {
+      const r = resUntil(u); if (r) { const d = dDiff(TODAY, r);
+        if (d < 0) H.push({ sev: 'hoch', key: u.key, title: `${o.name}, Wohnung ${u.no}: Reservierung abgelaufen`, text: `Seit ${fmtD(r)} abgelaufen. Verlängern oder wieder freigeben.`, act: ['Öffnen', u.key] });
+        else if (d <= 3) H.push({ sev: 'mittel', key: u.key, title: `${o.name}, Wohnung ${u.no}: Reservierung läuft ab`, text: `Endet ${d === 0 ? 'heute' : d === 1 ? 'morgen' : 'am ' + fmtD(r)}. Mit Interessent klären.`, act: ['Öffnen', u.key] }); }
+    }
+    if (s === 'vergeben' && u.freiAb && dDiff(TODAY, u.freiAb) <= 60) H.push({ sev: 'info', key: u.key, title: `${o.name}, Wohnung ${u.no}: wird am ${fmtD(u.freiAb)} frei`, text: `Gekündigt. Jetzt vermarkten, damit kein Leerstand entsteht.`, act: ['Öffnen', u.key] });
+  }
+  const open = allInquiries().filter(a => objs.includes(OBJ[a.obj]) && inqStatus(a) === 'neu' && Date.now() - a.t > 2 * DAY);
+  if (open.length) H.push({ sev: 'mittel', title: `${open.length} Anfrage${open.length > 1 ? 'n' : ''} seit über 48 Stunden unbeantwortet`, text: 'Schnelle Antworten erhöhen die Abschlussquote deutlich.', act: ['Anfragen', '#/anfragen'] });
+  const rank = { hoch: 0, mittel: 1, info: 2 };
+  return H.sort((a, b) => rank[a.sev] - rank[b.sev] || (b.score || 0) - (a.score || 0));
+}
+function median(a) { const s = a.slice().sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+
+// ================= Icons =================
+const I = {
+  home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  bld: '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/>',
+  list: '<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r=".8"/><circle cx="4" cy="12" r=".8"/><circle cx="4" cy="18" r=".8"/>',
+  inbox: '<path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 3h6l1-3h5"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  bell: '<path d="M6 16V11a6 6 0 0112 0v5l2 2H4z"/><path d="M10 20a2 2 0 004 0"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 011-1h10"/>',
+  print: '<path d="M6 9V3h12v6M6 18H4v-7h16v7h-2"/><rect x="6" y="14" width="12" height="7"/>',
+  dl: '<path d="M12 4v11M7 10l5 5 5-5M4 20h16"/>'
+};
+const ico = (k, cls = '') => `<svg viewBox="0 0 24 24" class="${cls}" aria-hidden="true">${I[k]}</svg>`;
+
+// ================= Navigation =================
+const PAGES = [
+  ['uebersicht', 'Übersicht', 'home'], ['objekt', 'Objekte', 'bld'], ['wohnungen', 'Wohnungen', 'list'],
+  ['anfragen', 'Anfragen', 'inbox'], ['statistik', 'Rundgang-Statistik', 'chart'], ['hinweise', 'Hinweise', 'bell'], ['verwaltung', 'Verwaltung', 'gear']
+];
+function renderNav(cur) {
+  const nNew = allInquiries().filter(a => objList().includes(OBJ[a.obj]) && inqStatus(a) === 'neu').length;
+  const nH = hints().filter(h => h.sev === 'hoch').length;
+  $('#nav').innerHTML = PAGES.map(([id, label, ic]) => {
+    const href = id === 'objekt' ? '#/objekt/' + (FILTER === 'alle' ? 'lindenhain' : FILTER) : '#/' + id;
+    const cnt = id === 'anfragen' && nNew ? `<span class="cnt">${nNew}</span>` : id === 'hinweise' && nH ? `<span class="cnt">${nH}</span>` : '';
+    return `<a href="${href}" ${cur === id ? 'aria-current="page"' : ''}>${ico(ic)}<span>${label}</span>${cnt}</a>`;
+  }).join('');
+}
+$('#objSel').innerHTML = `<option value="alle">Alle Objekte (${OBJECTS.length})</option>` + OBJECTS.map(o => `<option value="${o.id}">${esc(o.name)}</option>`).join('');
+$('#objSel').value = FILTER;
+$('#objSel').addEventListener('change', e => {
+  FILTER = e.target.value; store.set('immone-dash-filter', FILTER);
+  const r = route(); if (r.page === 'objekt' && FILTER !== 'alle') location.hash = '#/objekt/' + FILTER; else render();
+});
+$('#q').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim().replace(',', '.'); if (!q) return;
+  const pool = objList().flatMap(o => o.units);
+  const u = pool.find(x => x.no === q) || pool.find(x => x.no.startsWith(q)) || UNITS.find(x => x.no === q);
+  if (u) { openUnit(u.key); e.target.value = ''; } else toast('Keine Wohnung „' + q + '“ gefunden');
+});
+
+function route() {
+  const p = location.hash.replace(/^#\/?/, '').split('/');
+  return { page: PAGES.some(x => x[0] === p[0]) ? p[0] : 'uebersicht', arg: p[1] ? decodeURIComponent(p[1]) : null };
+}
+
+// ================= Seiten =================
+function kpiTile(l, v, h, extra = '') { return `<div class="card kpi"${extra}><div class="l">${l}</div><div class="v">${v}</div>${h ? `<div class="h">${h}</div>` : ''}</div>`; }
+function stackBar(c, n) { return `<div class="stack" role="img" aria-label="Frei ${c.frei}, reserviert ${c.reserviert}, vergeben ${c.vergeben}">${['frei', 'reserviert', 'vergeben'].filter(s => c[s]).map(s => `<span class="s-${s}" style="flex:${c[s]}" data-tip="${c[s]} von ${n} Wohnungen"></span>`).join('')}</div>`; }
+function legend(c, mode) { return `<div class="legend">${['frei', 'reserviert', 'vergeben'].map(s => `<span><i class="s-${s}"></i>${STATUS[s][mode]} <b>${c[s]}</b></span>`).join('')}</div>`; }
+
+function pageOverview() {
+  const objs = objList();
+  const rent = objs.filter(o => o.mode === 'rent');
+  const S = objs.map(objStats);
+  const units = S.reduce((a, s) => a + s.n, 0);
+  const rs = rent.map(objStats);
+  const rUnits = rs.reduce((a, s) => a + s.n, 0), rFree = rs.reduce((a, s) => a + s.c.frei, 0), rVerg = rs.reduce((a, s) => a + s.c.vergeben, 0);
+  const ausfall = rs.reduce((a, s) => a + s.ausfall, 0);
+  const fd = rent.flatMap(o => o.units.filter(u => st(u) === 'frei').map(u => dDiff(freeSince(u) || TODAY, TODAY)));
+  const avgFree = fd.length ? fd.reduce((a, b) => a + b, 0) / fd.length : 0;
+  const inq = allInquiries().filter(a => objs.includes(OBJ[a.obj]));
+  const inq7 = inq.filter(a => a.t > Date.now() - 7 * DAY), inqPrev = inq.filter(a => a.t <= Date.now() - 7 * DAY && a.t > Date.now() - 14 * DAY);
+  const newOpen = inq.filter(a => inqStatus(a) === 'neu').length;
+  const buyO = objs.find(o => o.mode === 'buy');
+  const d7 = inqPrev.length ? (inq7.length - inqPrev.length) / inqPrev.length * 100 : 0;
+  const tiles = [
+    kpiTile('Wohnungen', nf0.format(units), `in ${objs.length} Objekt${objs.length > 1 ? 'en' : ''}`),
+    rent.length ? kpiTile('Leerstandsquote', pct(rFree / rUnits * 100), `${rFree} von ${rUnits} Mietwohnungen frei`) : kpiTile('Leerstandsquote', '–', 'keine Mietobjekte'),
+    rent.length ? kpiTile('Vermietungsquote', pct(rVerg / rUnits * 100), `${rVerg} vermietet`) : kpiTile('Vermietungsquote', '–', ''),
+    kpiTile('Mietausfall / Monat', rent.length ? eur(ausfall) : '–', 'Kaltmiete der freien Wohnungen'),
+    kpiTile('Ø Leerstandsdauer', rent.length ? nf0.format(avgFree) + '<small>Tage</small>' : '–', 'über alle freien Mietwohnungen'),
+    buyO ? kpiTile('Verkaufsstand ' + buyO.name.split(' ').pop(), pct(objStats(buyO).vq), `${eurK(objStats(buyO).sold)} verkauft`) :
+      kpiTile('Anfragen (7 Tage)', nf0.format(inq7.length), `${newOpen} unbearbeitet · <span class="${d7 >= 0 ? 'up' : 'down'}">${d7 >= 0 ? '+' : ''}${nf0.format(d7)} %</span> zur Vorwoche`)
+  ];
+  const H = hints(objs);
+  return `
+  <div class="grid g-kpi">${tiles.join('')}</div>
+  <section class="card"><div class="card-h"><h2>Objekte</h2><a class="link" href="#/wohnungen">Alle Wohnungen anzeigen</a></div><p class="sub">Status aller Wohnungen je Objekt. Klick öffnet die Objektansicht.</p>
+    <div class="grid g-obj">${OBJECTS.map(o => objCard(o)).join('')}</div></section>
+  <div class="grid g-21">
+    <section class="card fill"><div class="card-h"><h2>Aufrufe im Navigator</h2><span class="sub" style="margin:0">letzte 30 Tage</span></div>
+      ${viewsHead(objs)}<div class="chart" data-chart="views"></div></section>
+    <section class="card"><div class="card-h"><h2>Hinweise</h2><a class="link" href="#/hinweise">Alle ${H.length} ansehen</a></div><p class="sub">Was heute Aufmerksamkeit braucht.</p>
+      ${hintList(H.slice(0, 4))}</section>
+  </div>
+  <div class="grid g-2">
+    <section class="card"><h2>Vom Aufruf zur Zusage</h2><p class="sub">Letzte 30 Tage${FILTER === 'alle' ? ', alle Objekte' : ', ' + esc(OBJ[FILTER].name)}</p>${funnel(objs)}</section>
+    <section class="card"><h2><span class="pulse"></span>Live aus dem Navigator</h2><p class="sub">Klicks und Anfragen bei Lindenhain-Höfe, auf diesem Gerät.</p><div id="feed">${feed()}</div></section>
+  </div>`;
+}
+function objCard(o) {
+  const s = objStats(o);
+  const nums = o.mode === 'rent'
+    ? `<div><b>${pct(s.quote)}</b>Leerstand</div><div><b>${eur(s.ausfall)}</b>Ausfall/Monat</div><div><b>${s.n}</b>Wohnungen</div>`
+    : `<div><b>${pct(s.vq)}</b>verkauft</div><div><b>${eurK(s.sold)}</b>Umsatz</div><div><b>${s.n}</b>Wohnungen</div>`;
+  return `<button class="card obj" data-go="#/objekt/${o.id}" ${FILTER !== 'alle' && FILTER !== o.id ? 'style="opacity:.55"' : ''}>
+    <div class="t"><div><h3>${esc(o.name)}</h3><div class="a">${esc(o.addr)}, ${esc(o.city)} · ${o.kind}, ${o.phase}</div></div><span class="amp ${s.amp}">${AMP_TXT[s.amp]}</span></div>
+    ${stackBar(s.c, s.n)}${legend(s.c, o.mode)}<div class="nums">${nums}</div></button>`;
+}
+function viewsSeries(objs) {
+  const out = [];
+  for (let i = 0; i < 60; i++) out.push({ d: objs[0].daily[i].d, v: objs.reduce((a, o) => a + o.daily[i].v, 0) });
+  const live = liveEv(60).filter(e => e.type === 'view');
+  if (objs.includes(OBJ.lindenhain)) live.forEach(e => { const i = 59 - dDiff(new Date(new Date(e.t).setHours(0, 0, 0, 0)), TODAY); if (out[i]) out[i].v++; });
+  return out;
+}
+function viewsHead(objs) {
+  const s = viewsSeries(objs); const cur = s.slice(30).reduce((a, x) => a + x.v, 0), prev = s.slice(0, 30).reduce((a, x) => a + x.v, 0);
+  const d = (cur - prev) / prev * 100;
+  return `<div style="display:flex;gap:22px;align-items:baseline;margin:6px 0 10px;flex-wrap:wrap"><div><span style="font-size:24px;font-weight:750">${nf0.format(cur)}</span> <span class="sub">Aufrufe</span></div><div class="sub" style="margin:0"><span class="${d >= 0 ? 'up' : 'down'}">${d >= 0 ? '+' : ''}${nf0.format(d)} %</span> gegenüber den 30 Tagen davor</div></div>`;
+}
+function hintList(H) {
+  if (!H.length) return '<p class="empty">Alles im grünen Bereich, keine offenen Hinweise.</p>';
+  const ic = { hoch: 'warn', mittel: 'clock', info: 'info' }, lb = { hoch: 'Dringend', mittel: 'Prüfen', info: 'Info' };
+  return `<ul class="hints">${H.map(h => `<li class="hint ${h.sev}"><span class="ic">${ico(ic[h.sev])}</span><div><b><span class="sev">${lb[h.sev]}</span>${esc(h.title)}</b><p>${esc(h.text)}</p></div>${h.act ? `<button class="btn" data-${h.act[1].startsWith('#') ? 'go' : 'unit'}="${h.act[1]}">${h.act[0]}</button>` : ''}</li>`).join('')}</ul>`;
+}
+function funnel(objs) {
+  const views = objs.reduce((a, o) => a + o.units.reduce((b, u) => b + unitViews(u), 0), 0);
+  const visitors = Math.round(views * 0.64), tours = Math.round(visitors * 0.463) + liveEv().filter(e => e.type === 'tour' && objs.includes(OBJ.lindenhain)).length;
+  const inq = allInquiries().filter(a => objs.includes(OBJ[a.obj]) && a.t > Date.now() - 30 * DAY);
+  const vis = inq.filter(a => ['besichtigung', 'zusage'].includes(inqStatus(a))).length;
+  const yes = inq.filter(a => inqStatus(a) === 'zusage').length;
+  const steps = [['Besucher', visitors], ['Rundgang gestartet', tours], ['Anfragen', inq.length], ['Besichtigungen', vis], ['Zusagen', yes]];
+  const max = steps[0][1];
+  return `<div class="hb funnel">${steps.map(([l, v], i) => {
+    const conv = i ? (steps[i - 1][1] ? v / steps[i - 1][1] * 100 : 0) : 100;
+    return `<div class="hb-row" data-tip="<b>${l}</b>${nf0.format(v)}${i ? ` · ${nf1.format(conv)} % vom Schritt davor` : ''}"><span class="lb">${l}</span><span class="tr"><span class="fl" style="display:block;width:${Math.max(0.6, v / max * 100)}%"></span></span><span class="vl">${nf0.format(v)}${i ? ` <small>${nf0.format(conv)} %</small>` : ''}</span></div>`;
+  }).join('')}</div><p class="note-hint">Prozentwerte: Anteil vom jeweils vorherigen Schritt.</p>`;
+}
+const EV_TXT = { view: 'angesehen', tour: '360°-Rundgang gestartet', room: 'Raum im Rundgang', ask: 'Anfrage gesendet' };
+function feed() {
+  const ev = EV.slice(-7).reverse();
+  if (!ev.length) return `<p class="empty">Noch nichts passiert. Öffne den <a class="link" href="index.html" target="_blank" rel="noopener">Navigator</a> in einem zweiten Tab und klicke eine Wohnung an, sie erscheint hier sofort.</p>`;
+  return `<ul class="feed">${ev.map(e => { const u = UBY['lindenhain:' + e.unit];
+    const what = e.type === 'room' ? `Rundgang: ${esc(e.roomName || 'Raum')}` : EV_TXT[e.type] || e.type;
+    return `<li><i></i><span>${u ? `<button class="link" data-unit="${u.key}">Wohnung ${u.no}</button>` : 'Wohnung'} · ${what}${e.type === 'ask' && e.name ? ` von ${esc(e.name)}` : ''}</span><time data-t="${e.t}">${ago(e.t)}</time></li>`; }).join('')}</ul>`;
+}
+
+function pageObject(id) {
+  const o = OBJ[id] || OBJ.lindenhain;
+  const s = objStats(o);
+  const per = o.id === 'lindenhain' ? 8 : o.per;
+  const floors = [...new Set(o.units.map(u => u.floor))].sort((a, b) => b - a);
+  const tiles = o.mode === 'rent' ? [
+    kpiTile('Wohnungen', s.n, `${o.kind}, ${o.phase}`), kpiTile('Leerstandsquote', pct(s.quote), `${s.c.frei} frei, ${s.c.reserviert} reserviert`),
+    kpiTile('Vermietet', pct(s.vq), `${s.c.vergeben} Wohnungen`), kpiTile('Mietausfall / Monat', eur(s.ausfall), 'Kaltmiete freier Wohnungen'),
+    kpiTile('Ø Leerstandsdauer', nf0.format(s.avgFree) + '<small>Tage</small>', ''), kpiTile('Ø Kaltmiete', nf2.format(median(o.units.map(u => kalt(u) / u.area))) + '<small>€/m²</small>', 'Median im Objekt')
+  ] : [
+    kpiTile('Wohnungen', s.n, `${o.kind}, ${o.phase}`), kpiTile('Verkauft', pct(s.vq), `${s.c.vergeben} von ${s.n}`),
+    kpiTile('Reserviert', s.c.reserviert, 'Notartermin ausstehend'), kpiTile('Umsatz verkauft', eurK(s.sold), ''),
+    kpiTile('Offenes Volumen', eurK(s.open), 'frei und reserviert'), kpiTile('Ø Preis verkauft', nf0.format(s.soldArea ? s.sold / s.soldArea : 0) + '<small>€/m²</small>', '')
+  ];
+  return `
+  <div class="card-h" style="align-items:center"><div><div class="sub" style="margin:0">${esc(o.addr)}, ${esc(o.city)}</div></div>
+    <div class="acts">${OBJECTS.map(x => `<a class="chip" href="#/objekt/${x.id}" aria-pressed="${x.id === o.id}">${esc(x.name)}</a>`).join('')}</div></div>
+  <div class="grid g-kpi">${tiles.join('')}</div>
+  ${o.mode === 'buy' ? `<section class="card"><div class="card-h"><h2>Verkaufsstand</h2><span class="sub" style="margin:0">${pct(s.vq)} verkauft, ${pct(s.c.reserviert / s.n * 100)} reserviert</span></div>${stackBar(s.c, s.n)}<div style="margin-top:8px">${legend(s.c, 'buy')}</div></section>` : ''}
+  <div class="grid g-12">
+    <section class="card"><div class="card-h"><h2>Gebäude</h2>${o.tour ? `<a class="link" href="index.html" target="_blank" rel="noopener">Im Navigator ansehen ↗</a>` : ''}</div><p class="sub">Jedes Feld ist eine Wohnung. Klick öffnet die Wohnungsakte.</p>
+      <div class="bld">${floors.map(f => { const us = o.units.filter(u => u.floor === f).sort((a, b) => a.pos - b.pos);
+        const cols = f === 6 && o.id === 'lindenhain' ? 2 : per;
+        return `<div class="fl-row"><span>${FLOOR_NAME(f)}</span><div class="cells" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${us.map(u => `<button class="cell st-${st(u)}" data-unit="${u.key}" data-tip="<b>Wohnung ${u.no}</b>${u.zi} Zi., ${m2(u.area)} · ${stLabel(u)}"><b>${u.no}</b><small>${u.zi} Zi.</small></button>`).join('')}</div></div>`; }).join('')}</div>
+      <div style="margin-top:12px">${legend(s.c, o.mode)}</div></section>
+    <section class="card"><div class="card-h"><h2>Alle Wohnungen</h2></div><p class="sub">Sortieren per Klick auf die Spalte.</p>${unitTable(o.units, 'o-' + o.id)}</section>
+  </div>`;
+}
+
+const TBL = store.get('immone-dash-tbl', {});
+function unitTable(units, tid, showObj) {
+  const t = TBL[tid] = TBL[tid] || { sort: 'no', dir: 'asc', st: 'alle', zi: 'alle' };
+  const mode = units.every(u => OBJ[u.obj].mode === 'buy') ? 'buy' : units.every(u => OBJ[u.obj].mode === 'rent') ? 'rent' : 'mix';
+  let rows = units.filter(u => (t.st === 'alle' || st(u) === t.st) && (t.zi === 'alle' || String(u.zi) === t.zi));
+  const keyF = { no: u => u.obj + String(u.floor * 100 + u.pos).padStart(4, '0'), obj: u => OBJ[u.obj].name, zi: u => u.zi, area: u => u.area, val: u => val(u), sqm: u => sqm(u), st: u => ['frei', 'reserviert', 'vergeben'].indexOf(st(u)), since: u => freeSince(u) ? -dDiff(freeSince(u), TODAY) : (u.freiAb ? 1e4 + u.freiAb.getTime() / DAY : 1e9), views: u => unitViews(u), inq: u => unitInq(u).length };
+  const f = keyF[t.sort] || keyF.no;
+  rows.sort((a, b) => { const x = f(a), y = f(b); const c = typeof x === 'string' ? x.localeCompare(y) : x - y; return t.dir === 'asc' ? c : -c; });
+  const valLabel = mode === 'buy' ? 'Kaufpreis' : mode === 'rent' ? 'Kaltmiete' : 'Miete / Preis';
+  const th = (k, l, n) => `<th class="${n ? 'n' : ''}"><button data-sort="${tid}:${k}" ${t.sort === k ? `data-dir="${t.dir}"` : ''}>${l}</button></th>`;
+  const chips = ['alle', 'frei', 'reserviert', 'vergeben'].map(s => `<button class="chip" data-filt="${tid}:st:${s}" aria-pressed="${t.st === s}">${s === 'alle' ? 'Alle' : s === 'vergeben' ? (mode === 'buy' ? 'Verkauft' : mode === 'rent' ? 'Vermietet' : 'Vergeben') : STATUS[s].rent}</button>`).join('');
+  const zis = [...new Set(units.map(u => u.zi))].sort();
+  return `<div class="toolbar">${chips}<select class="sel" data-zi="${tid}" aria-label="Zimmer" style="height:32px"><option value="alle">Alle Zimmer</option>${zis.map(z => `<option value="${z}" ${t.zi === String(z) ? 'selected' : ''}>${z} Zimmer</option>`).join('')}</select>
+    <span style="flex:1"></span><button class="btn" data-csv="${tid}">${ico('dl')}Excel (CSV)</button></div>
+  <div class="tw" style="max-height:560px"><table data-tid="${tid}"><thead><tr>${th('no', 'Nr.')}${showObj ? th('obj', 'Objekt') : ''}${th('zi', 'Zi.', 1)}${th('area', 'Fläche', 1)}${th('val', valLabel, 1)}${th('sqm', '€/m²', 1)}${th('st', 'Status')}${th('since', 'Frei seit / ab')}${th('views', 'Aufrufe', 1)}${th('inq', 'Anfragen', 1)}</tr></thead>
+  <tbody>${rows.map(u => { const s = st(u), fs = freeSince(u);
+    const since = fs ? `${fmtD(fs)} <span class="sub">(${dDiff(fs, TODAY)} T.)</span>` : u.freiAb && s === 'vergeben' ? `frei ab ${fmtD(u.freiAb)}` : s === 'reserviert' && resUntil(u) ? `bis ${fmtD(resUntil(u))}` : '–';
+    return `<tr data-unit="${u.key}"><td><b>${u.no}</b></td>${showObj ? `<td>${esc(OBJ[u.obj].name)}</td>` : ''}<td class="n">${u.zi}</td><td class="n">${m2(u.area)}</td><td class="n">${eur(val(u))}</td><td class="n">${nf2.format(sqm(u))}</td><td><span class="tag st-${s}">${stLabel(u)}</span></td><td>${since}</td><td class="n">${nf0.format(unitViews(u))}</td><td class="n">${unitInq(u).length}</td></tr>`; }).join('') || `<tr><td colspan="10" class="empty">Keine Wohnungen für diesen Filter.</td></tr>`}</tbody></table></div>
+  <p class="note-hint">${rows.length} von ${units.length} Wohnungen</p>`;
+}
+function csv(tid) {
+  const units = tid === 'all' ? objList().flatMap(o => o.units) : OBJ[tid.slice(2)].units;
+  const head = ['Objekt', 'Wohnung', 'Etage', 'Zimmer', 'Fläche m²', 'Kaltmiete/Kaufpreis €', '€/m²', 'Status', 'Frei seit', 'Aufrufe 30 Tage', 'Anfragen 30 Tage'];
+  const lines = [head].concat(units.map(u => [OBJ[u.obj].name, u.no, FLOOR_NAME(u.floor), u.zi, nf1.format(u.area), Math.round(val(u)), nf2.format(sqm(u)), stLabel(u), freeSince(u) ? fmtD(freeSince(u)) : '', unitViews(u), unitInq(u).length]));
+  const txt = '﻿' + lines.map(r => r.map(x => `"${String(x).replace(/"/g, '""')}"`).join(';')).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'immone-wohnungen-' + isoD(TODAY) + '.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  toast('Liste heruntergeladen, öffnet sich in Excel');
+}
+
+function pageUnits() {
+  const units = objList().flatMap(o => o.units);
+  const c = { frei: 0, reserviert: 0, vergeben: 0 }; units.forEach(u => c[st(u)]++);
+  const md = units.every(u => OBJ[u.obj].mode === 'rent') ? 'rent' : units.every(u => OBJ[u.obj].mode === 'buy') ? 'buy' : 'mix';
+  return `<section class="card"><div class="card-h"><h2>Wohnungen${FILTER === 'alle' ? ' in allen Objekten' : ' · ' + esc(OBJ[FILTER].name)}</h2>${legend(c, md)}</div><p class="sub">Klick auf eine Zeile öffnet die Wohnungsakte.</p>${unitTable(units, 'all', FILTER === 'alle')}</section>`;
+}
+
+let INQ_F = 'alle';
+function pageInquiries() {
+  const objs = objList();
+  const list = allInquiries().filter(a => objs.includes(OBJ[a.obj]));
+  const c = {}; Object.keys(INQ_ST).forEach(k => { c[k] = list.filter(a => inqStatus(a) === k).length; });
+  const rows = list.filter(a => INQ_F === 'alle' || inqStatus(a) === INQ_F);
+  const chans = CHANNELS.map(ch => [ch, list.filter(a => a.ch === ch && a.t > Date.now() - 30 * DAY).length]);
+  const mx = Math.max(1, ...chans.map(x => x[1]));
+  return `
+  <div class="grid g-kpi">${kpiTile('Anfragen (30 Tage)', list.filter(a => a.t > Date.now() - 30 * DAY).length, '')}${kpiTile('Unbearbeitet', c.neu, 'Status „Neu“')}${kpiTile('Kontaktiert', c.kontaktiert, '')}${kpiTile('Besichtigungen', c.besichtigung, '')}${kpiTile('Zusagen', c.zusage, '')}${kpiTile('Absagen', c.absage, '')}</div>
+  <div class="grid g-12">
+    <section class="card"><h2>Vom Aufruf zur Zusage</h2><p class="sub">Letzte 30 Tage</p>${funnel(objs)}
+      <h2 style="margin-top:22px">Woher die Anfragen kommen</h2><p class="sub">Letzte 30 Tage</p>
+      <div class="hb">${chans.sort((a, b) => b[1] - a[1]).map(([l, v]) => `<div class="hb-row" data-tip="<b>${l}</b>${v} Anfragen"><span class="lb">${l}</span><span class="tr"><span class="fl" style="display:block;width:${v / mx * 100}%"></span></span><span class="vl">${v}</span></div>`).join('')}</div>
+      <p class="note-hint">Wer Wohnungshelden oder ein CRM nutzt, bekommt die Anfragen später automatisch dorthin weitergeleitet.</p></section>
+    <section class="card"><div class="card-h"><h2>Anfragen</h2></div><p class="sub">Status direkt in der Liste ändern.</p>
+      <div class="toolbar">${['alle', ...Object.keys(INQ_ST)].map(k => `<button class="chip" data-inqf="${k}" aria-pressed="${INQ_F === k}">${k === 'alle' ? 'Alle' : INQ_ST[k]} <span class="sub" style="margin:0">${k === 'alle' ? list.length : c[k]}</span></button>`).join('')}</div>
+      <div class="tw" style="max-height:620px"><table><thead><tr><th>Eingang</th><th>Name</th><th>Status</th><th>Wohnung</th><th>Kanal</th></tr></thead><tbody>
+      ${rows.map(a => { const u = UBY[a.key]; return `<tr data-unit="${a.key}"><td>${fmtDs(new Date(a.t))} <span class="sub">${new Date(a.t).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}</span>${a.live ? ' <span class="tag live">Live</span>' : ''}</td><td><b>${esc(a.name)}</b><br><span class="sub">${a.art}</span></td>
+        <td><select class="sel" data-inq="${a.id}" style="height:30px" aria-label="Status">${Object.entries(INQ_ST).map(([k, l]) => `<option value="${k}" ${inqStatus(a) === k ? 'selected' : ''}>${l}</option>`).join('')}</select></td><td>${u.no} <span class="sub">${esc(OBJ[a.obj].name)}</span></td><td>${a.ch}</td></tr>`; }).join('') || '<tr><td colspan="5" class="empty">Keine Anfragen für diesen Filter.</td></tr>'}
+      </tbody></table></div><p class="note-hint">Namen sind erfunden. Echte Anfragen kommen im Live-Betrieb über das Formular im Navigator.</p></section>
+  </div>`;
+}
+
+function pageStats() {
+  const objs = objList();
+  const units = objs.flatMap(o => o.units);
+  const views = units.reduce((a, u) => a + unitViews(u), 0);
+  const dwell = units.reduce((a, u) => a + u.dwell * unitViews(u), 0) / views;
+  const src = {}; objs.forEach(o => { const v = o.units.reduce((a, u) => a + unitViews(u), 0); o.sources.forEach(([n, p]) => { src[n] = (src[n] || 0) + v * p; }); });
+  const srcA = Object.entries(src).sort((a, b) => b[1] - a[1]); const smax = srcA[0][1];
+  const mob = objs.reduce((a, o) => a + o.mobile * o.views, 0) / objs.reduce((a, o) => a + o.views, 0), tab = objs.reduce((a, o) => a + o.tablet * o.views, 0) / objs.reduce((a, o) => a + o.views, 0);
+  const rooms = {}; units.forEach(u => { const rv = unitRooms(u); for (const n in rv) { const k = n.replace(/ \d$/, ''); rooms[k] = (rooms[k] || 0) + rv[n]; } });
+  const rA = Object.entries(rooms).sort((a, b) => b[1] - a[1]).slice(0, 7); const rsum = Object.values(rooms).reduce((a, b) => a + b, 0); const rmax = rA[0][1];
+  const top = units.slice().sort((a, b) => unitViews(b) - unitViews(a)).slice(0, 10);
+  const s = viewsSeries(objs), prev = s.slice(0, 30).reduce((a, x) => a + x.v, 0), cur = s.slice(30).reduce((a, x) => a + x.v, 0);
+  const tours = Math.round(views * 0.64 * 0.463);
+  return `
+  <div class="grid g-kpi">${kpiTile('Aufrufe (30 Tage)', nf0.format(cur), `<span class="${cur >= prev ? 'up' : 'down'}">${cur >= prev ? '+' : ''}${nf0.format((cur - prev) / prev * 100)} %</span> zum Vormonat`)}${kpiTile('Besucher', nf0.format(Math.round(views * 0.64)), 'einzelne Personen, geschätzt')}${kpiTile('Rundgänge gestartet', nf0.format(tours), '')}${kpiTile('Ø Verweildauer', Math.floor(dwell / 60) + ':' + String(Math.round(dwell % 60)).padStart(2, '0') + '<small>Min.</small>', 'pro Wohnung')}${kpiTile('Handy', nf0.format(mob * 100) + '<small>%</small>', 'der Aufrufe')}${kpiTile('Anfragen je 100 Besucher', nf1.format(allInquiries().filter(a => objs.includes(OBJ[a.obj]) && a.t > Date.now() - 30 * DAY).length / (views * 0.64) * 100), '')}</div>
+  <section class="card"><div class="card-h"><h2>Aufrufe pro Tag</h2><span class="sub" style="margin:0">letzte 30 Tage, gestrichelt: 30 Tage davor</span></div><div class="chart" data-chart="views2" style="height:250px;margin-top:10px"></div></section>
+  <div class="grid g-2">
+    <section class="card"><h2>Herkunft der Besucher</h2><p class="sub">Anteil der Aufrufe, letzte 30 Tage</p>
+      <div class="hb">${srcA.map(([l, v]) => `<div class="hb-row" data-tip="<b>${l}</b>${nf0.format(v)} Aufrufe"><span class="lb">${l}</span><span class="tr"><span class="fl" style="display:block;width:${v / smax * 100}%"></span></span><span class="vl">${nf0.format(v / views * 100)} %</span></div>`).join('')}</div>
+      <h2 style="margin-top:22px">Geräte</h2>
+      <div class="split" role="img" aria-label="Handy ${nf0.format(mob * 100)} %, Computer ${nf0.format((1 - mob - tab) * 100)} %, Tablet ${nf0.format(tab * 100)} %"><span style="flex:${mob};background:var(--bar)"></span><span style="flex:${1 - mob - tab};background:var(--bar-2)"></span><span style="flex:${tab};background:var(--gold)"></span></div>
+      <div class="legend"><span><i style="background:var(--bar)"></i>Handy <b>${nf0.format(mob * 100)} %</b></span><span><i style="background:var(--bar-2)"></i>Computer <b>${nf0.format((1 - mob - tab) * 100)} %</b></span><span><i style="background:var(--gold)"></i>Tablet <b>${nf0.format(tab * 100)} %</b></span></div></section>
+    <section class="card"><h2>Meistgesehene Räume</h2><p class="sub">Anteil der Raumaufrufe im 360°-Rundgang</p>
+      <div class="hb">${rA.map(([l, v]) => `<div class="hb-row" data-tip="<b>${l}</b>${nf0.format(v)} Aufrufe"><span class="lb">${l}</span><span class="tr"><span class="fl" style="display:block;width:${v / rmax * 100}%"></span></span><span class="vl">${nf0.format(v / rsum * 100)} %</span></div>`).join('')}</div>
+      <p class="note-hint">Zeigt, worauf Interessenten achten, zum Beispiel für Exposé-Fotos oder Modernisierung.</p></section>
+  </div>
+  <section class="card"><h2>Meistgesehene Wohnungen</h2><p class="sub">Letzte 30 Tage. Viele Aufrufe ohne Anfrage deuten auf Preis oder Exposé hin.</p>
+    <div class="tw"><table><thead><tr><th>Wohnung</th><th>Objekt</th><th>Status</th><th class="n">Aufrufe</th><th class="n">Ø Verweildauer</th><th class="n">Anfragen</th><th class="n">Anfragen je 100 Aufrufe</th></tr></thead><tbody>
+    ${top.map(u => { const q = unitInq(u).length, v = unitViews(u); return `<tr data-unit="${u.key}"><td><b>${u.no}</b> <span class="sub">${u.zi} Zi., ${m2(u.area)}</span></td><td>${esc(OBJ[u.obj].name)}</td><td><span class="tag st-${st(u)}">${stLabel(u)}</span></td><td class="n">${nf0.format(v)}</td><td class="n">${Math.floor(u.dwell / 60)}:${String(u.dwell % 60).padStart(2, '0')} Min.</td><td class="n">${q}</td><td class="n">${nf1.format(q / v * 100)}</td></tr>`; }).join('')}
+    </tbody></table></div></section>`;
+}
+
+function pageHints() {
+  const H = hints();
+  const c = { hoch: 0, mittel: 0, info: 0 }; H.forEach(h => c[h.sev]++);
+  return `<div class="grid g-kpi" style="grid-template-columns:repeat(3,minmax(0,1fr))">${kpiTile('Dringend', c.hoch, 'sofort handeln')}${kpiTile('Prüfen', c.mittel, 'in den nächsten Tagen')}${kpiTile('Info', c.info, 'zum Vormerken')}</div>
+  <section class="card"><h2>Alle Hinweise</h2><p class="sub">Das System prüft die Daten laufend und meldet Auffälligkeiten selbst. Ändert sich ein Status, verschwindet der Hinweis automatisch.</p>${hintList(H)}</section>`;
+}
+
+function pageAdmin() {
+  const users = [['Phil G.', 'Administrator', 'alle Objekte', 'gerade aktiv'], ['M. Krüger', 'Vermietung', 'Lindenhain-Höfe, Mühlenteich', 'heute'], ['S. Yilmaz', 'Vermietung', 'Gartenstraße', 'gestern'], ['A. Becker', 'Vertrieb', 'Stadtvillen Birkenweg', 'vor 3 Tagen'], ['Geschäftsführung', 'Nur lesen', 'alle Objekte', 'vor 1 Woche']];
+  const embed = `<iframe src="https://app.immone.de/o/lindenhain-hoefe"\n        width="100%" height="720" style="border:0"\n        allow="fullscreen" loading="lazy"\n        title="Wohnungsnavigator Lindenhain-Höfe"></iframe>`;
+  return `<div class="grid g-2">
+    <section class="card"><div class="card-h"><h2>Benutzer & Rollen</h2><button class="btn" data-demo-only>+ Benutzer einladen</button></div><p class="sub">Wer was sehen und ändern darf.</p>
+      <div class="tw"><table><thead><tr><th>Name</th><th>Rolle</th><th>Objekte</th><th>Zuletzt aktiv</th></tr></thead><tbody>${users.map(u => `<tr style="cursor:default"><td><b>${u[0]}</b></td><td><span class="tag plain">${u[1]}</span></td><td>${u[2]}</td><td class="sub">${u[3]}</td></tr>`).join('')}</tbody></table></div>
+      <p class="note-hint">Rollen: Administrator (alles), Vermietung/Vertrieb (Status, Preise, Anfragen der eigenen Objekte), Nur lesen (Kennzahlen).</p></section>
+    <section class="card"><h2>Erscheinungsbild</h2><p class="sub">Der Navigator übernimmt Logo und Farben des Unternehmens.</p>
+      <div class="swatches"><span class="sw"><i style="background:#0E1F2E"></i>Hauptfarbe</span><span class="sw"><i style="background:#C8963E"></i>Akzent</span><span class="sw"><i style="background:#2BB673"></i>Frei</span><span class="sw"><i style="background:#F0952E"></i>Reserviert</span><span class="sw"><i style="background:#E5483F"></i>Vergeben</span></div>
+      <h2 style="margin-top:22px">Auf der eigenen Website einbinden</h2><p class="sub">Diesen Code auf der Objektseite einfügen, fertig.</p><pre class="code">${esc(embed)}</pre>
+      <div class="acts" style="margin-top:10px"><button class="btn" data-copy="embed">${ico('copy')}Code kopieren</button></div></section>
+  </div>
+  <section class="card"><h2>Demo zurücksetzen</h2><p class="sub">Setzt alle Statusänderungen, Notizen, Preise und Live-Ereignisse zurück, im Dashboard und im Navigator.</p><button class="btn" data-reset>Beispieldaten zurücksetzen</button></section>`;
+}
+
+// ================= Wohnungsakte =================
+let OPEN = null;
+function openUnit(key) { if (!UBY[key]) return; OPEN = key; renderDrawer(); $('#drawer').classList.add('on'); $('#drawer').setAttribute('aria-hidden', 'false'); $('#scrim').classList.add('on'); setTimeout(() => { const x = $('#drawer .x'); x && x.focus(); }, 60); }
+function closeUnit() { OPEN = null; $('#drawer').classList.remove('on'); $('#drawer').setAttribute('aria-hidden', 'true'); $('#scrim').classList.remove('on'); }
+function renderDrawer() {
+  const u = UBY[OPEN]; if (!u) return;
+  const o = OBJ[u.obj], s = st(u), fs = freeSince(u);
+  const rv = unitRooms(u); const rA = Object.entries(rv).sort((a, b) => b[1] - a[1]).slice(0, 5); const rmax = rA.length ? rA[0][1] : 1; const rsum = Object.values(rv).reduce((a, b) => a + b, 0) || 1;
+  const q = unitInq(u), vis = q.filter(a => ['besichtigung', 'zusage'].includes(inqStatus(a))).length;
+  const hist = (D.hist[u.key] || []).slice().reverse();
+  const seedHist = [{ t: addDays(TODAY, -40).getTime(), txt: 'Wohnung angelegt, Rundgang veröffentlicht' }];
+  const navUrl = new URL('index.html#' + u.id, location.href).href;
+  const facts = o.mode === 'rent'
+    ? [['Zimmer', u.zi], ['Wohnfläche', m2(u.area)], ['Etage', FLOOR_NAME(u.floor)], ['Kaltmiete', eur(kalt(u))], ['Warmmiete', eur(kalt(u) + u.nk)], ['Kaltmiete/m²', nf2.format(kalt(u) / u.area) + ' €']]
+    : [['Zimmer', u.zi], ['Wohnfläche', m2(u.area)], ['Etage', FLOOR_NAME(u.floor)], ['Kaufpreis', eur(price(u))], ['Preis/m²', nf0.format(price(u) / u.area) + ' €'], ['Lage', u.orient]];
+  $('#drawer').innerHTML = `
+  <div class="dr-h"><div><h2>Wohnung ${u.no}</h2><p>${esc(o.name)} · ${esc(u.typeLabel)} · ${esc(u.orient)}</p><div style="margin-top:8px"><span class="tag st-${s}">${stLabel(u)}</span></div></div>
+    <button class="x" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="dr-b">
+    <div class="facts">${facts.map(([l, v]) => `<div>${l}<b>${v}</b></div>`).join('')}</div>
+    <div class="no-print"><h3>Status</h3><div class="seg" role="group" aria-label="Status ändern">${['frei', 'reserviert', 'vergeben'].map(k => `<button class="st-${k}" data-setst="${k}" aria-pressed="${s === k}"><i class="s-${k}"></i>${STATUS[k][o.mode]}</button>`).join('')}</div>
+      <p class="note-hint">${o.tour ? 'Änderungen erscheinen sofort im Navigator.' : 'Bei Lindenhain-Höfe erscheinen Änderungen sofort im Navigator, die anderen Objekte sind reine Beispiele.'}</p>
+      <div class="row2" style="margin-top:12px">
+        ${s === 'reserviert' ? `<label class="fld">Reserviert bis<input class="inp" type="date" data-res value="${resUntil(u) ? isoD(resUntil(u)) : ''}"></label>` : s === 'frei' ? `<label class="fld">Frei seit<input class="inp" type="text" value="${fs ? fmtD(fs) + ' (' + dDiff(fs, TODAY) + ' Tage)' : '–'}" readonly></label>` : `<label class="fld">${o.mode === 'rent' ? 'Gekündigt, frei ab' : 'Verkauft'}<input class="inp" type="text" value="${u.freiAb ? fmtD(u.freiAb) : '–'}" readonly></label>`}
+        <label class="fld">${o.mode === 'rent' ? 'Kaltmiete (€)' : 'Kaufpreis (€)'}<input class="inp" type="number" min="0" step="${o.mode === 'rent' ? 10 : 1000}" data-price value="${Math.round(val(u))}"></label>
+      </div></div>
+    <div><h3>Letzte 30 Tage</h3><div class="mini"><div><b>${nf0.format(unitViews(u))}</b>Aufrufe</div><div><b>${Math.floor(u.dwell / 60)}:${String(u.dwell % 60).padStart(2, '0')}</b>Ø Min.</div><div><b>${q.length}</b>Anfragen</div><div><b>${vis}</b>Besichtigungen</div></div>
+      <div class="hb" style="margin-top:14px">${rA.map(([l, v]) => `<div class="hb-row"><span class="lb">${esc(l)}</span><span class="tr"><span class="fl" style="display:block;width:${v / rmax * 100}%"></span></span><span class="vl">${nf0.format(v / rsum * 100)} %</span></div>`).join('')}</div>
+      <p class="note-hint">Anteil der Aufrufe je Raum im Rundgang.</p></div>
+    ${q.length ? `<div><h3>Anfragen zu dieser Wohnung</h3><ul class="hist">${q.slice(0, 5).map(a => `<li><time>${fmtD(new Date(a.t))}</time><span><b>${esc(a.name)}</b> · ${a.ch} · ${INQ_ST[inqStatus(a)]}${a.live ? ' <span class="tag live">Live</span>' : ''}</span></li>`).join('')}</ul></div>` : ''}
+    <div class="no-print"><h3>Notizen</h3><textarea class="inp" style="width:100%" data-note placeholder="z. B. Interessent ruft Freitag zurück, Küche wird bis 01.03. erneuert">${esc(D.notes[u.key] || '')}</textarea><p class="note-hint">Wird automatisch gespeichert.</p></div>
+    <div><h3>Verlauf</h3><ul class="hist">${hist.map(h => `<li><time>${fmtD(new Date(h.t))}</time><span>${esc(h.txt)} <span class="sub">· ${esc(h.who || 'Phil G.')}</span></span></li>`).join('')}${seedHist.map(h => `<li><time>${fmtD(new Date(h.t))}</time><span>${h.txt} <span class="sub">· System</span></span></li>`).join('')}</ul></div>
+    <div class="acts no-print">${o.tour ? `<a class="btn pri" href="${navUrl}" target="_blank" rel="noopener">${ico('ext')}Im Navigator öffnen</a><button class="btn" data-copylink="${navUrl}">${ico('copy')}Link für Interessenten</button>` : `<button class="btn" disabled title="Nur bei Lindenhain-Höfe gibt es einen echten Rundgang">${ico('ext')}Kein echter Rundgang (Beispiel)</button>`}<button class="btn" data-print>${ico('print')}Exposé drucken</button></div>
+  </div>`;
+}
+function setStatus(u, s) {
+  const old = st(u); if (old === s) return;
+  if (s === u.status0) delete SO[u.key]; else SO[u.key] = s;
+  store.set(K_STATUS, SO);
+  (D.hist[u.key] = D.hist[u.key] || []).push({ t: Date.now(), from: old, to: s, txt: `Status: ${stLabel(u, old)} → ${stLabel(u, s)}` });
+  if (s === 'reserviert' && !D.res[u.key]) D.res[u.key] = addDays(TODAY, 7).getTime();
+  saveD();
+  toast(OBJ[u.obj].tour ? `Wohnung ${u.no} ist jetzt „${stLabel(u, s)}“, auch im Navigator` : `Wohnung ${u.no} ist jetzt „${stLabel(u, s)}“`);
+  render(); renderDrawer();
+}
+
+// ================= Diagramme =================
+function lineChart(el, series, opts = {}) {
+  const W = el.clientWidth, H = el.clientHeight; if (!W) return;
+  const cur = series.slice(30), prev = opts.compare ? series.slice(0, 30) : null;
+  const P = { l: 40, r: 10, t: 10, b: 26 };
+  const max = Math.max(...cur.map(x => x.v), ...(prev ? prev.map(x => x.v) : [0])) * 1.12;
+  const step = niceStep(max / 4); const top = Math.ceil(max / step) * step;
+  const x = i => P.l + i * (W - P.l - P.r) / (cur.length - 1), y = v => P.t + (H - P.t - P.b) * (1 - v / top);
+  let g = '';
+  for (let v = 0; v <= top + 1e-9; v += step) g += `<line x1="${P.l}" x2="${W - P.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/><text x="${P.l - 8}" y="${y(v) + 4}" text-anchor="end">${nf0.format(v)}</text>`;
+  const every = W < 480 ? 7 : 5;
+  cur.forEach((p, i) => { if ((cur.length - 1 - i) % every === 0) g += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle">${fmtDs(p.d)}</text>`; });
+  const path = arr => arr.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join('');
+  const area = path(cur) + `L${x(cur.length - 1)},${y(0)}L${x(0)},${y(0)}Z`;
+  el.innerHTML = `<svg width="${W}" height="${H}" role="img" aria-label="Aufrufe pro Tag, letzte 30 Tage">${g}
+    <path d="${area}" fill="var(--bar)" opacity=".08"/>
+    ${prev ? `<path d="${path(prev)}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4" opacity=".7"/>` : ''}
+    <path d="${path(cur)}" fill="none" stroke="var(--bar)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line class="xh" x1="0" x2="0" y1="${P.t}" y2="${H - P.b}" stroke="var(--muted)" stroke-width="1" opacity="0"/>
+    <circle class="dot" r="4.5" fill="var(--bar)" stroke="var(--surface)" stroke-width="2" opacity="0"/>
+    <rect x="${P.l}" y="0" width="${W - P.l - P.r}" height="${H}" fill="transparent" class="hit"/></svg>`;
+  const svg = el.querySelector('svg'), xh = svg.querySelector('.xh'), dot = svg.querySelector('.dot');
+  const move = ev => {
+    const r = svg.getBoundingClientRect(); const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+    const i = Math.max(0, Math.min(cur.length - 1, Math.round((cx - P.l) / (W - P.l - P.r) * (cur.length - 1))));
+    xh.setAttribute('x1', x(i)); xh.setAttribute('x2', x(i)); xh.setAttribute('opacity', '.5');
+    dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(cur[i].v)); dot.setAttribute('opacity', '1');
+    const wd = cur[i].d.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' });
+    showTip(`<b>${wd}</b>${nf0.format(cur[i].v)} Aufrufe${prev ? `<br><span style="opacity:.75">30 Tage davor: ${nf0.format(prev[i].v)}</span>` : ''}`, r.left + x(i), r.top + y(cur[i].v));
+  };
+  const leave = () => { xh.setAttribute('opacity', '0'); dot.setAttribute('opacity', '0'); hideTip(); };
+  svg.addEventListener('mousemove', move); svg.addEventListener('touchmove', move, { passive: true }); svg.addEventListener('mouseleave', leave); svg.addEventListener('touchend', leave);
+}
+function niceStep(v) { const p = Math.pow(10, Math.floor(Math.log10(v))); const n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
+function drawCharts() {
+  $$('[data-chart]').forEach(el => {
+    const k = el.dataset.chart; const s = viewsSeries(objList());
+    lineChart(el, s, { compare: k === 'views2' });
+  });
+}
+
+// ================= Tooltip & Toast =================
+const tip = $('#tip');
+function showTip(html, x, y) { tip.innerHTML = html; tip.classList.add('on'); const w = tip.offsetWidth, h = tip.offsetHeight; let L = x - w / 2, T = y - h - 14; L = Math.max(8, Math.min(innerWidth - w - 8, L)); if (T < 8) T = y + 16; tip.style.left = L + 'px'; tip.style.top = T + 'px'; }
+function hideTip() { tip.classList.remove('on'); }
+document.addEventListener('mouseover', e => { const t = e.target.closest('[data-tip]'); if (!t) return; const r = t.getBoundingClientRect(); showTip(t.dataset.tip, r.left + r.width / 2, r.top); });
+document.addEventListener('mouseout', e => { const t = e.target.closest('[data-tip]'); if (t && !t.contains(e.relatedTarget)) hideTip(); });
+let tt; function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 3200); }
+
+// ================= Ereignisse =================
+document.addEventListener('click', e => {
+  const t = e.target;
+  const go = t.closest('[data-go]'); if (go) { location.hash = go.dataset.go; return; }
+  if (t.closest('[data-close]') || t === $('#scrim')) { closeUnit(); return; }
+  const st_ = t.closest('[data-setst]'); if (st_) { setStatus(UBY[OPEN], st_.dataset.setst); return; }
+  if (t.closest('select, input, textarea, a')) return;
+  const un = t.closest('[data-unit]'); if (un) { openUnit(un.dataset.unit); return; }
+  const so = t.closest('[data-sort]'); if (so) { const [tid, k] = so.dataset.sort.split(':'); const c = TBL[tid]; c.dir = c.sort === k && c.dir === 'asc' ? 'desc' : 'asc'; if (c.sort !== k) c.dir = ['views', 'inq', 'since', 'val', 'area', 'sqm'].includes(k) ? 'desc' : 'asc'; c.sort = k; store.set('immone-dash-tbl', TBL); render(); return; }
+  const fi = t.closest('[data-filt]'); if (fi) { const [tid, , v] = fi.dataset.filt.split(':'); TBL[tid].st = v; store.set('immone-dash-tbl', TBL); render(); return; }
+  const iq = t.closest('[data-inqf]'); if (iq) { INQ_F = iq.dataset.inqf; render(); return; }
+  const cv = t.closest('[data-csv]'); if (cv) { csv(cv.dataset.csv); return; }
+  if (t.closest('[data-print]')) { window.print(); return; }
+  const cl = t.closest('[data-copylink]'); if (cl) { copy(cl.dataset.copylink, 'Link kopiert. Interessenten landen direkt auf dieser Wohnung.'); return; }
+  if (t.closest('[data-copy]')) { copy($('pre.code').textContent, 'Einbettungscode kopiert'); return; }
+  if (t.closest('[data-demo-only]')) { toast('Im Prototyp nicht aktiv, kommt mit der Plattform-Version'); return; }
+  if (t.closest('[data-reset]')) { ['immone-status-v1', 'immone-events-v1', 'immone-dash-v1', 'immone-dash-tbl', 'immone-dash-filter'].forEach(k => { try { localStorage.removeItem(k); } catch (e2) {} }); location.hash = '#/uebersicht'; location.reload(); }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.matches('[data-zi]')) { TBL[t.dataset.zi].zi = t.value; store.set('immone-dash-tbl', TBL); render(); }
+  if (t.matches('[data-inq]')) { const a = allInquiries().find(x => x.id === t.dataset.inq); D.inq[a.id] = t.value; saveD(); toast(`Anfrage von ${a.name}: ${INQ_ST[t.value]}`); render(); }
+  if (t.matches('[data-res]') && OPEN) { D.res[OPEN] = new Date(t.value).getTime(); (D.hist[OPEN] = D.hist[OPEN] || []).push({ t: Date.now(), txt: 'Reservierung bis ' + fmtD(new Date(t.value)) }); saveD(); render(); renderDrawer(); toast('Reservierungsdatum gespeichert'); }
+  if (t.matches('[data-price]') && OPEN) { const u = UBY[OPEN]; const v = Math.max(0, Math.round(+t.value)); const old = val(u); if (!v || v === Math.round(old)) return; D.price[OPEN] = v; (D.hist[OPEN] = D.hist[OPEN] || []).push({ t: Date.now(), txt: `${OBJ[u.obj].mode === 'rent' ? 'Kaltmiete' : 'Kaufpreis'}: ${eur(old)} → ${eur(v)}` }); saveD(); render(); renderDrawer(); toast('Preis gespeichert'); }
+});
+let nt; document.addEventListener('input', e => { if (e.target.matches('[data-note]') && OPEN) { const k = OPEN, v = e.target.value; clearTimeout(nt); nt = setTimeout(() => { D.notes[k] = v; saveD(); }, 400); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && OPEN) closeUnit(); });
+function copy(txt, msg) { (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast(msg), () => { prompt('Kopieren:', txt); }); }
+// Live: Änderungen aus dem Navigator (anderer Tab) sofort übernehmen
+window.addEventListener('storage', e => {
+  if (e.key === K_EVENTS) { const before = EV.length; EV = store.get(K_EVENTS, []); const n = EV[EV.length - 1]; render(); if (OPEN) renderDrawer();
+    if (n && EV.length > before) { const u = UBY['lindenhain:' + n.unit]; toast(n.type === 'ask' ? `Neue Anfrage zu Wohnung ${u ? u.no : ''}` : `Live: Wohnung ${u ? u.no : ''} ${n.type === 'room' ? '· ' + (n.roomName || 'Rundgang') : EV_TXT[n.type]}`); } }
+  if (e.key === K_STATUS) { SO = store.get(K_STATUS, {}); render(); if (OPEN) renderDrawer(); }
+});
+setInterval(() => { $$('time[data-t]').forEach(t => { t.textContent = ago(+t.dataset.t); }); }, 30000);
+
+// ================= Rendern =================
+const TITLES = { uebersicht: 'Übersicht', objekt: 'Objekt', wohnungen: 'Wohnungen', anfragen: 'Anfragen', statistik: 'Rundgang-Statistik', hinweise: 'Hinweise', verwaltung: 'Verwaltung' };
+let lastPage = null;
+function render() {
+  const r = route();
+  renderNav(r.page);
+  const y = scrollY;
+  $('#pageTitle').textContent = r.page === 'objekt' ? (OBJ[r.arg] || OBJ.lindenhain).name : TITLES[r.page];
+  document.title = $('#pageTitle').textContent + ' · Immone Portal';
+  const v = $('#view');
+  v.innerHTML = r.page === 'objekt' ? pageObject(r.arg) : r.page === 'wohnungen' ? pageUnits() : r.page === 'anfragen' ? pageInquiries() : r.page === 'statistik' ? pageStats() : r.page === 'hinweise' ? pageHints() : r.page === 'verwaltung' ? pageAdmin() : pageOverview();
+  drawCharts();
+  if (lastPage === location.hash) scrollTo(0, y); else scrollTo(0, 0);
+  lastPage = location.hash;
+}
+window.addEventListener('hashchange', () => { hideTip(); render(); });
+let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(drawCharts, 120); });
+render();
+const startUnit = new URLSearchParams(location.search).get('w'); if (startUnit && UBY[startUnit]) openUnit(startUnit);
+})();
+</script>
+</body>
+</html>
