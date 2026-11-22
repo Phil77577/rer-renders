@@ -368,7 +368,7 @@ dialog::backdrop { background: rgba(14,31,46,.55); }
   </form>
   <div class="dlg" id="askDone" hidden>
     <h2>Anfrage gesendet</h2>
-    <p>In dieser Demo wird nichts übertragen. Im Live-Betrieb landet die Anfrage direkt im CRM bzw. Postfach der Vermietung.</p>
+    <p>In dieser Demo wird nichts übertragen, die Anfrage erscheint nur auf diesem Gerät im Immone-Dashboard. Im Live-Betrieb landet sie direkt im CRM bzw. Postfach der Vermietung.</p>
     <div class="acts"><button class="btn primary" data-close-ask>Schließen</button></div>
   </div>
 </dialog>
@@ -650,6 +650,12 @@ function roomPath(t, from, to) {
 
   const units = buildUnits();
   const byId = Object.fromEntries(units.map(u => [u.id, u]));
+  // Immone-Dashboard (Demo): Statusänderungen übernehmen, Klicks und Anfragen protokollieren (nur in diesem Browser)
+  const ST_KEY = 'immone-status-v1', EV_KEY = 'immone-events-v1';
+  units.forEach(u => { u._s0 = u.status; });
+  function applyStatus() { let o = {}; try { o = JSON.parse(localStorage.getItem(ST_KEY) || '{}'); } catch (e) { /* kein Speicher */ } units.forEach(u => { const v = o['lindenhain:' + u.id]; u.status = (v && STATUS[v]) ? v : u._s0; }); }
+  applyStatus();
+  function logEv(ev) { try { const a = JSON.parse(localStorage.getItem(EV_KEY) || '[]'); ev.t = Date.now(); a.push(ev); localStorage.setItem(EV_KEY, JSON.stringify(a.slice(-400))); } catch (e) { /* kein Speicher */ } }
   const MAX_RENT = Math.ceil(Math.max(...units.map(u => u.kalt)) / 50) * 50;
   const MAX_BUY = Math.ceil(Math.max(...units.map(u => u.price)) / 10000) * 10000;
   const state = {
@@ -811,6 +817,7 @@ function roomPath(t, from, to) {
     });
     renderPlan();
   }
+  function area(q) { let s = 0; for (let i = 0; i < q.length; i++) { const p = q[i], r = q[(i + 1) % q.length]; s += p[0] * r[1] - r[0] * p[1]; } return Math.abs(s) / 2; }
   function bestView(u) {
     let best = null, ba = 0;
     for (const v of VIEWS) { const p = A.ext[v.id].polys[u.id]; if (!p) continue; const a = p.reduce((s, q) => s + area(q), 0); if (a > ba) { ba = a; best = v.id; } }
@@ -1006,6 +1013,7 @@ function roomPath(t, from, to) {
   // ================= Detail =================
   function select(id, opt = {}) {
     const u = byId[id]; if (!u) return;
+    if (state.sel !== id) logEv({ type: 'view', unit: id });
     state.sel = id;
     if (!A.ext[state.view].polys[id]) { const v = bestView(u); if (v) setView(v); }
     if (opt.focus && vb.z > 1) focusUnit(u);
@@ -1083,7 +1091,7 @@ function roomPath(t, from, to) {
     $('#askForm').hidden = false; $('#askDone').hidden = true;
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   }
-  $('#askForm').addEventListener('submit', e => { e.preventDefault(); if (!e.target.reportValidity()) return; $('#askForm').hidden = true; $('#askDone').hidden = false; });
+  $('#askForm').addEventListener('submit', e => { e.preventDefault(); if (!e.target.reportValidity()) return; if (state.sel) logEv({ type: 'ask', unit: state.sel, name: String(e.target.elements.name.value || '').slice(0, 60), art: e.target.elements.art.value }); $('#askForm').hidden = true; $('#askDone').hidden = false; });
   $$('[data-close-ask]').forEach(b => b.addEventListener('click', () => dlg.close ? dlg.close() : dlg.removeAttribute('open')));
 
   // ================= 360°-Rundgang (Musterwohnung, gerendert in Blender) =================
@@ -1178,6 +1186,7 @@ function roomPath(t, from, to) {
   }
   function setRoomUI() {
     const room = MT.byId[tour.room];
+    if (tour._logged !== tour.room) { tour._logged = tour.room; logEv({ type: 'room', unit: tour.unit.id, roomName: room.name }); }
     $('#tourRoom').textContent = room.name; $('#tourArea').textContent = m2(room.area);
     $('#tourPlan').innerHTML = planSVG(MT, { interactive: true, current: tour.room });
     $$('#tourRooms button').forEach(b => b.setAttribute('aria-current', String(b.dataset.room === tour.room)));
@@ -1197,6 +1206,7 @@ function roomPath(t, from, to) {
     if (!tr) initTour();
     state.tourOpen = true; tourEl.hidden = false; document.body.classList.add('touring');
     tour = { unit: u, room: 'flur', anim: null, queue: [] };
+    logEv({ type: 'tour', unit: u.id });
     sphA.material.map = tex('flur'); sphA.material.needsUpdate = true; sphB.material.opacity = 0;
     look.yaw = yawTo(sub(PANO.doors.flur.wohnen, PANO.cams.flur)); look.pitch = -0.05; look.vy = look.vp = 0;
     $('#tourUnit').textContent = PANOS[u.typeCode] ? `Wohnung ${u.no}: Rundgang (${MT.label})` : `Wohnung ${u.no}: Rundgang durch die Musterwohnung (3 Zimmer)`;
@@ -1313,6 +1323,7 @@ function roomPath(t, from, to) {
   update();
   applyVB();
   window.addEventListener('hashchange', () => { const id = location.hash.slice(1); if (byId[id] && id !== state.sel) select(id); });
+  window.addEventListener('storage', e => { if (e.key === ST_KEY) { applyStatus(); update(); } });
   const startId = location.hash.slice(1); if (byId[startId]) select(startId);
   requestAnimationFrame(loop);
   setTimeout(() => document.body.classList.add('ready'), 50);
