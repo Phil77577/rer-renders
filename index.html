@@ -1325,6 +1325,8 @@ function roomPath(t, from, to) {
   window.addEventListener('hashchange', () => { const id = location.hash.slice(1); if (byId[id] && id !== state.sel) select(id); });
   window.addEventListener('storage', e => { if (e.key === ST_KEY) { applyStatus(); update(); } });
   const startId = location.hash.slice(1); if (byId[startId]) select(startId);
+  // Direktstart des Rundgangs aus dem Dashboard: index.html?rundgang=1#we-3-02
+  if (byId[startId] && new URLSearchParams(location.search).get('rundgang') === '1') setTimeout(() => openTour(byId[startId]), 150);
   requestAnimationFrame(loop);
   setTimeout(() => document.body.classList.add('ready'), 50);
 })();
