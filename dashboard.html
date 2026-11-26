@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<script>try { const t = JSON.parse(localStorage.getItem('immone-theme')); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Immone Portal – Dashboard</title>
@@ -10,43 +11,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #0E1F2E; --navy-2: #16304A; --gold: #C8963E; --gold-ink: #8A611F;
-  --paper: #EEF1F2; --surface: #FFFFFF; --surface-2: #F4F6F6; --ink: #0E1F2E; --ink-2: #33424F; --muted: #5A6874; --line: #E2E6E7;
+  /* Immone Corporate Design: Nordisch + Marine */
+  --navy: #002941; --navy-2: #0D3A57; --gold: #7FA6B8; --gold-ink: #2F6280;
+  --paper: #F5F3EE; --surface: #FFFFFF; --surface-2: #F2F1EC; --ink: #1F3443; --ink-2: #34505F; --muted: #5B7686; --line: #E0E4E4;
   --frei: #1F8A53; --reserviert: #B25E0E; --vergeben: #C33A33;
   --c-frei: #2BB673; --c-reserviert: #F0952E; --c-vergeben: #E5483F;
   --t-frei: rgba(43,182,115,.14); --t-reserviert: rgba(240,149,46,.17); --t-vergeben: rgba(229,72,63,.12);
-  --bar: #2C5A80; --bar-2: #9DB5C9; --grid: #E6EAEC;
-  --sev-hoch: #C33A33; --sev-mittel: #B25E0E; --sev-info: #2C5A80;
-  --shadow: 0 1px 2px rgba(14,31,46,.05), 0 8px 24px -14px rgba(14,31,46,.25);
-  --side-active: rgba(200,150,62,.16); --hl-soft: rgba(200,150,62,.12); --side-ic: var(--gold); --hl-on: var(--navy); --pri: var(--navy); --pri-on: #fff;
+  --bar: #7FA6B8; --bar-2: #C9DDE8; --grid: #E9ECEC;
+  --sev-hoch: #C33A33; --sev-mittel: #B25E0E; --sev-info: #2F6280;
+  --shadow: 0 1px 2px rgba(0,41,65,.05), 0 8px 24px -14px rgba(0,41,65,.22);
+  --side-active: rgba(127,166,184,.22); --hl-soft: rgba(127,166,184,.16); --side-ic: #A9C8D6; --hl-on: #0B1F2C; --pri: #002941; --pri-on: #fff;
   --font: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif;
   --r: 14px;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --paper: #0B1620; --surface: #132433; --surface-2: #1A2E40; --ink: #E8EDF0; --ink-2: #C6D2DB; --muted: #9CAEBC; --line: #24394C; --gold-ink: #DDB06A;
-    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA9CC; --bar-2: #3B5873; --grid: #20354A;
+  :root:not([data-theme="light"]) { --paper: #0A1A24; --surface: #10242F; --surface-2: #163040; --ink: #E6EEF2; --ink-2: #C3D3DC; --muted: #8FA9B8; --line: #21394A; --gold-ink: #A9C8D6; --navy: #061520;
+    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA6B8; --bar-2: #2C4A5C; --grid: #1B3141;
     --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
-    --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #7FA9CC; color-scheme: dark; }
+    --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #A9C8D6; --pri: #7FA6B8; --pri-on: #061520; --hl-on: #061520;
+    --hl-soft: rgba(127,166,184,.14); --side-active: rgba(127,166,184,.2); --shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px -14px rgba(0,0,0,.5); color-scheme: dark; }
 }
-:root[data-theme="dark"] { --paper: #0B1620; --surface: #132433; --surface-2: #1A2E40; --ink: #E8EDF0; --ink-2: #C6D2DB; --muted: #9CAEBC; --line: #24394C; --gold-ink: #DDB06A;
-  --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA9CC; --bar-2: #3B5873; --grid: #20354A;
-  --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
-  --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #7FA9CC; color-scheme: dark; }
-
-:root[data-pal="p1"] { --paper: #F7FBFD; --surface: #FFFFFF; --surface-2: #EFF5F9; --line: #D6E6EF; --grid: #E4EEF3; --ink: #2A3E4B; --ink-2: #3C5463; --muted: #5B7686; --navy: #2A3E4B; --gold: #7FA6B8; --gold-ink: #3F6B80; --hl-on: #14232C; --hl-soft: rgba(127,166,184,.16); --side-active: rgba(127,166,184,.24); --side-ic: #A9C8D6; --pri: #2A3E4B; --pri-on: #fff; --bar: #7FA6B8; --bar-2: #C9DDE8; color-scheme: light; }
-:root[data-pal="p1m"] { --paper: #F7FBFD; --surface: #FFFFFF; --surface-2: #EFF5F9; --line: #D6E6EF; --grid: #E4EEF3; --ink: #1F3443; --ink-2: #34505F; --muted: #5B7686; --navy: #002941; --gold: #7FA6B8; --gold-ink: #2F6280; --hl-on: #0B1F2C; --hl-soft: rgba(127,166,184,.16); --side-active: rgba(127,166,184,.22); --side-ic: #A9C8D6; --pri: #002941; --pri-on: #fff; --bar: #7FA6B8; --bar-2: #C9DDE8; color-scheme: light; }
-:root[data-pal="p2"] { --paper: #F3F9FC; --surface: #FFFFFF; --surface-2: #EAF5FA; --line: #CFE6EF; --grid: #E1F0F6; --ink: #002941; --ink-2: #1D3F55; --muted: #4F6B7C; --navy: #002941; --gold: #FD6E6E; --gold-ink: #C84A4A; --hl-on: #002941; --hl-soft: rgba(182,223,237,.45); --side-active: rgba(253,110,110,.18); --side-ic: #FD6E6E; --pri: #002941; --pri-on: #fff; --bar: #002941; --bar-2: #B6DFED; color-scheme: light; }
-:root[data-pal="p3"] { --paper: #F5F5F8; --surface: #FFFFFF; --surface-2: #F0F1F5; --line: #DFE1E8; --grid: #E8E9EF; --ink: #2E1A22; --ink-2: #4A3540; --muted: #6E6670; --navy: #411827; --gold: #EAC4D4; --gold-ink: #7A3550; --hl-on: #411827; --hl-soft: rgba(234,196,212,.38); --side-active: rgba(234,196,212,.18); --side-ic: #EAC4D4; --pri: #411827; --pri-on: #fff; --bar: #411827; --bar-2: #CDD1DC; color-scheme: light; }
-:root[data-pal="p4"] { --paper: #FCFCFC; --surface: #FFFFFF; --surface-2: #F4F5F6; --line: #E4E5E7; --grid: #ECEDEF; --ink: #3E4044; --ink-2: #4F5257; --muted: #6E7176; --navy: #3E4044; --gold: #054980; --gold-ink: #054980; --hl-on: #FFFFFF; --hl-soft: rgba(5,73,128,.07); --side-active: rgba(255,255,255,.10); --side-ic: #8DB8DE; --pri: #054980; --pri-on: #fff; --bar: #054980; --bar-2: #AFC6DA; color-scheme: light; }
-:root[data-pal="p5"] { --paper: #FBF7EF; --surface: #FFFFFF; --surface-2: #F8F1E3; --line: #EFE2C6; --grid: #F2E9D6; --ink: #3A2814; --ink-2: #563C22; --muted: #7A6450; --navy: #603E1E; --gold: #FFC34D; --gold-ink: #8A5A1E; --hl-on: #3A2814; --hl-soft: rgba(241,217,168,.5); --side-active: rgba(255,195,77,.18); --side-ic: #FFC34D; --pri: #603E1E; --pri-on: #fff; --bar: #603E1E; --bar-2: #F1D9A8; color-scheme: light; }
-/* Paletten-Vergleich */
-.palbar { margin: 10px 28px 0; display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
-.palbar > span { font-weight: 650; margin-right: 4px; }
-.pal { height: 30px; padding: 0 11px 0 8px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); font-size: 12.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
-.pal .sw3 { display: inline-flex; } .pal .sw3 i { width: 13px; height: 13px; border-radius: 50%; border: 1.5px solid var(--surface); margin-left: -4px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); } .pal .sw3 i:first-child { margin-left: 0; }
-.pal[aria-pressed="true"] { border-color: var(--pri); box-shadow: inset 0 0 0 1px var(--pri); }
-@media (max-width: 860px) { .palbar { margin: 10px 16px 0; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; } .palbar::-webkit-scrollbar { display: none; } }
+:root[data-theme="dark"] { --paper: #0A1A24; --surface: #10242F; --surface-2: #163040; --ink: #E6EEF2; --ink-2: #C3D3DC; --muted: #8FA9B8; --line: #21394A; --gold-ink: #A9C8D6; --navy: #061520;
+    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA6B8; --bar-2: #2C4A5C; --grid: #1B3141;
+    --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
+    --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #A9C8D6; --pri: #7FA6B8; --pri-on: #061520; --hl-on: #061520;
+    --hl-soft: rgba(127,166,184,.14); --side-active: rgba(127,166,184,.2); --shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px -14px rgba(0,0,0,.5); color-scheme: dark; }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; overflow-x: clip; }
@@ -72,7 +62,7 @@ a { color: inherit; }
 .nav a[aria-current="page"] svg { stroke: var(--side-ic); }
 .nav .cnt { margin-left: auto; background: var(--gold); color: var(--hl-on); font-size: 11.5px; font-weight: 800; border-radius: 99px; padding: 1px 7px; }
 .side-foot { margin-top: auto; padding: 12px; font-size: 12px; color: #93A6B6; border-top: 1px solid rgba(255,255,255,.08); }
-.side-foot a { color: #E3C48C; }
+.side-foot a { color: #A9C8D6; }
 
 .main { min-width: 0; display: flex; flex-direction: column; }
 .top { display: flex; align-items: center; gap: 14px; padding: 16px 28px; background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
@@ -81,6 +71,9 @@ a { color: inherit; }
 .sel, .inp { height: 38px; border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 0 12px; min-width: 0; }
 .sel { padding-right: 30px; appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: right 15px top 16px, right 10px top 16px; background-size: 5px 5px; background-repeat: no-repeat; }
 .search { width: 210px; }
+.themebtn { height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 13px; color: var(--ink-2); flex: none; }
+.themebtn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.themebtn:hover { border-color: var(--gold); }
 .user { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 13.5px; white-space: nowrap; }
 .user i { width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; display: grid; place-items: center; font-style: normal; font-weight: 700; font-size: 13px; }
 :root[data-theme="dark"] .user i { background: var(--gold); color: var(--navy); }
@@ -312,10 +305,10 @@ pre.code { background: var(--navy); color: #E7EEF3; padding: 14px; border-radius
       <select id="objSel" class="sel"></select>
       <label class="sr" for="q">Wohnung suchen</label>
       <input id="q" class="inp search" type="search" placeholder="Wohnung suchen, z. B. 3.02" autocomplete="off">
+      <button class="themebtn" id="themeBtn" type="button"></button>
       <span class="user"><i>PG</i>Phil G.</span>
     </header>
     <div class="demo" role="note"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Demo mit erfundenen Beispieldaten. Statusänderungen bei <b>Lindenhain-Höfe</b> wirken sofort im <a href="index.html" target="_blank" rel="noopener">Navigator</a>, Klicks und Anfragen dort erscheinen hier live.</span></div>
-    <div class="palbar" id="palbar" role="group" aria-label="Farbpalette vergleichen"></div>
     <main id="view" tabindex="-1"></main>
   </div>
 </div>
@@ -923,6 +916,7 @@ function pageAdmin() {
       <p class="note-hint">Rollen: Administrator (alles), Vermietung/Vertrieb (Status, Preise, Anfragen der eigenen Objekte), Nur lesen (Kennzahlen).</p></section>
     <section class="card"><h2>Erscheinungsbild</h2><p class="sub">Der Navigator übernimmt Logo und Farben des Unternehmens.</p>
       <div class="swatches"><span class="sw"><i style="background:var(--navy)"></i>Hauptfarbe</span><span class="sw"><i style="background:var(--gold)"></i>Akzent</span><span class="sw"><i style="background:var(--bar)"></i>Diagramme</span><span class="sw"><i style="background:var(--paper)"></i>Hintergrund</span><span class="sw"><i style="background:#2BB673"></i>Frei</span><span class="sw"><i style="background:#F0952E"></i>Reserviert</span><span class="sw"><i style="background:#E5483F"></i>Vergeben</span></div>
+      <h2 style="margin-top:22px">Farbcodes</h2><div class="tw" style="margin-top:8px"><table><thead><tr><th>Farbe</th><th>Code</th><th>Einsatz</th></tr></thead><tbody>${[["#002941","Marine: Seitenleiste, Knöpfe, Überschriften im Plan"],["#7FA6B8","Nordblau: Akzent, Diagramme, Markierungen"],["#2F6280","Tiefblau: Links und Text-Akzente"],["#D6E6EF","Eisblau: helle Flächen, Linien"],["#F5F3EE","Hintergrund hell (leicht cremig)"],["#FFFFFF","Karten und Flächen"],["#1F3443","Schrift"],["#5B7686","Nebentext"],["#0A1A24","Hintergrund dunkel"],["#10242F","Karten dunkel"]].map(([c, u]) => `<tr style="cursor:default"><td><i style="display:inline-block;width:18px;height:18px;border-radius:5px;background:${c};border:1px solid var(--line);vertical-align:middle"></i></td><td><b>${c}</b></td><td class="sub">${u}</td></tr>`).join("")}</tbody></table></div>
       <h2 style="margin-top:22px">Auf der eigenen Website einbinden</h2><p class="sub">Diesen Code auf der Objektseite einfügen, fertig.</p><pre class="code">${esc(embed)}</pre>
       <div class="acts" style="margin-top:10px"><button class="btn" data-copy="embed">${ico('copy')}Code kopieren</button></div></section>
   </div>
@@ -1061,24 +1055,15 @@ window.addEventListener('storage', e => {
 });
 setInterval(() => { $$('time[data-t]').forEach(t => { t.textContent = ago(+t.dataset.t); }); }, 30000);
 
-// ================= Farbpaletten-Vergleich =================
-const PALS = [
-  ['orig', 'Original', ['#0E1F2E', '#C8963E', '#EEF1F2']],
-  ['p1m', 'Empfehlung: Nordisch + Marine', ['#002941', '#7FA6B8', '#D6E6EF', '#F7FBFD']],
-  ['p1', '1 · Nordisch', ['#2A3E4B', '#7FA6B8', '#D6E6EF', '#F7FBFD']],
-  ['p2', '2 · Himmel & Koralle', ['#002941', '#FD6E6E', '#B6DFED']],
-  ['p3', '3 · Bordeaux & Rosé', ['#411827', '#EAC4D4', '#CDD1DC']],
-  ['p4', '4 · Graphit & Blau', ['#3E4044', '#054980', '#FCFCFC']],
-  ['p5', '5 · Sand & Gold', ['#603E1E', '#FFC34D', '#F1D9A8']]
-];
-let PAL = store.get('immone-dash-pal', 'orig'); if (!PALS.some(p => p[0] === PAL)) PAL = 'orig';
-function applyPal() {
-  const r = document.documentElement;
-  if (PAL === 'orig') { delete r.dataset.pal; delete r.dataset.theme; } else { r.dataset.pal = PAL; r.dataset.theme = 'light'; }
-  $('#palbar').innerHTML = '<span>Farben vergleichen:</span>' + PALS.map(([id, n, sw]) => `<button class="pal" data-pal="${id}" aria-pressed="${PAL === id}"><span class="sw3">${sw.map(c => `<i style="background:${c}"></i>`).join('')}</span>${n}</button>`).join('');
-}
-$('#palbar').addEventListener('click', e => { const b = e.target.closest('[data-pal]'); if (!b) return; PAL = b.dataset.pal; store.set('immone-dash-pal', PAL); applyPal(); drawCharts(); });
-applyPal();
+// ================= Hell / Dunkel (gemeinsam mit dem Navigator gespeichert) =================
+const ICON_SUN = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+const ICON_MOON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/></svg>';
+const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+function paintTheme() { const b = $('#themeBtn'); b.innerHTML = (isDark() ? ICON_SUN : ICON_MOON) + `<span>${isDark() ? 'Hell' : 'Dunkel'}</span>`; b.setAttribute('aria-label', isDark() ? 'Helles Design einschalten' : 'Dunkles Design einschalten'); }
+$('#themeBtn').addEventListener('click', () => { const t = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = t; store.set('immone-theme', t); paintTheme(); drawCharts(); });
+window.addEventListener('storage', e => { if (e.key === 'immone-theme') { const t = store.get('immone-theme', null); if (t) document.documentElement.dataset.theme = t; paintTheme(); drawCharts(); } });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { paintTheme(); drawCharts(); });
+paintTheme();
 
 // ================= Rendern =================
 const TITLES = { uebersicht: 'Übersicht', objekt: 'Objekt', wohnungen: 'Wohnungen', anfragen: 'Anfragen', statistik: 'Rundgang-Statistik', hinweise: 'Hinweise', verwaltung: 'Verwaltung' };
