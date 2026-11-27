@@ -14,29 +14,30 @@
   /* Immone Corporate Design: Nordisch + Marine */
   --navy: #002941; --navy-2: #0D3A57; --gold: #7FA6B8; --gold-ink: #2F6280;
   --paper: #F5F3EE; --surface: #FFFFFF; --surface-2: #F2F1EC; --ink: #1F3443; --ink-2: #34505F; --muted: #5B7686; --line: #E0E4E4;
-  --frei: #1F8A53; --reserviert: #B25E0E; --vergeben: #C33A33;
-  --c-frei: #2BB673; --c-reserviert: #F0952E; --c-vergeben: #E5483F;
-  --t-frei: rgba(43,182,115,.14); --t-reserviert: rgba(240,149,46,.17); --t-vergeben: rgba(229,72,63,.12);
-  --bar: #7FA6B8; --bar-2: #C9DDE8; --grid: #E9ECEC;
-  --sev-hoch: #C33A33; --sev-mittel: #B25E0E; --sev-info: #2F6280;
+  --frei: #1F8A53; --reserviert: #B25E0E; --vergeben: #9B1C1C;
+  --c-frei: #2BB673; --c-reserviert: #F0952E; --c-vergeben: #B3261E;
+  --coral: #FF6574; --coral-on: #1A1C1D; --hellblau: #CCDCEF;
+  --t-frei: rgba(43,182,115,.14); --t-reserviert: rgba(240,149,46,.17); --t-vergeben: rgba(179,38,30,.11);
+  --bar: #7FA6B8; --bar-2: #CCDCEF; --grid: #E9ECEC;
+  --sev-hoch: #9B1C1C; --sev-mittel: #B25E0E; --sev-info: #2F6280;
   --shadow: 0 1px 2px rgba(0,41,65,.05), 0 8px 24px -14px rgba(0,41,65,.22);
-  --side-active: rgba(127,166,184,.22); --hl-soft: rgba(127,166,184,.16); --side-ic: #A9C8D6; --hl-on: #0B1F2C; --pri: #002941; --pri-on: #fff;
+  --side-active: rgba(127,166,184,.22); --hl-soft: rgba(127,166,184,.16); --side-ic: #CCDCEF; --hl-on: #0B1F2C; --pri: #002941; --pri-on: #fff;
   --font: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif;
   --r: 14px;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --paper: #0A1A24; --surface: #10242F; --surface-2: #163040; --ink: #E6EEF2; --ink-2: #C3D3DC; --muted: #8FA9B8; --line: #21394A; --gold-ink: #A9C8D6; --navy: #061520;
-    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA6B8; --bar-2: #2C4A5C; --grid: #1B3141;
-    --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
-    --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #A9C8D6; --pri: #7FA6B8; --pri-on: #061520; --hl-on: #061520;
-    --hl-soft: rgba(127,166,184,.14); --side-active: rgba(127,166,184,.2); --shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px -14px rgba(0,0,0,.5); color-scheme: dark; }
+  :root:not([data-theme="light"]) { --paper: #222526; --surface: #2B2E30; --surface-2: #33373A; --ink: #EEF1F4; --ink-2: #CDD3D9; --muted: #9EA6AD; --line: #3B3F42; --gold: #CCDCEF; --gold-ink: #CCDCEF; --navy: #1A1C1D;
+    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #EE8379; --c-vergeben: #C8302A; --bar: #CCDCEF; --bar-2: #56616B; --grid: #383C3F;
+    --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(200,48,42,.26);
+    --sev-hoch: #EE8379; --sev-mittel: #F5B067; --sev-info: #CCDCEF; --pri: #CCDCEF; --pri-on: #1A1C1D; --hl-on: #1A1C1D; --side-ic: #CCDCEF;
+    --hl-soft: rgba(204,220,239,.11); --side-active: rgba(204,220,239,.10); --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -14px rgba(0,0,0,.6); color-scheme: dark; }
 }
-:root[data-theme="dark"] { --paper: #0A1A24; --surface: #10242F; --surface-2: #163040; --ink: #E6EEF2; --ink-2: #C3D3DC; --muted: #8FA9B8; --line: #21394A; --gold-ink: #A9C8D6; --navy: #061520;
-    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #FF8A82; --bar: #7FA6B8; --bar-2: #2C4A5C; --grid: #1B3141;
-    --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(229,72,63,.2);
-    --sev-hoch: #FF8A82; --sev-mittel: #F5B067; --sev-info: #A9C8D6; --pri: #7FA6B8; --pri-on: #061520; --hl-on: #061520;
-    --hl-soft: rgba(127,166,184,.14); --side-active: rgba(127,166,184,.2); --shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px -14px rgba(0,0,0,.5); color-scheme: dark; }
+:root[data-theme="dark"] { --paper: #222526; --surface: #2B2E30; --surface-2: #33373A; --ink: #EEF1F4; --ink-2: #CDD3D9; --muted: #9EA6AD; --line: #3B3F42; --gold: #CCDCEF; --gold-ink: #CCDCEF; --navy: #1A1C1D;
+    --frei: #5FD39A; --reserviert: #F5B067; --vergeben: #EE8379; --c-vergeben: #C8302A; --bar: #CCDCEF; --bar-2: #56616B; --grid: #383C3F;
+    --t-frei: rgba(43,182,115,.2); --t-reserviert: rgba(240,149,46,.22); --t-vergeben: rgba(200,48,42,.26);
+    --sev-hoch: #EE8379; --sev-mittel: #F5B067; --sev-info: #CCDCEF; --pri: #CCDCEF; --pri-on: #1A1C1D; --hl-on: #1A1C1D; --side-ic: #CCDCEF;
+    --hl-soft: rgba(204,220,239,.11); --side-active: rgba(204,220,239,.10); --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -14px rgba(0,0,0,.6); color-scheme: dark; }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; overflow-x: clip; }
@@ -49,19 +50,19 @@ a { color: inherit; }
 
 /* ---------- Layout ---------- */
 .app { display: grid; grid-template-columns: 236px 1fr; min-height: 100vh; }
-.side { background: var(--navy); color: #DCE4EA; padding: 22px 14px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+.side { background: var(--navy); color: rgba(255,255,255,.86); padding: 22px 14px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 2px 10px 22px; color: #fff; text-decoration: none; }
-.brand .mark { width: 32px; height: 32px; border-radius: 9px; background: var(--gold); display: grid; place-items: center; color: var(--hl-on); font-weight: 800; font-size: 17px; }
+.brand .mark { width: 32px; height: 32px; border-radius: 9px; background: var(--coral); display: grid; place-items: center; color: var(--coral-on); font-weight: 800; font-size: 17px; }
 .brand b { font-size: 18px; letter-spacing: -.01em; }
-.brand small { display: block; font-size: 11.5px; color: #93A6B6; font-weight: 500; margin-top: -2px; }
+.brand small { display: block; font-size: 11.5px; color: rgba(255,255,255,.55); font-weight: 500; margin-top: -2px; }
 .nav { display: flex; flex-direction: column; gap: 2px; }
-.nav a { display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 10px; text-decoration: none; color: #C9D5DE; font-weight: 550; }
+.nav a { display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: 10px; text-decoration: none; color: rgba(255,255,255,.74); font-weight: 550; }
 .nav a svg { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
-.nav a[aria-current="page"] { background: var(--side-active); color: #fff; }
+.nav a[aria-current="page"] { background: var(--side-active); color: #fff; box-shadow: inset 3px 0 0 var(--coral); }
 .nav a[aria-current="page"] svg { stroke: var(--side-ic); }
-.nav .cnt { margin-left: auto; background: var(--gold); color: var(--hl-on); font-size: 11.5px; font-weight: 800; border-radius: 99px; padding: 1px 7px; }
-.side-foot { margin-top: auto; padding: 12px; font-size: 12px; color: #93A6B6; border-top: 1px solid rgba(255,255,255,.08); }
+.nav .cnt { margin-left: auto; background: var(--coral); color: var(--coral-on); font-size: 11.5px; font-weight: 800; border-radius: 99px; padding: 1px 7px; }
+.side-foot { margin-top: auto; padding: 12px; font-size: 12px; color: rgba(255,255,255,.55); border-top: 1px solid rgba(255,255,255,.08); }
 .side-foot a { color: #A9C8D6; }
 
 .main { min-width: 0; display: flex; flex-direction: column; }
@@ -138,7 +139,7 @@ a { color: inherit; }
 .hint .ic svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .hint.hoch .ic { color: var(--sev-hoch); background: var(--t-vergeben); }
 .hint.mittel .ic { color: var(--sev-mittel); background: var(--t-reserviert); }
-.hint.info .ic { color: var(--sev-info); background: rgba(44,90,128,.12); }
+.hint.info .ic { color: var(--sev-info); background: var(--hl-soft); }
 .hint b { display: block; font-size: 14px; }
 .hint p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
 .hint .sev { font-size: 11px; font-weight: 750; text-transform: uppercase; letter-spacing: .04em; margin-right: 6px; }
@@ -238,7 +239,7 @@ textarea.inp { height: 84px; padding: 9px 12px; resize: vertical; }
 .feed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .feed li { display: grid; grid-template-columns: 10px 1fr auto; gap: 11px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
 .feed li:first-child { border-top: 0; }
-.feed li i { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+.feed li i { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); }
 .feed time { color: var(--muted); font-size: 12px; white-space: nowrap; }
 .pulse { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c-frei); margin-right: 6px; box-shadow: 0 0 0 0 rgba(43,182,115,.6); animation: pl 1.8s infinite; }
 @keyframes pl { 0% { box-shadow: 0 0 0 0 rgba(43,182,115,.55); } 70% { box-shadow: 0 0 0 8px rgba(43,182,115,0); } 100% { box-shadow: 0 0 0 0 rgba(43,182,115,0); } }
@@ -915,8 +916,8 @@ function pageAdmin() {
       <div class="tw"><table><thead><tr><th>Name</th><th>Rolle</th><th>Objekte</th><th>Zuletzt aktiv</th></tr></thead><tbody>${users.map(u => `<tr style="cursor:default"><td><b>${u[0]}</b></td><td><span class="tag plain">${u[1]}</span></td><td>${u[2]}</td><td class="sub">${u[3]}</td></tr>`).join('')}</tbody></table></div>
       <p class="note-hint">Rollen: Administrator (alles), Vermietung/Vertrieb (Status, Preise, Anfragen der eigenen Objekte), Nur lesen (Kennzahlen).</p></section>
     <section class="card"><h2>Erscheinungsbild</h2><p class="sub">Der Navigator übernimmt Logo und Farben des Unternehmens.</p>
-      <div class="swatches"><span class="sw"><i style="background:var(--navy)"></i>Hauptfarbe</span><span class="sw"><i style="background:var(--gold)"></i>Akzent</span><span class="sw"><i style="background:var(--bar)"></i>Diagramme</span><span class="sw"><i style="background:var(--paper)"></i>Hintergrund</span><span class="sw"><i style="background:#2BB673"></i>Frei</span><span class="sw"><i style="background:#F0952E"></i>Reserviert</span><span class="sw"><i style="background:#E5483F"></i>Vergeben</span></div>
-      <h2 style="margin-top:22px">Farbcodes</h2><div class="tw" style="margin-top:8px"><table><thead><tr><th>Farbe</th><th>Code</th><th>Einsatz</th></tr></thead><tbody>${[["#002941","Marine: Seitenleiste, Knöpfe, Überschriften im Plan"],["#7FA6B8","Nordblau: Akzent, Diagramme, Markierungen"],["#2F6280","Tiefblau: Links und Text-Akzente"],["#D6E6EF","Eisblau: helle Flächen, Linien"],["#F5F3EE","Hintergrund hell (leicht cremig)"],["#FFFFFF","Karten und Flächen"],["#1F3443","Schrift"],["#5B7686","Nebentext"],["#0A1A24","Hintergrund dunkel"],["#10242F","Karten dunkel"]].map(([c, u]) => `<tr style="cursor:default"><td><i style="display:inline-block;width:18px;height:18px;border-radius:5px;background:${c};border:1px solid var(--line);vertical-align:middle"></i></td><td><b>${c}</b></td><td class="sub">${u}</td></tr>`).join("")}</tbody></table></div>
+      <div class="swatches"><span class="sw"><i style="background:var(--navy)"></i>Hauptfarbe</span><span class="sw"><i style="background:var(--coral)"></i>Koralle</span><span class="sw"><i style="background:var(--hellblau)"></i>Hellblau</span><span class="sw"><i style="background:var(--bar)"></i>Diagramme</span><span class="sw"><i style="background:var(--paper)"></i>Hintergrund</span><span class="sw"><i style="background:#2BB673"></i>Frei</span><span class="sw"><i style="background:#F0952E"></i>Reserviert</span><span class="sw"><i style="background:var(--c-vergeben)"></i>Vergeben</span></div>
+      <h2 style="margin-top:22px">Farbcodes</h2><div class="tw" style="margin-top:8px"><table><thead><tr><th>Farbe</th><th>Code</th><th>Einsatz</th></tr></thead><tbody>${[["#002941","Marine: Seitenleiste und Knöpfe (hell)"],["#CCDCEF","Hellblau: Blauton, im Dunkelmodus Hauptakzent"],["#FF6574","Koralle: Akzent (Logo, Zähler, aktive Seite)"],["#7FA6B8","Nordblau: Diagramme (hell)"],["#2F6280","Tiefblau: Links (hell)"],["#F5F3EE","Hintergrund hell"],["#FFFFFF","Karten hell"],["#1F3443","Schrift hell"],["#222526","Graphit: Hintergrund dunkel"],["#2B2E30","Karten dunkel"],["#1A1C1D","Seitenleiste dunkel"],["#EEF1F4","Schrift dunkel"],["#B3261E","Vergeben (hell), dunkler als Koralle"],["#C8302A","Vergeben (dunkel)"]].map(([c, u]) => `<tr style="cursor:default"><td><i style="display:inline-block;width:18px;height:18px;border-radius:5px;background:${c};border:1px solid var(--line);vertical-align:middle"></i></td><td><b>${c}</b></td><td class="sub">${u}</td></tr>`).join("")}</tbody></table></div>
       <h2 style="margin-top:22px">Auf der eigenen Website einbinden</h2><p class="sub">Diesen Code auf der Objektseite einfügen, fertig.</p><pre class="code">${esc(embed)}</pre>
       <div class="acts" style="margin-top:10px"><button class="btn" data-copy="embed">${ico('copy')}Code kopieren</button></div></section>
   </div>
