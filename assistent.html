@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script>try { const t = JSON.parse(localStorage.getItem('immone-theme')); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Immone – Objekt anlegen</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #002941; --gold: #7FA6B8; --gold-ink: #2F6280;
+  --paper: #F5F3EE; --surface: #FFFFFF; --surface-2: #F2F1EC; --ink: #1F3443; --ink-2: #34505F; --muted: #5B7686; --line: #E0E4E4;
+  --ok: #1F8A53; --warn: #B25E0E; --err: #9B1C1C; --t-ok: rgba(43,182,115,.14); --t-warn: rgba(240,149,46,.17); --t-err: rgba(179,38,30,.11);
+  --coral: #FF6574; --coral-on: #1A1C1D; --hellblau: #CCDCEF;
+  --pri: #002941; --pri-on: #fff; --hl-soft: rgba(127,166,184,.16);
+  --room: rgba(47,98,128,.16); --room-line: #2F6280; --sel: #FF6574; --canvas: #EDEBE5;
+  --shadow: 0 1px 2px rgba(0,41,65,.05), 0 8px 24px -14px rgba(0,41,65,.22);
+  --font: 'Albert Sans', 'Helvetica Neue', Arial, sans-serif; --r: 14px; color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --navy: #1A1C1D; --gold: #CCDCEF; --gold-ink: #CCDCEF; --paper: #222526; --surface: #2B2E30; --surface-2: #33373A; --ink: #EEF1F4; --ink-2: #CDD3D9; --muted: #9EA6AD; --line: #3B3F42;
+    --ok: #5FD39A; --warn: #F5B067; --err: #EE8379; --t-ok: rgba(43,182,115,.2); --t-warn: rgba(240,149,46,.22); --t-err: rgba(200,48,42,.26);
+    --pri: #CCDCEF; --pri-on: #1A1C1D; --hl-soft: rgba(204,220,239,.11); --room: rgba(204,220,239,.18); --room-line: #CCDCEF; --canvas: #1C1E1F;
+    --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -14px rgba(0,0,0,.6); color-scheme: dark; }
+}
+:root[data-theme="dark"] { --navy: #1A1C1D; --gold: #CCDCEF; --gold-ink: #CCDCEF; --paper: #222526; --surface: #2B2E30; --surface-2: #33373A; --ink: #EEF1F4; --ink-2: #CDD3D9; --muted: #9EA6AD; --line: #3B3F42;
+    --ok: #5FD39A; --warn: #F5B067; --err: #EE8379; --t-ok: rgba(43,182,115,.2); --t-warn: rgba(240,149,46,.22); --t-err: rgba(200,48,42,.26);
+    --pri: #CCDCEF; --pri-on: #1A1C1D; --hl-soft: rgba(204,220,239,.11); --room: rgba(204,220,239,.18); --room-line: #CCDCEF; --canvas: #1C1E1F;
+    --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -14px rgba(0,0,0,.6); color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--font); background: var(--paper); color: var(--ink); font-size: 14px; line-height: 1.45; overflow-x: clip; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: var(--gold-ink); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* Kopf */
+.top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 12px 22px; background: var(--navy); color: #fff; }
+.brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 750; }
+.brand .mark { width: 30px; height: 30px; border-radius: 9px; background: var(--coral); color: var(--coral-on); display: grid; place-items: center; font-weight: 800; }
+.brand small { display: block; font-weight: 500; font-size: 11.5px; color: rgba(255,255,255,.6); }
+.top .grow { flex: 1; }
+.top a.back { color: rgba(255,255,255,.82); text-decoration: none; font-weight: 600; font-size: 13px; display: inline-flex; gap: 6px; align-items: center; }
+.top a.back:hover { color: #fff; }
+.themebtn { height: 34px; padding: 0 11px; border-radius: 9px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); display: inline-flex; align-items: center; gap: 7px; font-weight: 600; font-size: 13px; color: #fff; }
+
+/* Schritte */
+.steps { display: flex; gap: 6px; padding: 14px 22px 0; overflow-x: auto; scrollbar-width: none; }
+.steps button { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 13px 6px 6px; font-weight: 650; font-size: 13px; color: var(--muted); white-space: nowrap; }
+.steps button b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-2); font-size: 12px; }
+.steps button[aria-current="step"] { color: var(--ink); border-color: var(--pri); }
+.steps button[aria-current="step"] b { background: var(--pri); color: var(--pri-on); }
+.steps button.done b { background: var(--t-ok); color: var(--ok); }
+
+.wrap { padding: 16px 22px 40px; max-width: 1500px; margin: 0 auto; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--shadow); min-width: 0; }
+h2 { font-size: 18px; margin: 0 0 4px; letter-spacing: -.01em; }
+h3 { font-size: 14px; margin: 0 0 8px; }
+.sub { color: var(--muted); margin: 0 0 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+label.f { display: grid; gap: 5px; font-weight: 600; font-size: 13px; color: var(--ink-2); }
+label.f small { font-weight: 500; color: var(--muted); }
+.inp, .sel { height: 38px; border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px; padding: 0 11px; min-width: 0; width: 100%; }
+.inp:focus, .sel:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.btn { height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 650; font-size: 13px; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; text-decoration: none; color: var(--ink); }
+.btn:hover { border-color: var(--gold); }
+.btn.pri { background: var(--pri); border-color: var(--pri); color: var(--pri-on); }
+.btn.pri svg { stroke: var(--coral); }
+.btn.danger { color: var(--err); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.foot { display: flex; justify-content: space-between; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.note { display: flex; gap: 10px; padding: 11px 14px; border-radius: 12px; background: var(--hl-soft); color: var(--ink-2); font-size: 13px; margin-bottom: 14px; }
+.note svg { color: var(--gold-ink); margin-top: 1px; }
+.drop { border: 1.5px dashed var(--line); border-radius: 14px; padding: 26px; text-align: center; color: var(--muted); background: var(--surface-2); }
+.drop.over { border-color: var(--gold); background: var(--hl-soft); }
+.drop b { color: var(--ink); }
+.list { display: grid; gap: 10px; margin-top: 14px; }
+.item { display: grid; grid-template-columns: 84px minmax(0,1fr) auto; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 10px; background: var(--surface); }
+.item img { width: 84px; height: 64px; object-fit: contain; background: #fff; border-radius: 8px; border: 1px solid var(--line); }
+.item .meta { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; font-size: 12px; font-weight: 650; }
+.pill.ok { background: var(--t-ok); color: var(--ok); } .pill.warn { background: var(--t-warn); color: var(--warn); } .pill.err { background: var(--t-err); color: var(--err); } .pill.neutral { background: var(--surface-2); color: var(--muted); }
+
+/* Editor */
+.ed { display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: 14px; }
+.ed-main { display: grid; grid-template-rows: auto minmax(0,1fr); min-width: 0; padding: 0; overflow: hidden; }
+.tools { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding: 10px; border-bottom: 1px solid var(--line); }
+.tools .t { height: 34px; padding: 0 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); font-weight: 650; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.tools .t[aria-pressed="true"] { background: var(--pri); color: var(--pri-on); border-color: var(--pri); }
+.tools .sep { width: 1px; height: 24px; background: var(--line); margin: 0 4px; }
+.tools .sel { width: auto; height: 34px; }
+.stage { position: relative; height: min(72vh, 760px); background: var(--canvas); touch-action: none; }
+.stage svg.cv { width: 100%; height: 100%; display: block; user-select: none; -webkit-user-select: none; }
+.stage.t-select svg.cv { cursor: default; } .stage.t-pan svg.cv { cursor: grab; } .stage:not(.t-select):not(.t-pan) svg.cv { cursor: crosshair; }
+.hint { position: absolute; left: 12px; bottom: 12px; right: 12px; pointer-events: none; display: flex; justify-content: flex-start; }
+.hint span { background: rgba(0,41,65,.86); color: #fff; padding: 7px 11px; border-radius: 9px; font-size: 12.5px; max-width: 100%; }
+.zoom { position: absolute; right: 12px; top: 12px; display: grid; gap: 6px; }
+.zoom button { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; color: var(--ink); }
+.scalebox { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; box-shadow: var(--shadow); display: none; gap: 8px; align-items: center; }
+.scalebox.on { display: flex; }
+.scalebox .inp { width: 90px; }
+.side { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.checks { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.checks li { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; padding: 7px 9px; border-radius: 9px; }
+.checks li.ok { background: var(--t-ok); } .checks li.warn { background: var(--t-warn); } .checks li.err { background: var(--t-err); }
+.checks li i { font-style: normal; font-weight: 800; width: 14px; flex: none; }
+.checks li.ok i { color: var(--ok); } .checks li.warn i { color: var(--warn); } .checks li.err i { color: var(--err); }
+.checks li[data-sel] { cursor: pointer; }
+.props { display: grid; gap: 10px; }
+.props .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kv { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); }
+.kv b { color: var(--ink); }
+.plantabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.plantabs button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-weight: 650; font-size: 13px; display: inline-flex; gap: 7px; align-items: center; color: var(--ink-2); }
+.plantabs button[aria-pressed="true"] { border-color: var(--pri); color: var(--ink); box-shadow: inset 0 0 0 1px var(--pri); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot.ok { background: var(--ok); } .dot.warn { background: var(--warn); } .dot.err { background: var(--err); }
+
+/* SVG-Inhalte */
+.cv { --room: rgba(47,98,128,.15); --room-line: #2F6280; --pl-ink: #002941; --pl-ink2: #34505F; --pl-bg: #fff; }
+.cv .rm rect { fill: var(--room); stroke: var(--room-line); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cv .rm.sel rect { stroke: var(--sel); stroke-width: 3; }
+.cv .lbl { fill: var(--pl-ink); font-weight: 750; paint-order: stroke; stroke: var(--pl-bg); stroke-width: 4px; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
+.cv .lbl .a { font-weight: 600; fill: var(--pl-ink2); }
+.cv .bal rect { fill: none; stroke: var(--room-line); stroke-width: 2; stroke-dasharray: 6 4; vector-effect: non-scaling-stroke; }
+.cv .bal.sel rect { stroke: var(--sel); }
+.cv .dr line { stroke: #2BB673; stroke-width: 6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.cv .wn line { stroke: #4A90C2; stroke-width: 6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.cv .en line { stroke: var(--coral); stroke-width: 7; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.cv .sel line { stroke: var(--sel) !important; }
+.cv line.hit { stroke: transparent !important; stroke-width: 18px !important; }
+.cv .fx rect { fill: #fff; stroke: var(--pl-ink2); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.cv .fx text { fill: var(--pl-ink2); font-weight: 700; pointer-events: none; }
+.cv .fx.sel rect { stroke: var(--sel); stroke-width: 2.5; }
+.cv .pv rect { fill: rgba(255,101,116,.12); stroke: var(--sel); stroke-width: 2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.cv .sc line { stroke: var(--sel); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cv .sc circle { fill: var(--sel); }
+.cv .poly polygon { fill: rgba(255,101,116,.22); stroke: var(--coral); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cv .poly.sel polygon { fill: rgba(255,101,116,.4); }
+.cv .poly text { fill: #fff; font-weight: 800; paint-order: stroke; stroke: rgba(0,0,0,.6); stroke-width: 3px; vector-effect: non-scaling-stroke; }
+.cv .poly-draft polyline { fill: none; stroke: var(--coral); stroke-width: 2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+
+/* Stil */
+.opt { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface); display: grid; gap: 4px; cursor: pointer; text-align: left; }
+.opt[aria-pressed="true"] { border-color: var(--pri); box-shadow: inset 0 0 0 1px var(--pri); }
+.opt b { font-size: 14px; } .opt span { color: var(--muted); font-size: 12.5px; }
+.sw { display: flex; gap: 8px; flex-wrap: wrap; }
+.sw button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); }
+.sw button[aria-pressed="true"] { outline: 2px solid var(--pri); outline-offset: 2px; }
+.preview svg { width: 100%; height: auto; max-height: 340px; }
+table.sum { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.sum th, table.sum td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.sum th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+#toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(20px); background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 11px; font-weight: 600; opacity: 0; pointer-events: none; transition: .2s; z-index: 50; max-width: calc(100vw - 32px); }
+#toast.on { opacity: 1; transform: translateX(-50%); }
+
+@media (max-width: 1050px) { .ed { grid-template-columns: minmax(0,1fr); } .grid3 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 680px) {
+  .top { padding: 10px 16px; gap: 8px; } .top a.back span, .themebtn span, .brand small { display: none; }
+  .steps { padding: 12px 16px 0; } .wrap { padding: 14px 16px 32px; }
+  .grid2, .grid3 { grid-template-columns: minmax(0,1fr); }
+  .item { grid-template-columns: 64px minmax(0,1fr); } .item img { width: 64px; height: 52px; } .item .meta { grid-template-columns: minmax(0,1fr); } .item > .row { grid-column: 1 / -1; }
+  .stage { height: 62vh; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="dashboard.html"><span class="mark">i</span><span>Immone<small>Objekt anlegen · Prototyp</small></span></a>
+  <span class="grow"></span>
+  <a class="back" href="dashboard.html"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg><span>Zum Dashboard</span></a>
+  <button class="themebtn" id="themeBtn" type="button"></button>
+</header>
+<nav class="steps" id="steps" aria-label="Schritte"></nav>
+<div class="wrap" id="view"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+'use strict';
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nf1 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const nf2 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const uid = () => Math.random().toString(36).slice(2, 9);
+const r2 = v => Math.round(v * 100) / 100;
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+};
+const I = {
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  up: '<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>', next: '<path d="M9 6l6 6-6 6"/>', prev: '<path d="M15 6l-6 6 6 6"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', dl: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',
+  play: '<path d="M7 5l12 7-12 7z"/>', spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>'
+};
+const ico = k => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); }
+
+// ---------- Theme (gemeinsam mit Dashboard & Navigator) ----------
+const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; };
+function paintTheme() { const d = isDark(); $('#themeBtn').innerHTML = ico(d ? 'sun' : 'moon') + `<span>${d ? 'Hell' : 'Dunkel'}</span>`; $('#themeBtn').setAttribute('aria-label', d ? 'Hellen Modus einschalten' : 'Dunklen Modus einschalten'); }
+$('#themeBtn').addEventListener('click', () => { const t = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = t; store.set('immone-theme', t); paintTheme(); });
+window.addEventListener('storage', e => { if (e.key === 'immone-theme') { const t = store.get('immone-theme', null); if (t) document.documentElement.dataset.theme = t; paintTheme(); } });
+paintTheme();
+
+// ---------- Bilder in IndexedDB (Fallback: Speicher) ----------
+const MEM = {};
+let dbp = null;
+function db() {
+  if (dbp) return dbp;
+  dbp = new Promise(res => {
+    try {
+      const rq = indexedDB.open('immone-assistent', 1);
+      rq.onupgradeneeded = () => rq.result.createObjectStore('img');
+      rq.onsuccess = () => res(rq.result); rq.onerror = () => res(null);
+    } catch (e) { res(null); }
+  });
+  return dbp;
+}
+async function imgPut(id, data) { MEM[id] = data; const d = await db(); if (!d) return; try { d.transaction('img', 'readwrite').objectStore('img').put(data, id); } catch (e) {} }
+async function imgGet(id) {
+  if (MEM[id]) return MEM[id];
+  const d = await db(); if (!d) return null;
+  return new Promise(res => { try { const rq = d.transaction('img').objectStore('img').get(id); rq.onsuccess = () => { MEM[id] = rq.result || null; res(MEM[id]); }; rq.onerror = () => res(null); } catch (e) { res(null); } });
+}
+function imgDel(id) { delete MEM[id]; db().then(d => { if (d) try { d.transaction('img', 'readwrite').objectStore('img').delete(id); } catch (e) {} }); }
+
+// ---------- Zustand ----------
+const KEY = 'immone-assistent-v1';
+const blank = () => ({ step: 0, obj: { name: '', strasse: '', ort: '', art: 'miete', bau: 'neubau', etagen: '', proEtage: '', jahr: '' }, plans: [], photos: [], style: { linie: 'standard', moebliert: 'ja', wand: '#F4F1EA', boden: 'eiche-hell', kueche: 'weiss' }, cur: null, curPhoto: null });
+let S = Object.assign(blank(), store.get(KEY, {}));
+const save = () => store.set(KEY, S);
+const STEPS = ['Objekt', 'Grundrisse', 'Prüfen', 'Außenfotos', 'Stil', 'Freigabe'];
+
+const RT = { wohnen: 'Wohnen', kueche: 'Küche', schlafen: 'Schlafen', kind: 'Kinderzimmer', bad: 'Bad', wc: 'Gäste-WC', flur: 'Flur', diele: 'Diele', abstell: 'Abstellraum', arbeit: 'Arbeiten' };
+const FX = { wc: ['WC', 0.4, 0.6, 'WC'], dusche: ['Dusche', 0.9, 0.9, 'DU'], wanne: ['Wanne', 1.7, 0.75, 'BW'], waschtisch: ['Waschtisch', 0.6, 0.45, 'WT'], kueche: ['Küche', 2.4, 0.6, 'Küche'], waschm: ['Waschmaschine', 0.6, 0.6, 'WM'] };
+const WALL = 0.12;
+const doorW = t => (t === 'bad' || t === 'wc' || t === 'abstell') ? 0.76 : 0.885;
+const winDef = t => (t === 'bad' || t === 'wc') ? { w: 0.7, sill: 1.4, top: 2.2 } : (t === 'schlafen' || t === 'kind' || t === 'arbeit') ? { w: 1.4, sill: 0.9, top: 2.3 } : { w: 1.4, sill: 0.5, top: 2.3 };
+const newSpec = () => ({ rooms: [], doors: [], windows: [], entry: null, balcony: null, fixtures: [] });
+
+// ---------- Schritte ----------
+function renderSteps() {
+  $('#steps').innerHTML = STEPS.map((n, i) => `<button type="button" data-step="${i}" ${S.step === i ? 'aria-current="step"' : ''} class="${stepDone(i) ? 'done' : ''}"><b>${stepDone(i) && S.step !== i ? '✓' : i + 1}</b>${n}</button>`).join('');
+  $$('#steps button').forEach(b => b.addEventListener('click', () => go(+b.dataset.step)));
+}
+function stepDone(i) {
+  if (i === 0) return !!(S.obj.name && S.obj.strasse);
+  if (i === 1) return S.plans.length > 0;
+  if (i === 2) return S.plans.length > 0 && S.plans.every(p => p.checked && !validate(p).some(c => c.lvl === 'err'));
+  if (i === 3) return S.photos.some(p => p.units.length);
+  if (i === 4) return true;
+  return false;
+}
+function go(i) { if (edState.cleanup) edState.cleanup(); S.step = Math.max(0, Math.min(STEPS.length - 1, i)); save(); render(); window.scrollTo(0, 0); }
+function foot(prevOk = true, nextLabel = 'Weiter') {
+  return `<div class="foot">${S.step > 0 && prevOk ? `<button class="btn" type="button" data-go="${S.step - 1}">${ico('prev')}Zurück</button>` : '<span></span>'}${S.step < STEPS.length - 1 ? `<button class="btn pri" type="button" data-go="${S.step + 1}">${nextLabel}${ico('next')}</button>` : ''}</div>`;
+}
+function bindFoot() { $$('[data-go]').forEach(b => b.addEventListener('click', () => go(+b.dataset.go))); }
+function render() { renderSteps(); [vObjekt, vPlaene, vPruefen, vFotos, vStil, vFreigabe][S.step](); bindFoot(); }
+
+// ---------- 1 Objekt ----------
+function vObjekt() {
+  const o = S.obj;
+  $('#view').innerHTML = `<section class="card"><h2>Objektdaten</h2><p class="sub">Grunddaten zum Gebäude. Wohnungen, Räume und Flächen kommen später aus den Grundrissen.</p>
+  <div class="grid2">
+    <label class="f">Objektname<input class="inp" data-k="name" value="${esc(o.name)}" placeholder="z. B. Lindenhain-Höfe"></label>
+    <label class="f">Vermarktung<select class="sel" data-k="art"><option value="miete">Vermietung</option><option value="kauf">Verkauf</option><option value="beides">Beides</option></select></label>
+    <label class="f">Straße und Hausnummer<input class="inp" data-k="strasse" value="${esc(o.strasse)}" placeholder="z. B. Lindenallee 12"></label>
+    <label class="f">PLZ und Ort<input class="inp" data-k="ort" value="${esc(o.ort)}" placeholder="z. B. 16341 Panketal"></label>
+    <label class="f">Gebäude<select class="sel" data-k="bau"><option value="neubau">Neubau (noch nicht fertig)</option><option value="bestand">Bestand</option><option value="saniert">Saniert</option></select></label>
+    <label class="f">Baujahr / Fertigstellung<input class="inp" data-k="jahr" value="${esc(o.jahr)}" placeholder="z. B. 2027" inputmode="numeric"></label>
+    <label class="f">Etagen <small>optional – wird sonst aus den Geschossplänen übernommen</small><input class="inp" data-k="etagen" value="${esc(o.etagen)}" inputmode="numeric" placeholder="z. B. 5"></label>
+    <label class="f">Wohnungen pro Etage <small>optional</small><input class="inp" data-k="proEtage" value="${esc(o.proEtage)}" inputmode="numeric" placeholder="z. B. 4"></label>
+  </div></section>${foot()}`;
+  $$('[data-k]').forEach(el => { if (el.tagName === 'SELECT') el.value = o[el.dataset.k]; el.addEventListener('input', () => { o[el.dataset.k] = el.value; save(); renderSteps(); }); });
+}
+
+// ---------- Upload-Helfer ----------
+let pdfjs = null;
+function loadPdfJs() {
+  if (pdfjs) return pdfjs;
+  pdfjs = new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); };
+    s.onerror = () => rej(new Error('PDF-Leser konnte nicht geladen werden')); document.head.appendChild(s);
+  });
+  return pdfjs;
+}
+async function fileToImages(file) {
+  if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+    const lib = await loadPdfJs(); const doc = await lib.getDocument({ data: await file.arrayBuffer() }).promise; const out = [];
+    for (let i = 1; i <= Math.min(doc.numPages, 12); i++) {
+      const pg = await doc.getPage(i); const vp = pg.getViewport({ scale: 2 }); const c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+      await pg.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise; out.push({ name: file.name.replace(/\.pdf$/i, '') + (doc.numPages > 1 ? ' S. ' + i : ''), data: c.toDataURL('image/jpeg', 0.9), w: c.width, h: c.height });
+    }
+    return out;
+  }
+  const data = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+  const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = data; });
+  let w = im.naturalWidth, h = im.naturalHeight, d = data;
+  if (Math.max(w, h) > 3200) { const k = 3200 / Math.max(w, h); const c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); d = c.toDataURL('image/jpeg', 0.9); w = c.width; h = c.height; }
+  return [{ name: file.name.replace(/\.[^.]+$/, ''), data: d, w, h }];
+}
+function bindDrop(el, input, onFiles) {
+  el.addEventListener('click', () => input.click());
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+  ['dragenter', 'dragover'].forEach(t => el.addEventListener(t, e => { e.preventDefault(); el.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(t => el.addEventListener(t, e => { e.preventDefault(); el.classList.remove('over'); }));
+  el.addEventListener('drop', e => onFiles(Array.from(e.dataTransfer.files)));
+  input.addEventListener('change', () => { onFiles(Array.from(input.files)); input.value = ''; });
+}
+
+// Beispiel-Grundriss (Typ A, 2 Zimmer) als Bild erzeugen – nur für die Demo
+const DEMO = { rooms: [['wohnen', 'Wohnen & Kochen', 0, 0, 4.9, 4.4], ['schlafen', 'Schlafen', 5.02, 0, 8.4, 4.4], ['bad', 'Bad', 0, 4.52, 2.6, 7.0], ['flur', 'Flur', 2.72, 4.52, 6.2, 7.0], ['abstell', 'Abstellraum', 6.32, 4.52, 8.4, 7.0]], balcony: [0, -1.75, 4.9, -0.3] };
+function demoImage() {
+  const ppm = 90, pad = 60, W = Math.round(8.4 * ppm + 2 * pad + 60), H = Math.round(8.75 * ppm + 2 * pad + 60);
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+  const X = x => pad + 30 + x * ppm, Y = y => pad + 30 + (7.0 - y) * ppm; // Norden oben
+  g.fillStyle = '#222';
+  const ext = 0.3 * ppm;
+  g.fillRect(X(0) - ext, Y(7.0) - ext, 8.4 * ppm + 2 * ext, ext); g.fillRect(X(0) - ext, Y(0), 8.4 * ppm + 2 * ext, ext);
+  g.fillRect(X(0) - ext, Y(7.0) - ext, ext, 7.0 * ppm + 2 * ext); g.fillRect(X(8.4), Y(7.0) - ext, ext, 7.0 * ppm + 2 * ext);
+  g.fillRect(X(4.9), Y(4.4), WALL * ppm, 4.4 * ppm); g.fillRect(X(0), Y(4.52), 8.4 * ppm, WALL * ppm);
+  g.fillRect(X(2.6), Y(7.0), WALL * ppm, 2.48 * ppm); g.fillRect(X(6.2), Y(7.0), WALL * ppm, 2.48 * ppm);
+  g.fillStyle = '#fff';
+  [[3.7, 'h', 0.885], [5.6, 'h', 0.885]].forEach(([c0, , w]) => g.fillRect(X(c0 - w / 2), Y(4.52) - 1, w * ppm, WALL * ppm + 2));
+  g.fillRect(X(2.6) - 1, Y(5.8 + 0.38), WALL * ppm + 2, 0.76 * ppm); g.fillRect(X(6.2) - 1, Y(6.1 + 0.38), WALL * ppm + 2, 0.76 * ppm);
+  g.fillRect(X(4.6 - 0.5), Y(7.0) - ext - 1, 1.0 * ppm, ext + 2);
+  g.strokeStyle = '#4A90C2'; g.lineWidth = 3;
+  [[1.6, 1.4], [3.6, 1.4], [6.7, 1.6]].forEach(([c0, w]) => { g.fillRect(X(c0 - w / 2), Y(0) + 1, w * ppm, ext - 2); g.strokeRect(X(c0 - w / 2), Y(0) + ext / 2 - 3, w * ppm, 6); });
+  g.fillRect(X(0.65 - 0.35), Y(7.0) - ext + 1, 0.7 * ppm, ext - 2); g.strokeRect(X(0.3), Y(7.0) - ext / 2 - 3, 0.7 * ppm, 6);
+  g.setLineDash([8, 6]); g.strokeStyle = '#222'; g.lineWidth = 2; g.strokeRect(X(0), Y(-0.3), 4.9 * ppm, 1.45 * ppm); g.setLineDash([]);
+  g.strokeStyle = '#555'; g.lineWidth = 1.5;
+  g.strokeRect(X(0.15), Y(6.85), 0.9 * ppm, 0.9 * ppm); g.strokeRect(X(1.6), Y(6.85), 0.4 * ppm, 0.6 * ppm); g.strokeRect(X(0.15), Y(5.2), 0.45 * ppm, 0.6 * ppm);
+  g.strokeRect(X(0.1), Y(4.3), 2.4 * ppm, 0.6 * ppm);
+  g.fillStyle = '#222'; g.textAlign = 'center';
+  const area = { wohnen: '21,6', schlafen: '14,9', bad: '6,4', flur: '8,6', abstell: '5,2' };
+  DEMO.rooms.forEach(([id, n, x0, y0, x1, y1]) => { g.font = '600 17px Arial'; g.fillText(n, X((x0 + x1) / 2), Y((y0 + y1) / 2) - 4); g.font = '15px Arial'; g.fillText(area[id] + ' m²', X((x0 + x1) / 2), Y((y0 + y1) / 2) + 16); });
+  g.font = '600 15px Arial'; g.fillText('Balkon 7,1 m²', X(2.45), Y(-1.05) + 5);
+  g.font = '14px Arial'; g.fillText('8,40 m', X(4.2), Y(7.0) - ext - 18); g.beginPath(); g.moveTo(X(0), Y(7.0) - ext - 10); g.lineTo(X(8.4), Y(7.0) - ext - 10); g.stroke();
+  g.textAlign = 'left'; g.font = '600 14px Arial'; g.fillText('Typ A · 2 Zimmer · Beispiel', 16, 24);
+  return { data: c.toDataURL('image/png'), w: W, h: H, ppm, X, Y };
+}
+async function addDemo() {
+  const d = demoImage(); const id = uid();
+  await imgPut(id, d.data);
+  const p = { id, name: 'Typ A – 2 Zimmer (Beispiel)', w: d.w, h: d.h, count: 8, etagen: '1–4', ppm: null, scale: null, spec: newSpec(), checked: false, demo: true };
+  S.plans.push(p); S.cur = id; save(); return { p, d };
+}
+// "Erkennung" für das Beispiel simulieren (klar gekennzeichnet)
+function demoRecognize(p) {
+  const ppm = 90, X = x => 60 + 30 + x * ppm, Y = y => 60 + 30 + (7.0 - y) * ppm;
+  p.ppm = ppm; p.scale = { a: [X(0), Y(7.0) - 0.3 * ppm - 10], b: [X(8.4), Y(7.0) - 0.3 * ppm - 10], m: 8.4 };
+  const sp = newSpec();
+  const planA = { wohnen: 21.6, schlafen: 14.9, bad: 6.4, flur: 8.6, abstell: 5.2 };
+  DEMO.rooms.forEach(([t, n, x0, y0, x1, y1]) => sp.rooms.push({ id: uid(), type: t, name: n, r: [X(x0), Y(y1), X(x1), Y(y0)], plan: planA[t] }));
+  const R = t => sp.rooms.find(r => r.type === t).id;
+  sp.doors.push({ id: uid(), a: R('flur'), b: R('wohnen'), c: X(3.7), w: 0.885 }, { id: uid(), a: R('flur'), b: R('schlafen'), c: X(5.6), w: 0.885 }, { id: uid(), a: R('flur'), b: R('bad'), c: Y(5.8), w: 0.76 }, { id: uid(), a: R('flur'), b: R('abstell'), c: Y(6.1), w: 0.76 });
+  sp.windows.push({ id: uid(), room: R('wohnen'), side: 'S', c: X(1.6), w: 1.4, sill: 0, top: 2.3 }, { id: uid(), room: R('wohnen'), side: 'S', c: X(3.6), w: 1.4, sill: 0.5, top: 2.3 }, { id: uid(), room: R('schlafen'), side: 'S', c: X(6.7), w: 1.6, sill: 0.9, top: 2.3 }, { id: uid(), room: R('bad'), side: 'N', c: X(0.65), w: 0.7, sill: 1.4, top: 2.2 });
+  sp.entry = { room: R('flur'), side: 'N', c: X(4.6) };
+  sp.balcony = { r: [X(0), Y(-0.3), X(4.9), Y(-1.75)], plan: 7.1 };
+  sp.fixtures.push({ id: uid(), type: 'dusche', x: X(0.6), y: Y(6.4), rot: 0 }, { id: uid(), type: 'wc', x: X(1.8), y: Y(6.55), rot: 0 }, { id: uid(), type: 'waschtisch', x: X(0.375), y: Y(4.9), rot: 90 }, { id: uid(), type: 'kueche', x: X(1.3), y: Y(4.0), rot: 0 });
+  p.spec = sp; p.recognized = 'Beispiel'; save();
+}
+
+// ---------- 2 Grundrisse ----------
+function vPlaene() {
+  $('#view').innerHTML = `<section class="card"><h2>Grundrisse hochladen</h2><p class="sub">Je Wohnungstyp ein Grundriss (Bild oder PDF). Gleiche Grundrisse auf mehreren Etagen nur einmal hochladen und die Anzahl angeben – sie werden nur einmal gerendert.</p>
+    <div class="note">${ico('info')}<span>Prototyp: Die Dateien bleiben in diesem Browser und werden nirgends hochgeladen. Für echte Kunden kommt später ein sicherer Server dazu.</span></div>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Grundrisse auswählen">${ico('up')}<p><b>Grundrisse hierher ziehen</b> oder klicken zum Auswählen<br><small>JPG, PNG oder PDF · mehrere Dateien möglich</small></p></div>
+    <input type="file" id="file" accept="image/*,application/pdf" multiple hidden>
+    <div class="row" style="margin-top:12px"><button class="btn" type="button" id="demo">${ico('spark')}Beispiel-Grundriss laden</button><span class="sub" style="margin:0">zum Ausprobieren ohne eigene Pläne</span></div>
+    <div class="list" id="plist"></div></section>${foot()}`;
+  bindDrop($('#drop'), $('#file'), async files => {
+    for (const f of files) {
+      try { for (const im of await fileToImages(f)) { const id = uid(); await imgPut(id, im.data); S.plans.push({ id, name: im.name, w: im.w, h: im.h, count: 1, etagen: '', ppm: null, scale: null, spec: newSpec(), checked: false }); } }
+      catch (e) { toast('Datei „' + f.name + '“ konnte nicht gelesen werden'); }
+    }
+    save(); listPlans(); renderSteps();
+  });
+  $('#demo').addEventListener('click', async () => { await addDemo(); listPlans(); renderSteps(); toast('Beispiel-Grundriss hinzugefügt'); });
+  listPlans();
+}
+async function listPlans() {
+  const el = $('#plist'); if (!el) return;
+  if (!S.plans.length) { el.innerHTML = ''; return; }
+  el.innerHTML = S.plans.map(p => { const st = planState(p); return `<div class="item" data-id="${p.id}"><img alt="" data-img="${p.id}">
+    <div class="meta"><label class="f">Bezeichnung<input class="inp" data-pk="name" value="${esc(p.name)}"></label><label class="f">Anzahl im Gebäude<input class="inp" data-pk="count" value="${esc(p.count)}" inputmode="numeric"></label><label class="f">Etagen<input class="inp" data-pk="etagen" value="${esc(p.etagen)}" placeholder="z. B. 1–4"></label></div>
+    <div class="row"><span class="pill ${st.cls}">${st.txt}</span><button class="btn" type="button" data-edit>Prüfen</button><button class="btn danger" type="button" data-del aria-label="Entfernen">${ico('trash')}</button></div></div>`; }).join('');
+  $$('#plist .item').forEach(it => {
+    const p = S.plans.find(x => x.id === it.dataset.id);
+    imgGet(p.id).then(d => { if (d) it.querySelector('img').src = d; });
+    it.querySelectorAll('[data-pk]').forEach(i => i.addEventListener('input', () => { p[i.dataset.pk] = i.dataset.pk === 'count' ? Math.max(1, parseInt(i.value, 10) || 1) : i.value; save(); }));
+    it.querySelector('[data-edit]').addEventListener('click', () => { S.cur = p.id; go(2); });
+    it.querySelector('[data-del]').addEventListener('click', () => { S.plans = S.plans.filter(x => x !== p); imgDel(p.id); if (S.cur === p.id) S.cur = null; save(); listPlans(); renderSteps(); });
+  });
+}
+function planState(p) {
+  const v = validate(p);
+  if (!p.spec.rooms.length) return { cls: 'neutral', txt: 'Noch nicht erkannt', dot: 'warn' };
+  if (v.some(c => c.lvl === 'err')) return { cls: 'err', txt: 'Fehler', dot: 'err' };
+  if (!p.checked) return { cls: 'warn', txt: 'Prüfen', dot: 'warn' };
+  return { cls: 'ok', txt: 'Geprüft', dot: 'ok' };
+}
+
+// ---------- Geometrie ----------
+const rw = r => r.r[2] - r.r[0], rh = r => r.r[3] - r.r[1];
+const m2 = (p, r) => (rw(r) / p.ppm) * (rh(r) / p.ppm);
+function roomAt(sp, x, y) { return sp.rooms.find(r => x >= r.r[0] && x <= r.r[2] && y >= r.r[1] && y <= r.r[3]); }
+// Wand zwischen zwei Räumen: liefert {sa, sb, axis, lo, hi, pos}
+function sharedWall(p, a, b) {
+  const tol = 0.35 * p.ppm, res = [];
+  const ox0 = Math.max(a.r[0], b.r[0]), ox1 = Math.min(a.r[2], b.r[2]), oy0 = Math.max(a.r[1], b.r[1]), oy1 = Math.min(a.r[3], b.r[3]);
+  if (ox1 - ox0 > 0.3 * p.ppm) {
+    if (Math.abs(b.r[1] - a.r[3]) < tol) res.push({ sa: 'S', sb: 'N', axis: 'x', lo: ox0, hi: ox1, pos: (a.r[3] + b.r[1]) / 2 });
+    if (Math.abs(a.r[1] - b.r[3]) < tol) res.push({ sa: 'N', sb: 'S', axis: 'x', lo: ox0, hi: ox1, pos: (a.r[1] + b.r[3]) / 2 });
+  }
+  if (oy1 - oy0 > 0.3 * p.ppm) {
+    if (Math.abs(b.r[0] - a.r[2]) < tol) res.push({ sa: 'E', sb: 'W', axis: 'y', lo: oy0, hi: oy1, pos: (a.r[2] + b.r[0]) / 2 });
+    if (Math.abs(a.r[0] - b.r[2]) < tol) res.push({ sa: 'W', sb: 'E', axis: 'y', lo: oy0, hi: oy1, pos: (a.r[0] + b.r[2]) / 2 });
+  }
+  return res;
+}
+// In Bildkoordinaten ist "oben" Norden → N = kleine y
+function edgeOf(r, side) { return side === 'N' ? r.r[1] : side === 'S' ? r.r[3] : side === 'W' ? r.r[0] : r.r[2]; }
+function isOuter(p, r, side) {
+  return !p.spec.rooms.some(o => o !== r && sharedWall(p, r, o).some(w => w.sa === side));
+}
+function nearestEdge(p, x, y, outerOnly) {
+  let best = null; const tol = 0.45 * p.ppm;
+  for (const r of p.spec.rooms) for (const sd of 'NESW') {
+    const horiz = sd === 'N' || sd === 'S'; const e = edgeOf(r, sd);
+    const d = horiz ? Math.abs(y - e) : Math.abs(x - e);
+    const inside = horiz ? (x > r.r[0] && x < r.r[2]) : (y > r.r[1] && y < r.r[3]);
+    if (!inside || d > tol) continue;
+    if (outerOnly && !isOuter(p, r, sd)) continue;
+    if (!best || d < best.d) best = { r, sd, d, c: horiz ? x : y };
+  }
+  return best;
+}
+
+// ---------- Prüfregeln (Selbstkontrolle) ----------
+function validate(p) {
+  const sp = p.spec, out = [];
+  if (!p.ppm) { out.push({ lvl: 'err', msg: 'Maßstab fehlt – zwei Punkte mit bekanntem Abstand anklicken.' }); return out; }
+  if (!sp.rooms.length) { out.push({ lvl: 'err', msg: 'Noch keine Räume eingezeichnet.' }); return out; }
+  for (let i = 0; i < sp.rooms.length; i++) for (let j = i + 1; j < sp.rooms.length; j++) {
+    const a = sp.rooms[i], b = sp.rooms[j], m = 0.02 * p.ppm;
+    if (a.r[0] + m < b.r[2] && b.r[0] + m < a.r[2] && a.r[1] + m < b.r[3] && b.r[1] + m < a.r[3]) out.push({ lvl: 'err', msg: `${a.name} und ${b.name} überlappen.`, sel: a.id });
+  }
+  for (const d of sp.doors) {
+    const a = sp.rooms.find(r => r.id === d.a), b = sp.rooms.find(r => r.id === d.b);
+    if (!a || !b || !sharedWall(p, a, b).length) out.push({ lvl: 'err', msg: 'Eine Tür verbindet keine zwei Räume.', sel: d.id });
+  }
+  if (!sp.entry) out.push({ lvl: 'err', msg: 'Wohnungseingang fehlt.' });
+  else {
+    const seen = new Set([sp.entry.room]); let grew = true;
+    while (grew) { grew = false; for (const d of sp.doors) { if (seen.has(d.a) && !seen.has(d.b)) { seen.add(d.b); grew = true; } if (seen.has(d.b) && !seen.has(d.a)) { seen.add(d.a); grew = true; } } }
+    sp.rooms.filter(r => !seen.has(r.id)).forEach(r => out.push({ lvl: 'err', msg: `${r.name} ist über keine Tür erreichbar.`, sel: r.id }));
+  }
+  sp.rooms.filter(r => ['wohnen', 'schlafen', 'kind', 'arbeit'].includes(r.type) && !sp.windows.some(w => w.room === r.id)).forEach(r => out.push({ lvl: 'warn', msg: `${r.name} hat kein Fenster.`, sel: r.id }));
+  sp.rooms.filter(r => r.type === 'bad' || r.type === 'wc').forEach(r => {
+    const f = sp.fixtures.filter(x => roomAt(sp, x.x, x.y) === r).map(x => x.type);
+    if (!f.includes('wc')) out.push({ lvl: 'warn', msg: `${r.name}: kein WC eingezeichnet.`, sel: r.id });
+    if (r.type === 'bad' && !f.includes('dusche') && !f.includes('wanne')) out.push({ lvl: 'warn', msg: `${r.name}: weder Dusche noch Wanne eingezeichnet.`, sel: r.id });
+    if (!f.includes('waschtisch')) out.push({ lvl: 'warn', msg: `${r.name}: kein Waschtisch eingezeichnet.`, sel: r.id });
+  });
+  sp.rooms.filter(r => r.plan > 0).forEach(r => { const a = m2(p, r), dev = Math.abs(a - r.plan) / r.plan; if (dev > 0.05) out.push({ lvl: dev > 0.12 ? 'err' : 'warn', msg: `${r.name}: ${nf1.format(a)} m² gemessen, laut Plan ${nf1.format(r.plan)} m².`, sel: r.id }); });
+  if (!out.some(c => c.lvl !== 'ok')) out.push({ lvl: 'ok', msg: 'Alle Prüfungen bestanden.' });
+  return out;
+}
+function wohnflaeche(p) {
+  if (!p.ppm) return 0;
+  let a = p.spec.rooms.reduce((s, r) => s + m2(p, r), 0);
+  if (p.spec.balcony) a += 0.25 * ((p.spec.balcony.r[2] - p.spec.balcony.r[0]) / p.ppm) * ((p.spec.balcony.r[3] - p.spec.balcony.r[1]) / p.ppm);
+  return a;
+}
+
+// ---------- Export im Generator-Format ----------
+function exportSpec(p) {
+  const sp = p.spec, k = 1 / p.ppm;
+  const xs = sp.rooms.flatMap(r => [r.r[0], r.r[2]]), ys = sp.rooms.flatMap(r => [r.r[1], r.r[3]]);
+  const ox = Math.min(...xs), oy = Math.max(...ys);
+  const X = x => r2((x - ox) * k), Y = y => r2((oy - y) * k);
+  const cnt = {}, ids = {};
+  sp.rooms.forEach(r => { cnt[r.type] = (cnt[r.type] || 0) + 1; });
+  const seen = {};
+  sp.rooms.forEach(r => { seen[r.type] = (seen[r.type] || 0) + 1; ids[r.id] = cnt[r.type] > 1 ? r.type + seen[r.type] : r.type; });
+  const along = (side, c) => (side === 'N' || side === 'S') ? X(c) : Y(c);
+  const out = {
+    name: p.name,
+    rooms: sp.rooms.map(r => Object.assign({ id: ids[r.id], type: r.type, rect: [X(r.r[0]), Y(r.r[3]), X(r.r[2]), Y(r.r[1])], name: r.name }, r.plan ? { flaeche_plan: r.plan } : {})),
+    doors: sp.doors.map(d => { const a = sp.rooms.find(r => r.id === d.a), b = sp.rooms.find(r => r.id === d.b); const w = sharedWall(p, a, b)[0]; return { a: ids[d.a], b: ids[d.b], side: [w.sa, w.sb], c: w.axis === 'x' ? X(d.c) : Y(d.c), w: d.w }; }),
+    entry: sp.entry ? { room: ids[sp.entry.room], side: sp.entry.side, c: along(sp.entry.side, sp.entry.c) } : null,
+    windows: sp.windows.map(w => ({ room: ids[w.room], side: w.side, c: along(w.side, w.c), w: w.w, sill: w.sill, top: w.top })),
+    fixtures: sp.fixtures.map(f => { const r = roomAt(sp, f.x, f.y); return { type: f.type, room: r ? ids[r.id] : null, x: X(f.x), y: Y(f.y), rot: f.rot }; }),
+    etage: 0, anzahl: p.count, etagen: p.etagen
+  };
+  if (sp.balcony) out.balcony = [X(sp.balcony.r[0]), Y(sp.balcony.r[3]), X(sp.balcony.r[2]), Y(sp.balcony.r[1])];
+  return out;
+}
+
+// ---------- 3 Prüfen (Editor) ----------
+const edState = { tool: 'select', vb: null, sel: null, drag: null, rtype: 'wohnen', fxtype: 'wc', scaleTmp: null, cleanup: null };
+const TOOLS = [['select', 'Auswählen'], ['pan', 'Verschieben'], ['scale', 'Maßstab'], ['room', 'Raum'], ['door', 'Tür'], ['window', 'Fenster'], ['entry', 'Eingang'], ['fixture', 'Ausstattung'], ['balcony', 'Balkon']];
+const HINTS = {
+  select: 'Element anklicken zum Bearbeiten · Räume lassen sich ziehen · Entf löscht',
+  pan: 'Ziehen verschiebt den Plan · Mausrad zoomt',
+  scale: 'Zwei Punkte mit bekanntem Abstand anklicken (z. B. eine Maßkette), dann Länge eingeben',
+  room: 'Raum als Rechteck aufziehen – Kanten rasten an Nachbarräumen ein (Wand 12 cm)',
+  door: 'Auf die Wand zwischen zwei Räumen klicken',
+  window: 'Auf eine Außenwand klicken',
+  entry: 'Auf die Außenwand klicken, an der die Wohnungstür liegt',
+  fixture: 'Typ wählen und in den Raum klicken · im Auswahl-Modus mit „Drehen“ ausrichten',
+  balcony: 'Balkon oder Terrasse als Rechteck aufziehen'
+};
+function curPlan() { return S.plans.find(p => p.id === S.cur) || S.plans[0]; }
+function vPruefen() {
+  const p = curPlan();
+  if (!p) { $('#view').innerHTML = `<section class="card"><h2>Grundrisse prüfen</h2><p class="sub">Noch keine Grundrisse vorhanden.</p><button class="btn pri" type="button" data-go="1">Grundrisse hochladen</button></section>`; return; }
+  S.cur = p.id;
+  $('#view').innerHTML = `<div class="plantabs" id="ptabs">${S.plans.map(x => `<button type="button" data-pid="${x.id}" aria-pressed="${x.id === p.id}"><span class="dot ${planState(x).dot}"></span>${esc(x.name)}</button>`).join('')}</div>
+  <div class="ed">
+    <section class="card ed-main">
+      <div class="tools" id="tools">${TOOLS.map(([k, n]) => `<button class="t" type="button" data-tool="${k}" aria-pressed="${edState.tool === k}">${n}</button>`).join('')}
+        <span class="sep"></span>
+        <label class="sr" for="rtype">Raumtyp</label><select class="sel" id="rtype">${Object.entries(RT).map(([k, n]) => `<option value="${k}">${n}</option>`).join('')}</select>
+        <label class="sr" for="fxtype">Ausstattung</label><select class="sel" id="fxtype">${Object.entries(FX).map(([k, v]) => `<option value="${k}">${v[0]}</option>`).join('')}</select>
+      </div>
+      <div class="stage" id="stage"><svg class="cv" id="cv" aria-label="Grundriss-Editor"></svg>
+        <div class="scalebox" id="scalebox"><label for="scalem">Abstand in Metern</label><input class="inp" id="scalem" inputmode="decimal" placeholder="z. B. 8,40"><button class="btn pri" type="button" id="scaleok">Übernehmen</button><button class="btn" type="button" id="scalex">Abbrechen</button></div>
+        <div class="zoom"><button type="button" id="zin" aria-label="Hineinzoomen">+</button><button type="button" id="zout" aria-label="Herauszoomen">−</button><button type="button" id="zfit" aria-label="Ganzen Plan zeigen">⤢</button></div>
+        <div class="hint"><span id="hint"></span></div>
+      </div>
+    </section>
+    <aside class="side">
+      <section class="card"><h3>Erkennung</h3>
+        <p class="sub" style="margin-bottom:10px">${p.recognized === 'Beispiel' ? 'Beispiel: Ergebnis vorausgefüllt, um den Prüfschritt zu zeigen.' : 'Die automatische Erkennung (eigene Immone-KI) wird gerade entwickelt. Bis dahin hier nachzeichnen – jeder geprüfte Grundriss wird ein Trainingsbeispiel.'}</p>
+        ${p.demo && !p.spec.rooms.length ? `<button class="btn" type="button" id="demoRec">${ico('spark')}Beispiel-Erkennung einfügen</button>` : ''}
+        <div class="kv" style="margin-top:8px"><span>Maßstab</span><b>${p.ppm ? nf1.format(p.ppm) + ' px/m' : '–'}</b></div>
+        <div class="kv"><span>Wohnfläche (Balkon ¼)</span><b>${p.ppm && p.spec.rooms.length ? nf2.format(wohnflaeche(p)) + ' m²' : '–'}</b></div>
+      </section>
+      <section class="card" id="props"></section>
+      <section class="card"><h3>Selbstkontrolle</h3><ul class="checks" id="checks"></ul>
+        <div class="row" style="margin-top:12px"><button class="btn pri" type="button" id="confirm">${p.checked ? 'Geprüft ✓' : 'Grundriss bestätigen'}</button><button class="btn" type="button" id="json">${ico('dl')}JSON</button></div>
+      </section>
+    </aside>
+  </div>${foot()}`;
+  $$('#ptabs button').forEach(b => b.addEventListener('click', () => { S.cur = b.dataset.pid; edState.sel = null; edState.vb = null; save(); render(); }));
+  $$('#tools [data-tool]').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
+  $('#rtype').value = edState.rtype; $('#rtype').addEventListener('change', e => { edState.rtype = e.target.value; setTool('room'); });
+  $('#fxtype').value = edState.fxtype; $('#fxtype').addEventListener('change', e => { edState.fxtype = e.target.value; setTool('fixture'); });
+  if ($('#demoRec')) $('#demoRec').addEventListener('click', () => { demoRecognize(p); edState.vb = null; edState.tool = 'select'; render(); toast('Beispiel-Erkennung eingefügt – bitte prüfen'); });
+  $('#confirm').addEventListener('click', () => {
+    const v = validate(p);
+    if (v.some(c => c.lvl === 'err')) { toast('Erst die rot markierten Punkte beheben'); return; }
+    p.checked = true; save(); render(); toast('Grundriss bestätigt');
+  });
+  $('#json').addEventListener('click', () => { if (!p.ppm || !p.spec.rooms.length) { toast('Noch nichts zu exportieren'); return; } download(slug(p.name) + '.json', JSON.stringify(exportSpec(p), null, 1)); });
+  $('#zin').addEventListener('click', () => zoomBy(0.8)); $('#zout').addEventListener('click', () => zoomBy(1.25)); $('#zfit').addEventListener('click', () => { edState.vb = null; draw(); });
+  $('#scaleok').addEventListener('click', applyScale); $('#scalex').addEventListener('click', () => { edState.scaleTmp = null; $('#scalebox').classList.remove('on'); draw(); });
+  $('#scalem').addEventListener('keydown', e => { if (e.key === 'Enter') applyScale(); });
+  edState.gray = null;
+  imgGet(p.id).then(d => { edState.img = d; draw(); if (d) buildGray(d, p); });
+  setupCanvas(p);
+  setTool(p.ppm ? edState.tool : 'scale', true);
+}
+// Wände im Bild erkennen (dunkle Pixel) – Kanten rasten an der Innenseite der Wand ein
+function buildGray(data, p) {
+  const im = new Image();
+  im.onload = () => {
+    const k = Math.min(1, 1800 / Math.max(im.naturalWidth, im.naturalHeight)); const w = Math.round(im.naturalWidth * k), h = Math.round(im.naturalHeight * k);
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(im, 0, 0, w, h);
+    const px = g.getImageData(0, 0, w, h).data, gr = new Uint8Array(w * h);
+    for (let i = 0; i < w * h; i++) gr[i] = (px[i * 4] * 0.299 + px[i * 4 + 1] * 0.587 + px[i * 4 + 2] * 0.114) | 0;
+    edState.gray = { gr, w, h, k: w / p.w, pid: p.id };
+  };
+  im.src = data;
+}
+function darkAt(G, x, y) { const xi = Math.round(x * G.k), yi = Math.round(y * G.k); if (xi < 0 || yi < 0 || xi >= G.w || yi >= G.h) return 0; return G.gr[yi * G.w + xi] < 110 ? 1 : 0; }
+function wallSnap(p, r) {
+  const G = edState.gray; if (!G || G.pid !== p.id) return { r, hit: [0, 0, 0, 0] };
+  const t = 14 * pxPerScreen(), out = r.slice(), hit = [0, 0, 0, 0], N = 32;
+  const edge = (fixed0, fixed1, horiz, cur, dir) => {
+    let best = null;
+    for (let v = cur - t; v <= cur + t; v += 1 / G.k) {
+      let s = 0;
+      for (let i = 0; i < N; i++) {
+        const u = fixed0 + (fixed1 - fixed0) * (0.1 + 0.8 * i / (N - 1));
+        const a = horiz ? darkAt(G, u, v + dir / G.k) : darkAt(G, v + dir / G.k, u);
+        const b = horiz ? darkAt(G, u, v) : darkAt(G, v, u);
+        s += a - b;
+      }
+      s /= N;
+      if (s > 0.42 && (!best || s > best.s + 0.02 || (Math.abs(s - best.s) <= 0.02 && Math.abs(v - cur) < Math.abs(best.v - cur)))) best = { s, v };
+    }
+    return best ? (dir > 0 ? best.v + 1 / G.k : best.v) : null;
+  };
+  const L = edge(r[1], r[3], false, r[0], -1), R = edge(r[1], r[3], false, r[2], 1), T = edge(r[0], r[2], true, r[1], -1), B = edge(r[0], r[2], true, r[3], 1);
+  if (L != null) { out[0] = L; hit[0] = 1; } if (R != null) { out[2] = R; hit[2] = 1; } if (T != null) { out[1] = T; hit[1] = 1; } if (B != null) { out[3] = B; hit[3] = 1; }
+  return { r: out, hit };
+}
+function snapNew(p, raw) {
+  const ws = wallSnap(p, raw), rs = snapRect(p, raw), r = ws.r.slice();
+  for (let i = 0; i < 4; i++) if (!ws.hit[i]) r[i] = rs[i];
+  return r;
+}
+function slug(s) { return String(s).toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'grundriss'; }
+function download(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+function setTool(t, silent) {
+  const p = curPlan();
+  if (p && !p.ppm && !['select', 'pan', 'scale'].includes(t)) { if (!silent) toast('Bitte zuerst den Maßstab setzen'); t = 'scale'; }
+  edState.tool = t; edState.drag = null;
+  $$('#tools [data-tool]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tool === t)));
+  const st = $('#stage'); if (st) st.className = 'stage t-' + t;
+  if ($('#hint')) $('#hint').textContent = (p && !p.ppm && t === 'scale' ? 'Zuerst den Maßstab festlegen: ' : '') + HINTS[t];
+  draw();
+}
+function applyScale() {
+  const p = curPlan(), v = parseFloat(String($('#scalem').value).replace(',', '.'));
+  if (!edState.scaleTmp || !edState.scaleTmp.b || !(v > 0)) { toast('Bitte eine Länge in Metern eingeben'); return; }
+  const [a, b] = [edState.scaleTmp.a, edState.scaleTmp.b];
+  const ppm = Math.hypot(b[0] - a[0], b[1] - a[1]) / v;
+  p.ppm = ppm; p.scale = { a, b, m: v }; edState.scaleTmp = null; $('#scalebox').classList.remove('on'); p.checked = false; save();
+  toast('Maßstab gesetzt: ' + nf1.format(ppm) + ' px pro Meter'); setTool('room'); refreshSide();
+}
+function zoomBy(f, cx, cy) {
+  const vb = edState.vb; if (!vb) return;
+  cx = cx == null ? vb.x + vb.w / 2 : cx; cy = cy == null ? vb.y + vb.h / 2 : cy;
+  const nw = Math.max(80, Math.min(vb.w * f, 20000)), k = nw / vb.w;
+  edState.vb = { x: cx - (cx - vb.x) * k, y: cy - (cy - vb.y) * k, w: nw, h: vb.h * k }; draw();
+}
+function fitVB(p) {
+  const st = $('#stage').getBoundingClientRect(); const ar = st.width / Math.max(1, st.height);
+  let w = p.w * 1.06, h = p.h * 1.06; if (w / h < ar) w = h * ar; else h = w / ar;
+  return { x: p.w / 2 - w / 2, y: p.h / 2 - h / 2, w, h };
+}
+function svgPt(e) { const sv = $('#cv'); const pt = sv.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const m = sv.getScreenCTM(); if (!m) return [0, 0]; const q = pt.matrixTransform(m.inverse()); return [q.x, q.y]; }
+function pxPerScreen() { const sv = $('#cv'); const m = sv && sv.getScreenCTM(); return m ? 1 / m.a : 1; }
+function snapRect(p, r, ignore) {
+  const th = 10 * pxPerScreen(), gap = WALL * p.ppm, out = r.slice();
+  const xs = [], ys = [];
+  p.spec.rooms.forEach(o => { if (o === ignore) return; xs.push(o.r[0], o.r[2], o.r[0] - gap, o.r[2] + gap); ys.push(o.r[1], o.r[3], o.r[1] - gap, o.r[3] + gap); });
+  const sn = (v, arr) => { let b = v, d = th; arr.forEach(a => { if (Math.abs(a - v) < d) { d = Math.abs(a - v); b = a; } }); return b; };
+  out[0] = sn(r[0], xs); out[2] = sn(r[2], xs); out[1] = sn(r[1], ys); out[3] = sn(r[3], ys);
+  return out;
+}
+function setupCanvas(p) {
+  const sv = $('#cv'); let pan = null;
+  const down = e => {
+    if (e.button === 1 || edState.tool === 'pan' || e.button === 2) { pan = { x: e.clientX, y: e.clientY, vb: Object.assign({}, edState.vb) }; sv.setPointerCapture(e.pointerId); return; }
+    if (e.button !== 0) return;
+    const [x, y] = svgPt(e); const t = edState.tool, sp = p.spec;
+    if (t === 'scale') {
+      if (!edState.scaleTmp || edState.scaleTmp.b) edState.scaleTmp = { a: [x, y] };
+      else { edState.scaleTmp.b = [x, y]; $('#scalebox').classList.add('on'); $('#scalem').value = ''; setTimeout(() => $('#scalem').focus(), 30); }
+      draw(); return;
+    }
+    if (t === 'room' || t === 'balcony') { edState.drag = { kind: 'new', x0: x, y0: y, x1: x, y1: y }; sv.setPointerCapture(e.pointerId); draw(); return; }
+    if (t === 'door') {
+      let best = null;
+      for (let i = 0; i < sp.rooms.length; i++) for (let j = 0; j < sp.rooms.length; j++) {
+        if (i === j) continue; const a = sp.rooms[i], b = sp.rooms[j];
+        for (const w of sharedWall(p, a, b)) {
+          const along = w.axis === 'x' ? x : y, perp = w.axis === 'x' ? y : x;
+          if (along < w.lo || along > w.hi) continue; const d = Math.abs(perp - w.pos);
+          if (d < 0.4 * p.ppm && (!best || d < best.d)) best = { d, a, b, w, along };
+        }
+      }
+      if (!best) { toast('Hier ist keine Wand zwischen zwei Räumen'); return; }
+      const wd = Math.min(doorW(best.a.type), doorW(best.b.type));
+      const hw = wd / 2 * p.ppm, c = Math.min(Math.max(best.along, best.w.lo + hw + 0.05 * p.ppm), best.w.hi - hw - 0.05 * p.ppm);
+      const flur = ['flur', 'diele'].includes(best.b.type) ? best.b : best.a; const other = flur === best.a ? best.b : best.a;
+      const d = { id: uid(), a: flur.id, b: other.id, c, w: wd }; sp.doors.push(d); edState.sel = d.id; p.checked = false; save(); draw(); refreshSide(); return;
+    }
+    if (t === 'window' || t === 'entry') {
+      const ne = nearestEdge(p, x, y, true);
+      if (!ne) { toast('Bitte auf eine Außenwand klicken'); return; }
+      if (t === 'entry') { sp.entry = { room: ne.r.id, side: ne.sd, c: ne.c }; edState.sel = 'entry'; }
+      else { const df = winDef(ne.r.type); const w = Object.assign({ id: uid(), room: ne.r.id, side: ne.sd, c: ne.c }, df); sp.windows.push(w); edState.sel = w.id; }
+      p.checked = false; save(); draw(); refreshSide(); return;
+    }
+    if (t === 'fixture') {
+      if (!roomAt(sp, x, y)) { toast('Ausstattung bitte innerhalb eines Raums setzen'); return; }
+      const f = { id: uid(), type: edState.fxtype, x, y, rot: 0 }; sp.fixtures.push(f); edState.sel = f.id; p.checked = false; save(); draw(); refreshSide(); return;
+    }
+    if (t === 'select') {
+      const hit = e.target.closest('[data-id]');
+      edState.sel = hit ? hit.dataset.id : null;
+      const rm = hit && sp.rooms.find(r => r.id === hit.dataset.id);
+      const fx = hit && sp.fixtures.find(f => f.id === hit.dataset.id);
+      if (rm) { edState.drag = { kind: 'move', room: rm, sx: x, sy: y, r0: rm.r.slice() }; sv.setPointerCapture(e.pointerId); }
+      if (fx) { edState.drag = { kind: 'fx', fx, sx: x, sy: y, p0: [fx.x, fx.y] }; sv.setPointerCapture(e.pointerId); }
+      draw(); refreshSide();
+    }
+  };
+  const move = e => {
+    if (pan) { const k = edState.vb.w / sv.getBoundingClientRect().width; edState.vb = Object.assign({}, pan.vb, { x: pan.vb.x - (e.clientX - pan.x) * k, y: pan.vb.y - (e.clientY - pan.y) * k }); draw(); return; }
+    const d = edState.drag; if (!d) return; const [x, y] = svgPt(e);
+    if (d.kind === 'new') { d.x1 = x; d.y1 = y; draw(); }
+    if (d.kind === 'move') { const dx = x - d.sx, dy = y - d.sy; d.room.r = snapRect(p, [d.r0[0] + dx, d.r0[1] + dy, d.r0[2] + dx, d.r0[3] + dy], d.room); const w = d.r0[2] - d.r0[0], h = d.r0[3] - d.r0[1];
+      // Größe beibehalten: an der zuerst gerasteten Kante ausrichten
+      if (Math.abs((d.room.r[2] - d.room.r[0]) - w) > 0.5) { if (d.room.r[0] !== d.r0[0] + dx) d.room.r[2] = d.room.r[0] + w; else d.room.r[0] = d.room.r[2] - w; }
+      if (Math.abs((d.room.r[3] - d.room.r[1]) - h) > 0.5) { if (d.room.r[1] !== d.r0[1] + dy) d.room.r[3] = d.room.r[1] + h; else d.room.r[1] = d.room.r[3] - h; }
+      d.moved = true; draw(); }
+    if (d.kind === 'fx') { d.fx.x = d.p0[0] + x - d.sx; d.fx.y = d.p0[1] + y - d.sy; d.moved = true; draw(); }
+  };
+  const up = e => {
+    if (pan) { pan = null; return; }
+    const d = edState.drag; if (!d) return; edState.drag = null;
+    if (d.kind === 'new') {
+      let r = [Math.min(d.x0, d.x1), Math.min(d.y0, d.y1), Math.max(d.x0, d.x1), Math.max(d.y0, d.y1)];
+      if (r[2] - r[0] < 0.6 * p.ppm || r[3] - r[1] < 0.6 * p.ppm) { draw(); toast('Raum ist zu klein – größer aufziehen'); return; }
+      r = edState.tool === 'balcony' ? snapRect(p, r) : snapNew(p, r);
+      if (edState.tool === 'balcony') { p.spec.balcony = { r }; edState.sel = 'balcony'; }
+      else {
+        const n = p.spec.rooms.filter(x => x.type === edState.rtype).length;
+        const rm = { id: uid(), type: edState.rtype, name: RT[edState.rtype] + (n ? ' ' + (n + 1) : ''), r };
+        p.spec.rooms.push(rm); edState.sel = rm.id;
+      }
+      p.checked = false; save(); draw(); refreshSide(); return;
+    }
+    if (d.moved) { p.checked = false; save(); refreshSide(); }
+  };
+  sv.addEventListener('pointerdown', down); sv.addEventListener('pointermove', move); sv.addEventListener('pointerup', up); sv.addEventListener('pointercancel', up);
+  sv.addEventListener('contextmenu', e => e.preventDefault());
+  sv.addEventListener('wheel', e => { e.preventDefault(); const [x, y] = svgPt(e); zoomBy(e.deltaY > 0 ? 1.12 : 0.89, x, y); }, { passive: false });
+  const key = e => {
+    if (S.step !== 2 || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if ((e.key === 'Delete' || e.key === 'Backspace') && edState.sel) { e.preventDefault(); delSel(); }
+    if (e.key === 'Escape') { edState.drag = null; edState.scaleTmp = null; $('#scalebox').classList.remove('on'); draw(); }
+  };
+  document.addEventListener('keydown', key);
+  const rs = () => { edState.vb = null; draw(); };
+  window.addEventListener('resize', rs);
+  edState.cleanup = () => { document.removeEventListener('keydown', key); window.removeEventListener('resize', rs); edState.cleanup = null; };
+}
+function delSel() {
+  const p = curPlan(), sp = p.spec, id = edState.sel;
+  if (id === 'entry') sp.entry = null; else if (id === 'balcony') sp.balcony = null;
+  else {
+    const rm = sp.rooms.find(r => r.id === id);
+    if (rm) { sp.doors = sp.doors.filter(d => d.a !== id && d.b !== id); sp.windows = sp.windows.filter(w => w.room !== id); if (sp.entry && sp.entry.room === id) sp.entry = null; }
+    sp.rooms = sp.rooms.filter(r => r.id !== id); sp.doors = sp.doors.filter(d => d.id !== id); sp.windows = sp.windows.filter(w => w.id !== id); sp.fixtures = sp.fixtures.filter(f => f.id !== id);
+  }
+  edState.sel = null; p.checked = false; save(); draw(); refreshSide();
+}
+function openingLine(p, r, side, c, w) {
+  const e = edgeOf(r, side), hw = w / 2 * p.ppm;
+  return (side === 'N' || side === 'S') ? [c - hw, e, c + hw, e] : [e, c - hw, e, c + hw];
+}
+function draw() {
+  const p = curPlan(), sv = $('#cv'); if (!p || !sv) return;
+  if (!edState.vb) edState.vb = fitVB(p);
+  const vb = edState.vb; sv.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  const sp = p.spec, k = pxPerScreen(), fs = 13 * k, sel = edState.sel;
+  let h = edState.img ? `<image href="${edState.img}" x="0" y="0" width="${p.w}" height="${p.h}" preserveAspectRatio="none"/>` : '';
+  if (sp.balcony) { const b = sp.balcony.r; h += `<g class="bal ${sel === 'balcony' ? 'sel' : ''}" data-id="balcony"><rect x="${b[0]}" y="${b[1]}" width="${b[2] - b[0]}" height="${b[3] - b[1]}" fill="transparent"/></g>`; }
+  let labels = '';
+  sp.rooms.forEach(r => {
+    const lx = r.r[0] + 6 * k, ly = r.r[1] + 6 * k;
+    h += `<g class="rm ${sel === r.id ? 'sel' : ''}" data-id="${r.id}"><rect x="${r.r[0]}" y="${r.r[1]}" width="${rw(r)}" height="${rh(r)}"/></g>`;
+    labels += `<text class="lbl" x="${lx}" y="${ly + fs * 0.95}" font-size="${fs}">${esc(r.name)}${p.ppm ? ` <tspan class="a" font-size="${fs * 0.9}">${nf1.format(m2(p, r))} m²</tspan>` : ''}</text>`;
+  });
+  sp.doors.forEach(d => { const a = sp.rooms.find(r => r.id === d.a), b = sp.rooms.find(r => r.id === d.b); if (!a || !b) return; const w = sharedWall(p, a, b)[0]; if (!w) return; const hw = d.w / 2 * p.ppm;
+    const L = w.axis === 'x' ? [d.c - hw, w.pos, d.c + hw, w.pos] : [w.pos, d.c - hw, w.pos, d.c + hw];
+    h += `<g class="dr ${sel === d.id ? 'sel' : ''}" data-id="${d.id}"><line x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}"/><line class="hit" x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}"/></g>`; });
+  sp.windows.forEach(w => { const r = sp.rooms.find(x => x.id === w.room); if (!r) return; const L = openingLine(p, r, w.side, w.c, w.w);
+    h += `<g class="wn ${sel === w.id ? 'sel' : ''}" data-id="${w.id}"><line x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}"/><line class="hit" x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}"/></g>`; });
+  if (sp.entry) { const r = sp.rooms.find(x => x.id === sp.entry.room); if (r) { const L = openingLine(p, r, sp.entry.side, sp.entry.c, 1.0); h += `<g class="en ${sel === 'entry' ? 'sel' : ''}" data-id="entry"><line x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}"/><line class="hit" x1="${L[0]}" y1="${L[1]}" x2="${L[2]}" y2="${L[3]}"/></g>`; } }
+  if (p.ppm) sp.fixtures.forEach(f => { const [n, w0, d0] = FX[f.type]; const rot = f.rot % 180 === 90; const w = (rot ? d0 : w0) * p.ppm, dd = (rot ? w0 : d0) * p.ppm;
+    h += `<g class="fx ${sel === f.id ? 'sel' : ''}" data-id="${f.id}"><rect x="${f.x - w / 2}" y="${f.y - dd / 2}" width="${w}" height="${dd}" rx="${4 * k}"/><text x="${f.x}" y="${f.y + fs * 0.32}" text-anchor="middle" font-size="${fs * 0.75}">${FX[f.type][3]}</text><title>${n}</title></g>`; });
+  h += labels;
+  const d = edState.drag;
+  if (d && d.kind === 'new') { const r = snapNew(p, [Math.min(d.x0, d.x1), Math.min(d.y0, d.y1), Math.max(d.x0, d.x1), Math.max(d.y0, d.y1)]); const am = p.ppm ? ((r[2] - r[0]) / p.ppm) * ((r[3] - r[1]) / p.ppm) : 0;
+    h += `<g class="pv"><rect x="${r[0]}" y="${r[1]}" width="${r[2] - r[0]}" height="${r[3] - r[1]}"/>${p.ppm ? `<text x="${(r[0] + r[2]) / 2}" y="${(r[1] + r[3]) / 2}" text-anchor="middle" font-size="${fs}" fill="currentColor" style="font-weight:700">${nf1.format(am)} m²</text>` : ''}</g>`; }
+  const sc = edState.scaleTmp || (edState.tool === 'scale' && p.scale ? p.scale : null);
+  if (sc) { h += `<g class="sc"><circle cx="${sc.a[0]}" cy="${sc.a[1]}" r="${5 * k}"/>${sc.b ? `<line x1="${sc.a[0]}" y1="${sc.a[1]}" x2="${sc.b[0]}" y2="${sc.b[1]}"/><circle cx="${sc.b[0]}" cy="${sc.b[1]}" r="${5 * k}"/>` : ''}</g>`; }
+  sv.innerHTML = h;
+}
+function refreshSide() {
+  const p = curPlan(); if (!p || !$('#checks')) return;
+  const v = validate(p);
+  $('#checks').innerHTML = v.map(c => `<li class="${c.lvl}" ${c.sel ? `data-sel="${c.sel}"` : ''}><i>${c.lvl === 'ok' ? '✓' : c.lvl === 'warn' ? '!' : '×'}</i><span>${esc(c.msg)}</span></li>`).join('');
+  $$('#checks [data-sel]').forEach(li => li.addEventListener('click', () => { edState.sel = li.dataset.sel; setTool('select'); refreshSide(); }));
+  $('#confirm').textContent = p.checked ? 'Geprüft ✓' : 'Grundriss bestätigen';
+  $$('#ptabs button').forEach(b => { const x = S.plans.find(q => q.id === b.dataset.pid); b.querySelector('.dot').className = 'dot ' + planState(x).dot; });
+  const kvs = $$('.side .kv b'); if (kvs[0]) kvs[0].textContent = p.ppm ? nf1.format(p.ppm) + ' px/m' : '–'; if (kvs[1]) kvs[1].textContent = p.ppm && p.spec.rooms.length ? nf2.format(wohnflaeche(p)) + ' m²' : '–';
+  renderProps(p); renderSteps();
+}
+function renderProps(p) {
+  const el = $('#props'), sp = p.spec, id = edState.sel; if (!el) return;
+  const rm = sp.rooms.find(r => r.id === id), dr = sp.doors.find(d => d.id === id), wn = sp.windows.find(w => w.id === id), fx = sp.fixtures.find(f => f.id === id);
+  let h = '<h3>Auswahl</h3>';
+  if (rm) h += `<div class="props"><label class="f">Raumtyp<select class="sel" data-f="type">${Object.entries(RT).map(([k, n]) => `<option value="${k}" ${rm.type === k ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+    <label class="f">Name<input class="inp" data-f="name" value="${esc(rm.name)}"></label>
+    <div class="two"><div class="kv"><span>Gemessen</span><b>${nf1.format(m2(p, rm))} m²</b></div><label class="f">Fläche laut Plan<input class="inp" data-f="plan" inputmode="decimal" value="${rm.plan ? String(rm.plan).replace('.', ',') : ''}" placeholder="m²"></label></div>
+    <div class="kv"><span>Maße</span><b>${nf2.format(rw(rm) / p.ppm)} × ${nf2.format(rh(rm) / p.ppm)} m</b></div>
+    <button class="btn danger" type="button" data-del>${ico('trash')}Raum löschen</button></div>`;
+  else if (dr) h += `<div class="props"><div class="kv"><span>Tür</span><b>${esc((sp.rooms.find(r => r.id === dr.a) || {}).name)} ↔ ${esc((sp.rooms.find(r => r.id === dr.b) || {}).name)}</b></div>
+    <label class="f">Breite (m)<select class="sel" data-f="w">${[0.76, 0.885, 1.01].map(v => `<option value="${v}" ${dr.w === v ? 'selected' : ''}>${nf2.format(v)}</option>`).join('')}</select></label><button class="btn danger" type="button" data-del>${ico('trash')}Tür löschen</button></div>`;
+  else if (wn) h += `<div class="props"><div class="kv"><span>Fenster in</span><b>${esc((sp.rooms.find(r => r.id === wn.room) || {}).name)}</b></div>
+    <div class="two"><label class="f">Breite (m)<input class="inp" data-f="w" inputmode="decimal" value="${String(wn.w).replace('.', ',')}"></label><label class="f">Brüstung (m)<input class="inp" data-f="sill" inputmode="decimal" value="${String(wn.sill).replace('.', ',')}"></label></div>
+    <label class="f"><span><input type="checkbox" data-f="tuer" ${wn.sill < 0.05 ? 'checked' : ''}> Balkon- / Terrassentür (bodentief)</span></label><button class="btn danger" type="button" data-del>${ico('trash')}Fenster löschen</button></div>`;
+  else if (fx) h += `<div class="props"><div class="kv"><span>Ausstattung</span><b>${FX[fx.type][0]}</b></div><div class="row"><button class="btn" type="button" data-rot>Drehen 90°</button><button class="btn danger" type="button" data-del>${ico('trash')}Löschen</button></div></div>`;
+  else if (id === 'entry' && sp.entry) h += `<div class="props"><div class="kv"><span>Wohnungseingang</span><b>${esc((sp.rooms.find(r => r.id === sp.entry.room) || {}).name)}</b></div><button class="btn danger" type="button" data-del>${ico('trash')}Eingang löschen</button></div>`;
+  else if (id === 'balcony' && sp.balcony) h += `<div class="props"><div class="kv"><span>Balkon</span><b>${nf1.format(((sp.balcony.r[2] - sp.balcony.r[0]) / p.ppm) * ((sp.balcony.r[3] - sp.balcony.r[1]) / p.ppm))} m²</b></div><button class="btn danger" type="button" data-del>${ico('trash')}Balkon löschen</button></div>`;
+  else h += `<p class="sub" style="margin:0">Mit „Auswählen“ ein Element anklicken, um es zu bearbeiten.</p>`;
+  el.innerHTML = h;
+  const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : null; };
+  el.querySelectorAll('[data-f]').forEach(i => i.addEventListener('change', () => {
+    const f = i.dataset.f;
+    if (rm) { if (f === 'plan') rm.plan = num(i.value) || null; else rm[f] = i.value; if (f === 'type' && RT[i.value] && /^(Wohnen|Küche|Schlafen|Kinderzimmer|Bad|Gäste-WC|Flur|Diele|Abstellraum|Arbeiten)( \d+)?$/.test(rm.name)) rm.name = RT[i.value]; }
+    if (dr && f === 'w') dr.w = num(i.value);
+    if (wn) { if (f === 'tuer') { wn.sill = i.checked ? 0 : winDef((sp.rooms.find(r => r.id === wn.room) || {}).type).sill; } else { const v = num(i.value); if (v != null) wn[f] = v; } }
+    p.checked = false; save(); draw(); refreshSide();
+  }));
+  const d = el.querySelector('[data-del]'); if (d) d.addEventListener('click', delSel);
+  const ro = el.querySelector('[data-rot]'); if (ro) ro.addEventListener('click', () => { fx.rot = (fx.rot + 90) % 360; p.checked = false; save(); draw(); });
+}
+
+// ---------- 4 Außenfotos ----------
+const phState = { draft: [], sel: null };
+function vFotos() {
+  const ph = S.photos.find(x => x.id === S.curPhoto) || S.photos[0];
+  if (ph) S.curPhoto = ph.id;
+  $('#view').innerHTML = `<section class="card"><h2>Außenfotos & Wohnungen markieren</h2><p class="sub">Foto des Gebäudes hochladen (bei Neubau die Architekten-Visualisierung) und jede Wohnung als Fläche umranden. So wird sie im Navigator anklickbar.</p>
+    <div class="drop" id="pdrop" tabindex="0" role="button" aria-label="Fotos auswählen">${ico('up')}<p><b>Fotos hierher ziehen</b> oder klicken<br><small>JPG oder PNG</small></p></div><input type="file" id="pfile" accept="image/*" multiple hidden>
+    ${ph ? `<div class="plantabs" style="margin-top:14px" id="phtabs">${S.photos.map(x => `<button type="button" data-ph="${x.id}" aria-pressed="${x.id === ph.id}">${esc(x.name)} · ${x.units.length}</button>`).join('')}</div>
+    <div class="ed"><section class="card ed-main"><div class="tools"><span class="sub" style="margin:0">Ecken der Wohnung anklicken · Doppelklick oder Enter schließt die Fläche · Esc bricht ab</span></div>
+      <div class="stage t-room" id="pstage"><svg class="cv" id="pcv" aria-label="Foto-Editor"></svg></div></section>
+      <aside class="side"><section class="card"><h3>Markierte Wohnungen</h3><div id="ulist"></div><div class="row" style="margin-top:10px"><button class="btn danger" type="button" id="phdel">${ico('trash')}Foto entfernen</button></div></section></aside></div>` : ''}
+  </section>${foot()}`;
+  bindDrop($('#pdrop'), $('#pfile'), async files => {
+    for (const f of files) { try { for (const im of await fileToImages(f)) { const id = uid(); await imgPut(id, im.data); S.photos.push({ id, name: im.name, w: im.w, h: im.h, units: [] }); S.curPhoto = id; } } catch (e) { toast('Datei „' + f.name + '“ konnte nicht gelesen werden'); } }
+    save(); render();
+  });
+  if (!ph) return;
+  $$('#phtabs button').forEach(b => b.addEventListener('click', () => { S.curPhoto = b.dataset.ph; phState.draft = []; save(); render(); }));
+  $('#phdel').addEventListener('click', () => { S.photos = S.photos.filter(x => x !== ph); imgDel(ph.id); S.curPhoto = null; save(); render(); });
+  const sv = $('#pcv');
+  imgGet(ph.id).then(d => { phState.img = d; drawPh(ph); });
+  const pt = e => { const q = sv.createSVGPoint(); q.x = e.clientX; q.y = e.clientY; const m = sv.getScreenCTM(); const r = q.matrixTransform(m.inverse()); return [r.x / ph.w, r.y / ph.h]; };
+  const close = () => {
+    if (phState.draft.length < 3) { phState.draft = []; drawPh(ph); return; }
+    const n = ph.units.length + 1; const u = { id: uid(), label: 'WE ' + n, pts: phState.draft.map(p => [r2(p[0] * 10000) / 10000, r2(p[1] * 10000) / 10000]) };
+    ph.units.push(u); phState.draft = []; phState.sel = u.id; save(); drawPh(ph); listUnits(ph); renderSteps();
+    const tb = document.querySelector(`#phtabs [data-ph="${ph.id}"]`); if (tb) tb.textContent = ph.name + ' · ' + ph.units.length;
+  };
+  sv.addEventListener('click', e => { if (e.detail > 1) return; const hit = e.target.closest('[data-u]'); if (hit && !phState.draft.length) { phState.sel = hit.dataset.u; drawPh(ph); listUnits(ph); return; } phState.draft.push(pt(e)); drawPh(ph); });
+  sv.addEventListener('dblclick', e => { e.preventDefault(); close(); });
+  sv.addEventListener('pointermove', e => { if (phState.draft.length) { phState.hover = pt(e); drawPh(ph); } });
+  const key = e => { if (S.step !== 3 || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return; if (e.key === 'Enter') close(); if (e.key === 'Escape') { phState.draft = []; drawPh(ph); } };
+  document.addEventListener('keydown', key); edState.cleanup = () => { document.removeEventListener('keydown', key); edState.cleanup = null; };
+  listUnits(ph);
+}
+function drawPh(ph) {
+  const sv = $('#pcv'); if (!sv) return;
+  const st = $('#pstage').getBoundingClientRect(), ar = st.width / Math.max(1, st.height);
+  let w = ph.w * 1.02, h = ph.h * 1.02; if (w / h < ar) w = h * ar; else h = w / ar;
+  sv.setAttribute('viewBox', `${ph.w / 2 - w / 2} ${ph.h / 2 - h / 2} ${w} ${h}`);
+  const k = w / st.width, P = q => `${q[0] * ph.w},${q[1] * ph.h}`;
+  let s = phState.img ? `<image href="${phState.img}" x="0" y="0" width="${ph.w}" height="${ph.h}"/>` : '';
+  ph.units.forEach(u => { const cx = u.pts.reduce((a, q) => a + q[0], 0) / u.pts.length * ph.w, cy = u.pts.reduce((a, q) => a + q[1], 0) / u.pts.length * ph.h;
+    s += `<g class="poly ${phState.sel === u.id ? 'sel' : ''}" data-u="${u.id}"><polygon points="${u.pts.map(P).join(' ')}"/><text x="${cx}" y="${cy}" text-anchor="middle" font-size="${14 * k}">${esc(u.label)}</text></g>`; });
+  if (phState.draft.length) s += `<g class="poly-draft"><polyline points="${phState.draft.concat(phState.hover ? [phState.hover] : []).map(P).join(' ')}"/></g>`;
+  sv.innerHTML = s;
+}
+function listUnits(ph) {
+  const el = $('#ulist'); if (!el) return;
+  el.innerHTML = ph.units.length ? ph.units.map(u => `<div class="row" style="margin-bottom:6px"><input class="inp" style="flex:1" data-ul="${u.id}" value="${esc(u.label)}" aria-label="Bezeichnung"><button class="btn danger" type="button" data-ud="${u.id}" aria-label="Löschen">${ico('trash')}</button></div>`).join('') : '<p class="sub" style="margin:0">Noch keine Wohnung markiert.</p>';
+  el.querySelectorAll('[data-ul]').forEach(i => i.addEventListener('input', () => { ph.units.find(u => u.id === i.dataset.ul).label = i.value; save(); drawPh(ph); }));
+  el.querySelectorAll('[data-ud]').forEach(b => b.addEventListener('click', () => { ph.units = ph.units.filter(u => u.id !== b.dataset.ud); save(); drawPh(ph); listUnits(ph); renderSteps(); }));
+}
+
+// ---------- 5 Stil ----------
+const LINIEN = [['standard', 'Standard', 'Helle, zeitlose Einrichtung – passt für die meisten Mietwohnungen'], ['gehoben', 'Gehoben', 'Hochwertigere Materialien, dunklere Akzente – für Eigentum und Premium'], ['skandi', 'Skandinavisch', 'Viel helles Holz, Weiß und Grau, sehr ruhig']];
+const WAND = ['#F4F1EA', '#FFFFFF', '#E9E4DA', '#DDE3E2', '#E6DCD0'];
+const BODEN = [['eiche-hell', 'Eiche hell', '#C9A877'], ['eiche-natur', 'Eiche natur', '#A9824F'], ['eiche-dunkel', 'Eiche dunkel', '#6E5136'], ['fliese-grau', 'Fliese grau', '#9B9C98']];
+const KUECHE = [['weiss', 'Weiß matt', '#F2F2EF'], ['grau', 'Grau', '#8E9296'], ['anthrazit', 'Anthrazit', '#3B3E41'], ['holz', 'Holz', '#B48A5A']];
+function vStil() {
+  const s = S.style;
+  $('#view').innerHTML = `<section class="card"><h2>Stil der Visualisierung</h2><p class="sub">Gilt für alle Wohnungen dieses Objekts. Farben lassen sich später ändern – dann werden nur die betroffenen Räume neu berechnet.</p>
+    <h3>Ausstattungslinie</h3><div class="grid3">${LINIEN.map(([k, n, d]) => `<button class="opt" type="button" data-s="linie" data-v="${k}" aria-pressed="${s.linie === k}"><b>${n}</b><span>${d}</span></button>`).join('')}</div>
+    <h3 style="margin-top:18px">Möblierung</h3><div class="grid3">${[['ja', 'Möbliert', 'Beispielhafte Einrichtung – Interessenten sehen, wie es wirkt'], ['nein', 'Leer', 'Nur Böden, Wände, Küche und Bad']].map(([k, n, d]) => `<button class="opt" type="button" data-s="moebliert" data-v="${k}" aria-pressed="${s.moebliert === k}"><b>${n}</b><span>${d}</span></button>`).join('')}</div>
+    <div class="grid3" style="margin-top:18px">
+      <div><h3>Wandfarbe</h3><div class="sw">${WAND.map(c => `<button type="button" data-s="wand" data-v="${c}" aria-pressed="${s.wand === c}" style="background:${c}" aria-label="Wandfarbe ${c}"></button>`).join('')}</div></div>
+      <div><h3>Boden</h3><div class="sw">${BODEN.map(([k, n, c]) => `<button type="button" data-s="boden" data-v="${k}" aria-pressed="${s.boden === k}" style="background:${c}" aria-label="${n}" title="${n}"></button>`).join('')}</div></div>
+      <div><h3>Küchenfront</h3><div class="sw">${KUECHE.map(([k, n, c]) => `<button type="button" data-s="kueche" data-v="${k}" aria-pressed="${s.kueche === k}" style="background:${c}" aria-label="${n}" title="${n}"></button>`).join('')}</div></div>
+    </div>
+    <div class="note" style="margin-top:18px;margin-bottom:0">${ico('info')}<span>Jede Visualisierung wird automatisch mit „Visualisierung – Möblierung beispielhaft“ gekennzeichnet.</span></div></section>${foot()}`;
+  $$('[data-s]').forEach(b => b.addEventListener('click', () => { s[b.dataset.s] = b.dataset.v; save(); vStil(); bindFoot(); }));
+}
+
+// ---------- 6 Freigabe ----------
+function sketch(p) {
+  const e = exportSpec(p), all = e.rooms.flatMap(r => [r.rect]).concat(e.balcony ? [e.balcony] : []);
+  const x0 = Math.min(...all.map(r => r[0])) - 0.5, x1 = Math.max(...all.map(r => r[2])) + 0.5, y0 = Math.min(...all.map(r => r[1])) - 0.5, y1 = Math.max(...all.map(r => r[3])) + 0.5;
+  const Y = y => y1 - y + y0;
+  let s = `<svg viewBox="${x0} ${y0} ${x1 - x0} ${y1 - y0}" role="img" aria-label="Skizze ${esc(p.name)}">`;
+  if (e.balcony) { const b = e.balcony; s += `<rect x="${b[0]}" y="${Y(b[3])}" width="${b[2] - b[0]}" height="${b[3] - b[1]}" fill="none" stroke="var(--room-line)" stroke-width=".05" stroke-dasharray=".2 .12"/>`; }
+  e.rooms.forEach(r => { const [a, b, c, d] = r.rect; s += `<rect x="${a}" y="${Y(d)}" width="${c - a}" height="${d - b}" fill="var(--room)" stroke="var(--room-line)" stroke-width=".06"/><text x="${(a + c) / 2}" y="${Y((b + d) / 2)}" font-size=".34" text-anchor="middle" fill="var(--ink)" font-weight="700">${esc(r.name)}</text>`; });
+  s += '</svg>'; return s;
+}
+function vFreigabe() {
+  const plans = S.plans, ready = plans.length && plans.every(p => p.checked && !validate(p).some(c => c.lvl === 'err'));
+  const units = plans.reduce((a, p) => a + (+p.count || 1), 0), photos = S.photos.reduce((a, p) => a + p.units.length, 0);
+  const jobs = store.get('immone-jobs-v1', []);
+  $('#view').innerHTML = `<section class="card"><h2>Zusammenfassung & Freigabe</h2><p class="sub">${esc(S.obj.name || 'Ohne Namen')} · ${esc([S.obj.strasse, S.obj.ort].filter(Boolean).join(', ') || 'keine Adresse')}</p>
+    <table class="sum"><thead><tr><th>Wohnungstyp</th><th>Anzahl</th><th>Räume</th><th>Wohnfläche</th><th>Status</th></tr></thead><tbody>
+    ${plans.map(p => { const st = planState(p); return `<tr><td>${esc(p.name)}</td><td>${esc(p.count)}${p.etagen ? ' · Etage ' + esc(p.etagen) : ''}</td><td>${p.spec.rooms.length}</td><td>${p.ppm && p.spec.rooms.length ? nf1.format(wohnflaeche(p)) + ' m²' : '–'}</td><td><span class="pill ${st.cls}">${st.txt}</span></td></tr>`; }).join('') || '<tr><td colspan="5">Keine Grundrisse</td></tr>'}
+    </tbody></table>
+    <div class="grid3" style="margin-top:16px">${plans.filter(p => p.ppm && p.spec.rooms.length).map(p => `<div class="preview card" style="padding:12px"><h3>${esc(p.name)}</h3>${sketch(p)}</div>`).join('')}</div>
+    <div class="grid3" style="margin-top:16px"><div class="kv"><span>Wohnungen gesamt</span><b>${units}</b></div><div class="kv"><span>Davon auf Fotos markiert</span><b>${photos}</b></div><div class="kv"><span>Zu rendernde Typen</span><b>${plans.length}</b></div></div>
+    ${photos < units ? `<div class="note" style="margin-top:14px">${ico('info')}<span>Auf den Außenfotos sind ${photos} von ${units} Wohnungen markiert. Das Rendern geht trotzdem; im Navigator sind dann nur die markierten anklickbar.</span></div>` : ''}
+    <div class="row" style="margin-top:16px"><button class="btn pri" type="button" id="order" ${ready ? '' : 'disabled'}>${ico('play')}Visualisierung beauftragen</button>${ready ? '' : '<span class="sub" style="margin:0">Erst alle Grundrisse prüfen und bestätigen.</span>'}</div>
+    <div class="note" style="margin-top:14px;margin-bottom:0">${ico('info')}<span>Prototyp: Der Auftrag wird als Datei heruntergeladen. Später geht er automatisch an den Render-Server, und du bekommst eine E-Mail, wenn alles fertig ist.</span></div>
+  </section>
+  ${jobs.length ? `<section class="card" style="margin-top:14px"><h3>Aufträge</h3><table class="sum"><thead><tr><th>Objekt</th><th>Erstellt</th><th>Typen</th><th>Status</th></tr></thead><tbody>${jobs.map(j => `<tr><td>${esc(j.name)}</td><td>${new Date(j.t).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })}</td><td>${j.n}</td><td><span class="pill warn">Wartet auf Rendern</span></td></tr>`).join('')}</tbody></table></section>` : ''}
+  ${foot()}`;
+  const b = $('#order'); if (b) b.addEventListener('click', () => {
+    const job = { version: 1, erstellt: new Date().toISOString(), objekt: S.obj, stil: S.style, typen: plans.map(exportSpec), fotos: S.photos.map(p => ({ name: p.name, wohnungen: p.units })) };
+    download('auftrag_' + slug(S.obj.name || 'objekt') + '.json', JSON.stringify(job, null, 1));
+    jobs.unshift({ name: S.obj.name || 'Ohne Namen', t: Date.now(), n: plans.length }); store.set('immone-jobs-v1', jobs.slice(0, 20));
+    toast('Auftrag erstellt'); vFreigabe(); bindFoot();
+  });
+}
+
+// Prüfen-Seite: Seitenleiste nach dem Aufbau füllen
+const origRender = render;
+render = function () { origRender(); if (S.step === 2 && curPlan()) refreshSide(); };
+render();
+})();
+</script>
+</body>
+</html>
