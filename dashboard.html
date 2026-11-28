@@ -61,6 +61,9 @@ a { color: inherit; }
 .nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
 .nav a[aria-current="page"] { background: var(--side-active); color: #fff; box-shadow: inset 3px 0 0 var(--coral); }
 .nav a[aria-current="page"] svg { stroke: var(--side-ic); }
+.newobj { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 14px 4px 0; height: 38px; border-radius: 10px; background: var(--coral); color: var(--coral-on); font-weight: 750; text-decoration: none; font-size: 13.5px; }
+.newobj svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; }
+.newobj:hover { filter: brightness(1.05); }
 .nav .cnt { margin-left: auto; background: var(--coral); color: var(--coral-on); font-size: 11.5px; font-weight: 800; border-radius: 99px; padding: 1px 7px; }
 .side-foot { margin-top: auto; padding: 12px; font-size: 12px; color: rgba(255,255,255,.55); border-top: 1px solid rgba(255,255,255,.08); }
 .side-foot a { color: #A9C8D6; }
@@ -260,6 +263,7 @@ pre.code { background: var(--navy); color: #E7EEF3; padding: 14px; border-radius
 @media (max-width: 860px) {
   .app { grid-template-columns: minmax(0, 1fr); } .side, .nav { min-width: 0; }
   .side { position: sticky; top: 0; height: auto; z-index: 30; flex-direction: row; align-items: center; padding: 10px 12px; gap: 8px; }
+  .newobj { margin: 0; height: 34px; padding: 0 10px; flex: none; font-size: 0; gap: 0; } .newobj svg { width: 18px; height: 18px; }
   .brand { padding: 0 6px 0 0; } .brand small { display: none; } .brand b { display: none; }
   .nav { flex-direction: row; overflow-x: auto; scrollbar-width: none; gap: 2px; flex: 1; }
   .nav::-webkit-scrollbar { display: none; }
@@ -296,6 +300,7 @@ pre.code { background: var(--navy); color: #E7EEF3; padding: 14px; border-radius
   <aside class="side" aria-label="Hauptnavigation">
     <a class="brand" href="#/uebersicht"><span class="mark">i</span><span><b>Immone</b><small>Portal · Beispiel Wohnbau GmbH</small></span></a>
     <nav class="nav" id="nav"></nav>
+    <a class="newobj" href="assistent.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Objekt anlegen</a>
     <div class="side-foot">Prototyp mit Beispieldaten.<br><a href="index.html" target="_blank" rel="noopener">Navigator öffnen ↗</a></div>
   </aside>
   <div class="main">
