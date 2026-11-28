@@ -1,3 +1,4 @@
 21:20:03 C flur fertig (1344 s, Belichtung +0.00)
 21:39:42 D flur fertig (1141 s, Belichtung +0.95)
 22:03:06 E flur fertig (1346 s, Belichtung +0.56)
+22:03:07 ALLE FERTIG
