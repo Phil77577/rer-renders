@@ -195,7 +195,9 @@ input[type=range] { width: 100%; accent-color: var(--gold); height: 22px; margin
 .plan .you { fill: #2F6280; stroke: #fff; stroke-width: .06; }
 .plan .room.current rect { fill: #DCEAF1; }
 .plan [role="button"] { cursor: pointer; } .plan [role="button"]:hover rect { fill: #EAF2F6; }
-.plan [role="button"]:focus, .plan [role="button"]:focus-visible, .plan g:focus { outline: none; } .plan [role="button"]:focus-visible rect { stroke: #2F6280; stroke-width: .18; }
+.plan [role="button"]:focus, .plan [role="button"]:focus-visible, .plan g:focus { outline: none; }
+.plan, .plan *, .t-plan, .t-plan * { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.plan ::selection, .t-plan ::selection { background: transparent; color: inherit; }
 
 /* Rundgang */
 #tour { position: fixed; inset: 0; z-index: 20; background: #002941; color: #fff; }
@@ -1304,6 +1306,7 @@ function roomPath(t, from, to) {
   }
   $('#tourClose').addEventListener('click', closeTour);
   $('#tourRooms').addEventListener('click', e => { const b = e.target.closest('button'); if (b) walkTo(b.dataset.room); });
+  $('#tourPlan').addEventListener('mousedown', e => { if (e.detail > 1) e.preventDefault(); });
   $('#tourPlan').addEventListener('click', e => { const g = e.target.closest('[data-room]'); if (g) walkTo(g.dataset.room); });
   $('#tourPlan').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.room) { e.preventDefault(); walkTo(e.target.dataset.room); } });
   $('#planToggle').addEventListener('click', () => { const on = tourEl.classList.toggle('plan-open'); $('#planToggle').setAttribute('aria-pressed', String(on)); });
